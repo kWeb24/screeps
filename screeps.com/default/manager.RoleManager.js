@@ -24,7 +24,7 @@ class RoleManager {
         needsHelp: (fromCreep) => this.Harvester.needsHelp(fromCreep)
       },{
         role: 'upgrader',
-        population: 1,
+        population: 2,
         genome: [WORK, CARRY, MOVE],
         capableOf: ['harvester', 'builder'],
         run: (creep) => this.Upgrader.run(creep),
@@ -43,7 +43,7 @@ class RoleManager {
 	selectRole(creep) {
     const matchedRole = this.getCreepRoleReference(creep);
 
-    if (!matchedRole[0].needsHelp(creep)) {
+    if (!matchedRole[0].needsHelp(creep) && matchedRole[0].role != 'upgrader') {
       const roleInNeed = this.findRoleInNeed(creep, matchedRole);
 
       if (roleInNeed) {
