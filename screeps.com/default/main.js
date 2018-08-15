@@ -18,16 +18,19 @@ class Core {
         role: 'harvester',
         population: 2,
         genome: [WORK, CARRY, MOVE],
+        capable: ['upgrader', 'builder'],
         run: (creep) => this.Harvester.run(creep)
       },{
         role: 'upgrader',
         population: 1,
         genome: [WORK, CARRY, MOVE],
+        capable: ['harvester', 'builder'],
         run: (creep) => this.Upgrader.run(creep)
       },{
         role: 'builder',
         population: 1,
         genome: [WORK, CARRY, MOVE],
+        capable: ['harvester', 'upgrader'],
         run: (creep) => this.Builder.run(creep)
       },
     ];
