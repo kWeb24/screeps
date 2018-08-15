@@ -3,6 +3,7 @@
 const Harvester = require('role.Harvester');
 const Upgrader = require('role.Upgrader');
 const Builder = require('role.Builder');
+const Tower = require('structure.Tower');
 
 class Core {
 
@@ -10,6 +11,7 @@ class Core {
     this.Harvester = new Harvester();
     this.Builder = new Builder();
     this.Upgrader = new Upgrader();
+    this.Tower = new Tower();
 
     this.ROLES = [
       {
@@ -19,7 +21,7 @@ class Core {
         run: (creep) => this.Harvester.run(creep)
       },{
         role: 'upgrader',
-        population: 2,
+        population: 1,
         genome: [WORK, CARRY, MOVE],
         run: (creep) => this.Upgrader.run(creep)
       },{
@@ -34,7 +36,7 @@ class Core {
   loop() {
     this.clearDeadCreeps();
     this.spawnCreeps();
-    this.handleTower();
+    this.Tower.run();
     this.runCreeps();
   }
 
@@ -52,7 +54,7 @@ class Core {
       var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.role);
 
       if (creeps.length < role.population) {
-        var newName = Game.spawns['CipciaObfita'].createCreep(role.genome, undefined, {role: role});
+        var newName = Game.spawns['CipciaObfita'].createCreep(role.genome, undefined, {role: role.role});
         console.log('Spawning new ' + role.role + ' - ' + newName);
       }
     });
@@ -66,23 +68,6 @@ class Core {
           role.run(creep);
         }
       });
-    }
-  }
-
-  handleTower() {
-    var tower = Game.getObjectById('500ebcb8c1a48083e1f72c79');
-    if (tower) {
-        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => structure.hits < structure.hitsMax
-        });
-        if (closestDamagedStructure) {
-            tower.repair(closestDamagedStructure);
-        }
-
-        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if (closestHostile) {
-            tower.attack(closestHostile);
-        }
     }
   }
 }
