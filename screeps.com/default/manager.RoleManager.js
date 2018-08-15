@@ -1,8 +1,11 @@
 /*jshint esversion: 6 */
+const Logger = require('utils.Logger');
 
 const Harvester = require('role.Harvester');
 const Upgrader = require('role.Upgrader');
 const Builder = require('role.Builder');
+
+const LOGGER = new Logger();
 
 class RoleManager {
 
@@ -45,14 +48,14 @@ class RoleManager {
 
       if (roleInNeed) {
         roleInNeed.run(creep);
-        console.log(creep.memory.role + ' is now: ' + roleInNeed.role);
+        LOGGER.note(creep.name + ' (' + creep.memory.role + ') role was changed to: ' + roleInNeed.role, 4);
       } else {
         matchedRole[0].run(creep);
-        console.log(creep.memory.role + ' is now: ' + matchedRole[0].role);
+        LOGGER.note(creep.name  + ' (' + creep.memory.role + ') not changed', 4);
       }
     } else {
       matchedRole[0].run(creep);
-      console.log(creep.memory.role + ' is now: ' + matchedRole[0].role);
+      LOGGER.note(creep.name  + ' (' + creep.memory.role + ') not changed', 4);
     }
 	}
 
