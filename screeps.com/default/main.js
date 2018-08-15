@@ -66,7 +66,7 @@ class Core {
 
       if (creeps.length < role.population) {
         var newName = Game.spawns['CipciaObfita'].createCreep(role.genome, undefined, {role: role.role});
-        LOGGER.note('Spawned: ' + name + ' as ' + role.role, 2);
+        LOGGER.note('Spawned: ' + newName + ' as ' + role.role, 2);
       }
     });
   }
