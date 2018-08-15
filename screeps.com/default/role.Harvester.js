@@ -4,6 +4,7 @@ class Harvester {
 
   constructor() {
 
+    console.log('-- Loading Harvester Role...');
   }
 
   /** @param {Creep} creep **/

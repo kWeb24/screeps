@@ -4,6 +4,7 @@ class Builder {
 
   constructor() {
 
+		console.log('-- Loading Builder Role...');
   }
 
 	/** @param {Creep} creep **/

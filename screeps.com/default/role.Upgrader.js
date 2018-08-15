@@ -4,6 +4,7 @@ class Upgrader {
 
   constructor() {
 
+    console.log('-- Loading Upgrader Role...');
   }
 
   /** @param {Creep} creep **/

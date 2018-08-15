@@ -7,7 +7,7 @@ const Tower = require('structure.Tower');
 const RoleManager = require('manager.RoleManager');
 
 const LOGGER = new Logger({
-  enabled: true
+  enabled: false
 });
 
 class Core {
@@ -23,13 +23,13 @@ class Core {
     if (this.PARAM_ADAPTIVE_ROLES) {
       LOGGER.success('PARAM_ADAPTIVE_ROLES: ' + this.PARAM_ADAPTIVE_ROLES, 1);
     } else {
-      LOGGER.note('PARAM_ADAPTIVE_ROLES: ' + this.PARAM_ADAPTIVE_ROLES, 1);
+      console.log('-- PARAM_ADAPTIVE_ROLES:' + this.PARAM_ADAPTIVE_ROLES);
     }
 
     if (LOGGER.ENABLED) {
       LOGGER.success('CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED, 1);
     } else {
-      LOGGER.note('CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED, 1);
+      console.log('-- CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED);
     }
 
     LOGGER.log('Available Roles', 1);

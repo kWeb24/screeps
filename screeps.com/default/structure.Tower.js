@@ -3,7 +3,8 @@
 class Tower {
 
   constructor() {
-    
+
+    console.log('-- Loading Tower Structure...');
   }
 
 	run() {

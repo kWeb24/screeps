@@ -6,7 +6,7 @@ const Upgrader = require('role.Upgrader');
 const Builder = require('role.Builder');
 
 const LOGGER = new Logger({
-  enabled: true
+  enabled: false
 });
 
 class RoleManager {
