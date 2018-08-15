@@ -3,7 +3,7 @@
 class Upgrader {
 
   constructor() {
-    
+
   }
 
   /** @param {Creep} creep **/
@@ -28,6 +28,10 @@ class Upgrader {
         creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#0e9db0'}});
       }
     }
+  }
+
+  needsHelp(fromCreep) {
+    return fromCreep.carry.energy == fromCreep.carryCapacity;
   }
 }
 

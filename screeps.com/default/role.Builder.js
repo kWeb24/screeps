@@ -3,7 +3,7 @@
 class Builder {
 
   constructor() {
-		
+
   }
 
 	/** @param {Creep} creep **/
@@ -33,6 +33,11 @@ class Builder {
 				creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
 			}
 		}
+	}
+
+	needsHelp(fromCreep) {
+		var targets = fromCreep.room.find(FIND_CONSTRUCTION_SITES);
+		return targets.length;
 	}
 }
 

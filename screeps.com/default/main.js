@@ -1,39 +1,16 @@
 /*jshint esversion: 6 */
 
-const Harvester = require('role.Harvester');
-const Upgrader = require('role.Upgrader');
-const Builder = require('role.Builder');
+
 const Tower = require('structure.Tower');
+const RoleManager = require('manager.RoleManager');
 
 class Core {
 
   constructor() {
-    this.Harvester = new Harvester();
-    this.Builder = new Builder();
-    this.Upgrader = new Upgrader();
-    this.Tower = new Tower();
+    this.PARAM_ADAPTIVE_ROLES = true;
 
-    this.ROLES = [
-      {
-        role: 'harvester',
-        population: 2,
-        genome: [WORK, CARRY, MOVE],
-        capable: ['upgrader', 'builder'],
-        run: (creep) => this.Harvester.run(creep)
-      },{
-        role: 'upgrader',
-        population: 1,
-        genome: [WORK, CARRY, MOVE],
-        capable: ['harvester', 'builder'],
-        run: (creep) => this.Upgrader.run(creep)
-      },{
-        role: 'builder',
-        population: 1,
-        genome: [WORK, CARRY, MOVE],
-        capable: ['harvester', 'upgrader'],
-        run: (creep) => this.Builder.run(creep)
-      },
-    ];
+    this.Tower = new Tower();
+    this.RoleManager = new RoleManager();
   }
 
   loop() {
@@ -53,7 +30,7 @@ class Core {
   }
 
   spawnCreeps() {
-    this.ROLES.forEach((role) => {
+    this.RoleManager.ROLES.forEach((role) => {
       var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.role);
 
       if (creeps.length < role.population) {
@@ -66,9 +43,13 @@ class Core {
   runCreeps() {
     for (var names in Game.creeps) {
       var creep = Game.creeps[names];
-      this.ROLES.forEach((role) => {
+      this.RoleManager.ROLES.forEach((role) => {
         if (creep.memory.role == role.role) {
-          role.run(creep);
+          if (this.PARAM_ADAPTIVE_ROLES) {
+            this.RoleManager.selectRole(creep);
+          } else {
+            role.run(creep);
+          }
         }
       });
     }
