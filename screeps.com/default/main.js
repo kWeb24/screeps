@@ -10,6 +10,7 @@ class Core {
 
   constructor() {
     this.PARAM_ADAPTIVE_ROLES = true;
+    this.LOOP = 1;
 
     this.Tower = new Tower();
     this.RoleManager = new RoleManager();
@@ -43,10 +44,13 @@ class Core {
   }
 
   loop() {
+    LOGGER.countLoop('&#8634; LOOP ' + this.LOOP + ' START', 1);
     this.clearDeadCreeps();
     this.spawnCreeps();
     this.Tower.run();
     this.runCreeps();
+    LOGGER.countLoop('&#8856; LOOP ' + this.LOOP + ' ENDS', 1);
+    this.LOOP++;
   }
 
   clearDeadCreeps() {

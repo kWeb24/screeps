@@ -17,7 +17,7 @@ class RoleManager {
     this.ROLES = [
       {
         role: 'harvester',
-        population: 2,
+        population: 3,
         genome: [WORK, CARRY, MOVE],
         capableOf: ['upgrader', 'builder'],
         run: (creep) => this.Harvester.run(creep),

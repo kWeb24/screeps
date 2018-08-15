@@ -52,6 +52,12 @@ class Logger {
     console.log(html);
   }
 
+  countLoop(log, lvl = false) {
+    let html = this.buildLadder(lvl);
+    html += '<span style="padding: 0 5px; background: ' + this.COLORS.white + '; color: ' + this.COLORS.black + '">' + log + '</span>';
+    console.log(html);
+  }
+
   buildLog(log, color, lvl) {
     let html = '';
     if (!lvl) {
