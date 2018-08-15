@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
 
-var Harvester = require('role.Harvester');
-var Upgrader = require('role.Upgrader');
-var Builder = require('role.Builder');
+const Harvester = require('role.Harvester');
+const Upgrader = require('role.Upgrader');
+const Builder = require('role.Builder');
 
 class Core {
 
@@ -44,8 +44,8 @@ class Core {
     }
 
     if(builders.length < 1) {
-        var newName = Game.spawns['CipciaObfita'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'builder'});
-        console.log('Spawning new builder: ' + newName);
+      var newName = Game.spawns['CipciaObfita'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'builder'});
+      console.log('Spawning new builder: ' + newName);
     }
   }
 
@@ -68,16 +68,16 @@ class Core {
 
   handleTower() {
     var tower = Game.getObjectById('500ebcb8c1a48083e1f72c79');
-    if(tower) {
+    if (tower) {
         var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => structure.hits < structure.hitsMax
         });
-        if(closestDamagedStructure) {
+        if (closestDamagedStructure) {
             tower.repair(closestDamagedStructure);
         }
 
         var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if(closestHostile) {
+        if (closestHostile) {
             tower.attack(closestHostile);
         }
     }
