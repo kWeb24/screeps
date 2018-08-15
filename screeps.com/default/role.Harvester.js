@@ -3,6 +3,7 @@
 class Harvester {
 
   constructor() {
+    
   }
 
   /** @param {Creep} creep **/

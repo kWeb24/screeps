@@ -3,6 +3,7 @@
 class Builder {
 
   constructor() {
+		
   }
 
 	/** @param {Creep} creep **/

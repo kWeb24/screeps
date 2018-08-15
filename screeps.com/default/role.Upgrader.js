@@ -3,6 +3,7 @@
 class Upgrader {
 
   constructor() {
+    
   }
 
   /** @param {Creep} creep **/

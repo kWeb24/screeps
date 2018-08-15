@@ -3,6 +3,7 @@
 class Tower {
 
   constructor() {
+    
   }
 
 	run() {
