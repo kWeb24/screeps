@@ -10,6 +10,25 @@ class Core {
     this.Harvester = new Harvester();
     this.Builder = new Builder();
     this.Upgrader = new Upgrader();
+
+    this.ROLES = [
+      {
+        role: 'harvester',
+        population: 2,
+        genome: [WORK, CARRY, MOVE],
+        run: (creep) => this.Harvester.run(creep)
+      },{
+        role: 'upgrader',
+        population: 2,
+        genome: [WORK, CARRY, MOVE],
+        run: (creep) => this.Upgrader.run(creep)
+      },{
+        role: 'builder',
+        population: 1,
+        genome: [WORK, CARRY, MOVE],
+        run: (creep) => this.Builder.run(creep)
+      },
+    ];
   }
 
   loop() {
@@ -20,7 +39,7 @@ class Core {
   }
 
   clearDeadCreeps() {
-    for(var name in Memory.creeps) {
+    for (var name in Memory.creeps) {
       if(!Game.creeps[name]) {
         delete Memory.creeps[name];
         console.log('Clearing non-existing creep memory:', name);
@@ -29,40 +48,24 @@ class Core {
   }
 
   spawnCreeps() {
-    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
+    this.ROLES.forEach((role) => {
+      var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.role);
 
-    if(harvesters.length < 2) {
-      var newName = Game.spawns['CipciaObfita'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'harvester'});
-      console.log('Spawning new harvester: ' + newName);
-    }
-
-    if(upgraders.length < 2) {
-      var newName = Game.spawns['CipciaObfita'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'upgrader'});
-      console.log('Spawning new upgrader: ' + newName);
-    }
-
-    if(builders.length < 1) {
-      var newName = Game.spawns['CipciaObfita'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'builder'});
-      console.log('Spawning new builder: ' + newName);
-    }
+      if (creeps.length < role.population) {
+        var newName = Game.spawns['CipciaObfita'].createCreep(role.genome, undefined, {role: role});
+        console.log('Spawning new ' + role.role + ' - ' + newName);
+      }
+    });
   }
 
   runCreeps() {
     for (var names in Game.creeps) {
       var creep = Game.creeps[names];
-      if (creep.memory.role == 'harvester') {
-        this.Harvester.run(creep);
-      }
-
-      if (creep.memory.role == 'upgrader') {
-        this.Upgrader.run(creep);
-      }
-
-      if (creep.memory.role == 'builder') {
-        this.Builder.run(creep);
-      }
+      this.ROLES.forEach((role) => {
+        if (creep.memory.role == role.role) {
+          role.run(creep);
+        }
+      });
     }
   }
 
