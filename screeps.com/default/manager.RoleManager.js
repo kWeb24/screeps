@@ -5,7 +5,9 @@ const Harvester = require('role.Harvester');
 const Upgrader = require('role.Upgrader');
 const Builder = require('role.Builder');
 
-const LOGGER = new Logger();
+const LOGGER = new Logger({
+  enabled: true
+});
 
 class RoleManager {
 
@@ -38,6 +40,9 @@ class RoleManager {
         needsHelp: (fromCreep) => this.Builder.needsHelp(fromCreep)
       },
     ];
+
+    console.log('-- Loading RoleManager...');
+    console.log('-- -- ROLE_MANAGER_LOGGER_ENABLED: ' + LOGGER.ENABLED);
   }
 
 	selectRole(creep) {

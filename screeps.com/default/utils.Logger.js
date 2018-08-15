@@ -2,7 +2,8 @@
 
 class Logger {
 
-  constructor() {
+  constructor(params) {
+    this.ENABLED = params.enabled;
     this.COLORS = {
       white: 'rgb(255, 255, 255)',
       grey: 'rgba(255, 255, 255, 0.6)',
@@ -41,24 +42,28 @@ class Logger {
   }
 
   finish(log, lvl = false) {
+    if (!this.ENABLED) return false;
     let html = this.buildLadder(lvl);
     html += '<span style="padding: 0 5px; background: ' + this.COLORS.green + '; color: ' + this.COLORS.black + '">' + log + '</span>';
     console.log(html);
   }
 
   ignore(log, lvl = false) {
+    if (!this.ENABLED) return false;
     let html = this.buildLadder(lvl);
     html += '<span style="padding: 0 5px; background: ' + this.COLORS.grey + '; color: ' + this.COLORS.black + '">' + log + '</span>';
     console.log(html);
   }
 
   countLoop(log, lvl = false) {
+    if (!this.ENABLED) return false;
     let html = this.buildLadder(lvl);
     html += '<span style="padding: 0 5px; background: ' + this.COLORS.white + '; color: ' + this.COLORS.black + '">' + log + '</span>';
     console.log(html);
   }
 
   buildLog(log, color, lvl) {
+    if (!this.ENABLED) return false;
     let html = '';
     if (!lvl) {
       html = '<span style="color: ' + color + '">' + log + '</span>';
@@ -80,7 +85,6 @@ class Logger {
       return html;
     }
   }
-
 }
 
 module.exports = Logger;

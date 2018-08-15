@@ -1,10 +1,14 @@
 /*jshint esversion: 6 */
 
+console.log('Initializing Core...');
+
 const Logger = require('utils.Logger');
 const Tower = require('structure.Tower');
 const RoleManager = require('manager.RoleManager');
 
-const LOGGER = new Logger();
+const LOGGER = new Logger({
+  enabled: true
+});
 
 class Core {
 
@@ -20,6 +24,12 @@ class Core {
       LOGGER.success('PARAM_ADAPTIVE_ROLES: ' + this.PARAM_ADAPTIVE_ROLES, 1);
     } else {
       LOGGER.note('PARAM_ADAPTIVE_ROLES: ' + this.PARAM_ADAPTIVE_ROLES, 1);
+    }
+
+    if (LOGGER.ENABLED) {
+      LOGGER.success('CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED, 1);
+    } else {
+      LOGGER.note('CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED, 1);
     }
 
     LOGGER.log('Available Roles', 1);
