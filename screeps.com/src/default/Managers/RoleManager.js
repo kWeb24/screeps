@@ -6,7 +6,7 @@ import Upgrader from '../Creeps/Roles/Upgrader.js';
 import Builder from '../Creeps/Roles/Builder.js';
 
 const LOGGER = new Logger({
-  enabled: true
+  enabled: false
 });
 
 export default class RoleManager {
