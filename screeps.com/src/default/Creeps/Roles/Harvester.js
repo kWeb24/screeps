@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-class Harvester {
+export default class Harvester {
 
   constructor() {
 
@@ -44,5 +44,3 @@ class Harvester {
     return targets.length > 0;
   }
 }
-
-module.exports = Harvester;

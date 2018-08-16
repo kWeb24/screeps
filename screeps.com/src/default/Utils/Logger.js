@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-class Logger {
+export default class Logger {
 
   constructor(params) {
     this.ENABLED = params.enabled;
@@ -86,5 +86,3 @@ class Logger {
     }
   }
 }
-
-module.exports = Logger;

@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-class Builder {
+export default class Builder {
 
   constructor() {
 
@@ -41,5 +41,3 @@ class Builder {
 		return targets.length;
 	}
 }
-
-module.exports = Builder;

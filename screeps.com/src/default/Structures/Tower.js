@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-class Tower {
+export default class Tower {
 
   constructor() {
 
@@ -32,5 +32,3 @@ class Tower {
     return structure;
   }
 }
-
-module.exports = Tower;

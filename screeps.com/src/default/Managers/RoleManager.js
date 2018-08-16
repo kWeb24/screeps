@@ -1,15 +1,15 @@
 /*jshint esversion: 6 */
-const Logger = require('utils.Logger');
+import Logger from '../Utils/Logger.js';
 
-const Harvester = require('role.Harvester');
-const Upgrader = require('role.Upgrader');
-const Builder = require('role.Builder');
+import Harvester from '../Creeps/Roles/Harvester.js';
+import Upgrader from '../Creeps/Roles/Upgrader.js';
+import Builder from '../Creeps/Roles/Builder.js';
 
 const LOGGER = new Logger({
-  enabled: false
+  enabled: true
 });
 
-class RoleManager {
+export default class RoleManager {
 
   constructor() {
     this.Harvester = new Harvester();
@@ -86,5 +86,3 @@ class RoleManager {
     });
   }
 }
-
-module.exports = RoleManager;

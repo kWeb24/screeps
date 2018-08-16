@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-class Upgrader {
+export default class Upgrader {
 
   constructor() {
 
@@ -35,5 +35,3 @@ class Upgrader {
     return fromCreep.carry.energy == fromCreep.carryCapacity;
   }
 }
-
-module.exports = Upgrader;
