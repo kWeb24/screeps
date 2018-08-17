@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 
+console.log('>> Loading Upgrader Role...');
+
 export default class Upgrader {
 
   constructor() {
 
-    console.log('-- Loading Upgrader Role...');
   }
 
   /** @param {Creep} creep **/

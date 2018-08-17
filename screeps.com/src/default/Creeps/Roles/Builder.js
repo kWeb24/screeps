@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 
+console.log('>> Loading Builder Role...');
+
 export default class Builder {
 
   constructor() {
 
-		console.log('-- Loading Builder Role...');
   }
 
 	/** @param {Creep} creep **/

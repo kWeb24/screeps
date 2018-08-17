@@ -1,10 +1,10 @@
 /*jshint esversion: 6 */
+console.log('>> Loading Harvester Role...');
 
 export default class Harvester {
 
   constructor() {
 
-    console.log('-- Loading Harvester Role...');
   }
 
   /** @param {Creep} creep **/

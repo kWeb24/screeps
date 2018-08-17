@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 
+console.log('>> Loading Tower Structure...');
+
 export default class Tower {
 
   constructor() {
 
-    console.log('-- Loading Tower Structure...');
   }
 
 	run() {
