@@ -20,10 +20,10 @@ export default class Repairer {
 			creep.say('repairing');
 		}
 
-		if (creep.memory.building) {
+		if (creep.memory.repairing) {
 			var target = this.findClosestRepairableStructure(creep);
 
-			if (target.length) {
+			if (target) {
 				if (creep.repair(target) == ERR_NOT_IN_RANGE) {
 					creep.moveTo(target, {visualizePathStyle: {stroke: '#faff00'}});
 				}
@@ -40,7 +40,7 @@ export default class Repairer {
 
 	needsHelp(fromCreep) {
 		var target = this.findClosestRepairableStructure(fromCreep);
-		return target.length;
+		return (target) ? true : false;
 	}
 
 	findClosestRepairableStructure(creep) {
