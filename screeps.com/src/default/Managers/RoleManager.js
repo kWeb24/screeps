@@ -1,9 +1,13 @@
 /*jshint esversion: 6 */
+
+console.log('>> Loading RoleManager...');
+
 import Logger from '../Utils/Logger.js';
 
 import Harvester from '../Creeps/Roles/Harvester.js';
 import Upgrader from '../Creeps/Roles/Upgrader.js';
 import Builder from '../Creeps/Roles/Builder.js';
+import Repairer from '../Creeps/Roles/Repairer.js';
 
 const LOGGER = new Logger({
   enabled: false
@@ -15,6 +19,7 @@ export default class RoleManager {
     this.Harvester = new Harvester();
     this.Builder = new Builder();
     this.Upgrader = new Upgrader();
+    this.Repairer = new Repairer();
 
     this.ROLES = [
       {
@@ -38,11 +43,15 @@ export default class RoleManager {
         capableOf: ['harvester', 'upgrader'],
         run: (creep) => this.Builder.run(creep),
         needsHelp: (fromCreep) => this.Builder.needsHelp(fromCreep)
-      },
+      },{
+        role: 'repairer',
+        population: 2,
+        genome: [WORK, CARRY, MOVE, MOVE],
+        capableOf: ['harvester', 'upgrader', 'builder'],
+        run: (creep) => this.Repairer.run(creep),
+        needsHelp: (fromCreep) => this.Repairer.needsHelp(fromCreep)
+      }
     ];
-
-    console.log('-- Loading RoleManager...');
-    console.log('-- -- ROLE_MANAGER_LOGGER_ENABLED: ' + LOGGER.ENABLED);
   }
 
 	selectRole(creep) {
@@ -56,11 +65,9 @@ export default class RoleManager {
         LOGGER.note(creep.name + ' (' + creep.memory.role + ') role was changed to: ' + roleInNeed.role, 4);
       } else {
         matchedRole[0].run(creep);
-        LOGGER.note(creep.name  + ' (' + creep.memory.role + ') not changed', 4);
       }
     } else {
       matchedRole[0].run(creep);
-      LOGGER.note(creep.name  + ' (' + creep.memory.role + ') not changed', 4);
     }
 	}
 
