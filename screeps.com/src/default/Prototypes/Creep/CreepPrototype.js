@@ -11,3 +11,15 @@ Object.assign(Creep.prototype, {
     this.memory.status = status;
   }
 });
+
+Object.assign(Creep.prototype, {
+  remember(key, value) {
+    this.memory['key'] = value;
+  }
+});
+
+Object.assign(Creep.prototype, {
+  forget(key) {
+    delete this.memory['key'];
+  }
+});
