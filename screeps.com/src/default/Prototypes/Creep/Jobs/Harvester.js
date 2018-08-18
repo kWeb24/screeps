@@ -16,6 +16,6 @@ Object.assign(Creep.prototype, {
 
 Object.assign(Creep.prototype, {
   isEnergyCapFull() {
-    return this.carry.energy >= this.carryCapacity
+    return this.carry.energy >= this.carryCapacity;
   }
 });
