@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 import Core from './Core/Core.js';
 import GlobalCache from './Cache/GlobalCache.js';
 
