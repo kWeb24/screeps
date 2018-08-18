@@ -4,7 +4,7 @@ console.log('>> Loading Core...');
 
 import Logger from '../Utils/Logger.js';
 
-import {} from '../Prototypes/CreepPrototype.js';
+import {} from '../Prototypes/Prototypes.js';
 import Tower from '../Structures/Tower.js';
 import RoleManager from '../Managers/RoleManager.js';
 
