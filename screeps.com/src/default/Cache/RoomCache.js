@@ -32,11 +32,11 @@ export default class RoomCache {
     this.MY_STRUCTURES = undefined;
     this.HOSTILE_STRUCTURES = undefined;
 
+    // Not implemented yet
     this.KEEPERLIARS = undefined;
     this.PORTALS = undefined;
+    this.POWERBANKS = undefined;
 
-
-    // Not implemented yet
     this.MY_EXTENSIONS = undefined;
     this.MY_CONTAINERS = undefined;
     this.MY_CONTROLLER = undefined;
@@ -44,7 +44,6 @@ export default class RoomCache {
     this.MY_LINKS = undefined;
     this.MY_NUKERS = undefined;
     this.MY_OVSERVERS = undefined;
-    this.MY_POWERBANKS = undefined;
     this.MY_POWERSPAWNS = undefined;
     this.MY_RAMPARTS = undefined;
     this.MY_STORAGES = undefined;
