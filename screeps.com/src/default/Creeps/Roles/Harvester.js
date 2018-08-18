@@ -9,38 +9,40 @@ export default class Harvester {
 
   /** @param {Creep} creep **/
   run(creep) {
-    if (creep.carry.energy < creep.carryCapacity) {
-      const sources = creep.room.find(FIND_SOURCES);
+    creep.job('harvesting');
 
-      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[0]);
-      }
+    if (!creep.isEnergyCapFull()) {
+      this.harvest(creep);
     } else {
-      const targets = this.findTargets(creep);
+      this.transfer(creep);
+    }
+  }
 
-      if (targets.length > 0) {
-        if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#0eb05d'}});
-        }
-      } else {
-        creep.moveTo(Game.flags['HarvestersGather'], {visualizePathStyle: {stroke: '#ffffff'}});
+  harvest(creep) {
+    const sources = creep.getSources();
+    creep.status('harvesting');
+    creep.target(sources[0].id);
+
+    if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(sources[0]);
+      creep.status('moving');
+    }
+  }
+
+  transfer(creep) {
+    const targets = creep.getEnergySinks();
+    creep.status('transfering');
+    creep.target(targets[0].id);
+
+    if (targets.length > 0) {
+      if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(targets[0]);
+        creep.status('moving');
       }
     }
   }
 
-  findTargets(creep) {
-    return creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-          return (structure.structureType == STRUCTURE_EXTENSION ||
-                  structure.structureType == STRUCTURE_SPAWN ||
-                  structure.structureType == STRUCTURE_TOWER) &&
-                  structure.energy < structure.energyCapacity;
-        }
-    });
-  }
-
   needsHelp(fromCreep) {
-    const targets = this.findTargets(fromCreep);
-    return targets.length > 0;
+    return !fromCreep.isEnergyCapFull() && fromCreep.getSources().length
   }
 }
