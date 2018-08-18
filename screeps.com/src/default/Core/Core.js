@@ -3,6 +3,8 @@
 console.log('>> Loading Core...');
 
 import Logger from '../Utils/Logger.js';
+
+import {} from '../Prototypes/CreepPrototype.js';
 import Tower from '../Structures/Tower.js';
 import RoleManager from '../Managers/RoleManager.js';
 
@@ -21,23 +23,6 @@ export default class Core {
 
     this.Tower = new Tower();
     this.RoleManager = new RoleManager();
-
-    LOGGER.log('Available Roles', 1);
-    this.RoleManager.ROLES.forEach((role) => {
-      let message = role.role;
-      message += ' (Population: ' + role.population + ') ';
-      message += ' (Genome: ';
-      role.genome.forEach((genome) => {
-        message += '[' + genome + ']';
-      });
-      message +=') ';
-      message += ' (Capable Of: ';
-      role.capableOf.forEach((capableOf) => {
-        message += '[' + capableOf + ']';
-      });
-      message +=') ';
-      LOGGER.note(message, 2);
-    });
   }
 
   loop() {
@@ -59,7 +44,6 @@ export default class Core {
   spawnCreeps() {
     this.RoleManager.ROLES.forEach((role) => {
       var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.role);
-
       if (creeps.length < role.population) {
         var newName = Game.spawns['CipciaObfita'].createCreep(role.genome, undefined, {role: role.role});
       }
