@@ -26,12 +26,8 @@ Object.assign(Creep.prototype, {
 });
 
 Object.assign(Creep.prototype, {
-  role(role = false) {
-    if (!role) {
-      return this.memory.role;
-    } else {
-      this.memory.role = role;
-    }
+  role() {
+    return this.memory.role;
   }
 });
 
@@ -54,7 +50,6 @@ Object.assign(Creep.prototype, {
     }
   }
 });
-
 
 Object.assign(Creep.prototype, {
   status(status = false) {
