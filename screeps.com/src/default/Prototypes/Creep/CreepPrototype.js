@@ -5,9 +5,9 @@ console.log('>> Loading Creep prototype...');
 import {} from './Jobs/Harvester.js';
 
 Object.assign(Creep.prototype, {
-  injectMemory(job, target, status) {
-    this.memory.job = '';
-    this.memory.target = '';
-    this.memory.status = '';
+  injectMemory(job = 'none', target = 'none', status = 'bored') {
+    this.memory.job = job;
+    this.memory.target = target;
+    this.memory.status = status;
   }
 });
