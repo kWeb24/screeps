@@ -32,6 +32,8 @@ export default class RoomCache {
     this.MY_STRUCTURES = undefined;
     this.HOSTILE_STRUCTURES = undefined;
 
+    this.ENERGY_SINKS = undefined;
+
     // Not implemented yet
     this.KEEPERLIARS = undefined;
     this.PORTALS = undefined;
@@ -242,5 +244,20 @@ export default class RoomCache {
     }
 
     return this.HOSTILE_STRUCTURES;
+  }
+
+  getEnergySinks() {
+    if (this.ENERGY_SINKS === undefined) {
+      this.ENERGY_SINKS = this.ROOM.find(FIND_STRUCTURES, {
+          filter: (structure) => {
+            return (structure.structureType == STRUCTURE_EXTENSION ||
+                    structure.structureType == STRUCTURE_SPAWN ||
+                    structure.structureType == STRUCTURE_TOWER) &&
+                    structure.energy < structure.energyCapacity;
+          }
+      });
+    }
+
+    return this.ENERGY_SINKS;
   }
 }
