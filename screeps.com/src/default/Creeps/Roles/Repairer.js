@@ -10,31 +10,40 @@ export default class Repairer {
 
 	/** @param {Creep} creep **/
 	run(creep) {
-		if (creep.memory.repairing && creep.carry.energy == 0) {
-      creep.memory.repairing = false;
-			creep.say('harvesting');
+		creep.job('repairing');
+
+    if (creep.carry.energy == 0) {
+			this.harvest(creep);
+    } else {
+			this.repair(creep);
 		}
+	}
 
-		if (!creep.memory.repairing && creep.carry.energy == creep.carryCapacity) {
-			creep.memory.repairing = true;
-			creep.say('repairing');
+	harvest(creep) {
+		var sources = creep.room.find(FIND_SOURCES);
+
+		creep.status('harvesting');
+		creep.target(sources[0].id);
+
+		if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+			creep.moveTo(sources[0]);
 		}
+	}
 
-		if (creep.memory.repairing) {
-			var target = this.findClosestRepairableStructure(creep);
+	repair(creep) {
+		var target = this.findClosestRepairableStructure(creep);
 
-			if (target) {
-				if (creep.repair(target) == ERR_NOT_IN_RANGE) {
-					creep.moveTo(target, {visualizePathStyle: {stroke: '#faff00'}});
-				}
-			} else {
-        creep.moveTo(Game.flags['BuildersGatherPoint'], {visualizePathStyle: {stroke: '#faff00'}});
-      }
-		} else {
-			var sources = creep.room.find(FIND_SOURCES);
-			if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-				creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+		creep.status('repairing');
+
+		if (target) {
+			creep.target(target.id);
+			if (creep.repair(target) == ERR_NOT_IN_RANGE) {
+				creep.moveTo(target);
+				creep.status('moving');
 			}
+		} else {
+			creep.moveTo(Game.flags['BuildersGatherPoint'], {visualizePathStyle: {stroke: '#faff00'}});
+			creep.status('bored');
 		}
 	}
 

@@ -10,25 +10,33 @@ export default class Upgrader {
 
   /** @param {Creep} creep **/
   run(creep) {
-    if (creep.memory.upgrading && creep.carry.energy == 0) {
-      creep.memory.upgrading = false;
-      creep.say('harvesting');
-    }
+    creep.job('upgrading');
 
-    if (!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
-      creep.memory.upgrading = true;
-      creep.say('upgrading');
-    }
-
-    if (creep.memory.upgrading) {
-      if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(creep.room.controller);
-      }
+    if (creep.carry.energy == 0) {
+			this.harvest(creep);
     } else {
-      var sources = creep.room.find(FIND_SOURCES);
-      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#0e9db0'}});
-      }
+			this.upgrade(creep);
+		}
+  }
+
+  harvest(creep) {
+    var sources = creep.room.find(FIND_SOURCES);
+
+		creep.status('harvesting');
+		creep.target(sources[0].id);
+
+		if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+			creep.moveTo(sources[0]);
+		}
+  }
+
+  upgrade(creep) {
+    creep.status('upgrading');
+    creep.target(creep.room.controller.name);
+
+    if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(creep.room.controller);
+      creep.status('moving');
     }
   }
 
