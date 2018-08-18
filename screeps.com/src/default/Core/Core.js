@@ -15,7 +15,8 @@ const LOGGER = new Logger({
 export default class Core {
 
   constructor() {
-    this.PARAM_ADAPTIVE_ROLES = true;
+    // TODO: Fix Adaptive roles, doesn't work with new prototypes
+    this.PARAM_ADAPTIVE_ROLES = false;
     this.LOOP = 1;
 
     console.log('-- -- CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED);
