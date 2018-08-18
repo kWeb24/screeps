@@ -9,3 +9,9 @@ Object.assign(Creep.prototype, {
     this.memory.status = '';
   }
 });
+
+Object.assign(Creep.prototype, {
+  getSources() {
+    return CACHE.ROOMS[this.room.name].getSources();
+  }
+});
