@@ -13,3 +13,22 @@ global.PLANNER = new Planner();
 global.ROLE_MANAGER = new RoleManager();
 
 module.exports.loop = () => CORE.loop();
+
+// TODO: Get shit done
+
+// role tier system
+// build builders only if construction site is present
+// priority queues
+
+// 2 harvesters per source
+// energyManagers to distribute energy from link spawn and storage to MY_EXTENSIONS
+// builders work as upgraders when nothing to do
+// Since road upkeep is the most work but required little energy
+// roadkeepers should be mainly fast with low build and storage
+// Spawn meele and ranged when enemy detected
+
+// if not to many construction sites creep check if standing on road
+// and eventually drop construction site
+
+// prefab layouts droppend near core far exits
+// core with storage spawns MY_TOWERS
