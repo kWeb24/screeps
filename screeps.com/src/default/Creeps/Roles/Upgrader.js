@@ -12,9 +12,13 @@ export default class Upgrader {
   run(creep) {
     creep.job('upgrading');
 
-    if (creep.carry.energy == 0) {
+    if ((creep.status() != 'harvesting' && creep.carry.energy == 0) ||
+        (creep.status() == 'harvesting' && !creep.isEnergyCapFull())) {
 			this.harvest(creep);
-    } else {
+    }
+
+    if ((creep.status() != 'upgrading' && creep.isEnergyCapFull()) ||
+        (creep.status() == 'upgrading' && creep.carry.energy > 0)) {
 			this.upgrade(creep);
 		}
   }

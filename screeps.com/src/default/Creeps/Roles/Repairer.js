@@ -12,6 +12,16 @@ export default class Repairer {
 	run(creep) {
 		creep.job('repairing');
 
+    if ((creep.status() != 'harvesting' && creep.carry.energy == 0) ||
+        (creep.status() == 'harvesting' && !creep.isEnergyCapFull())) {
+			this.harvest(creep);
+    }
+
+    if ((creep.status() != 'repairing' && creep.isEnergyCapFull()) ||
+        (creep.status() == 'repairing' && creep.carry.energy > 0)) {
+			this.repair(creep);
+		}
+
     if (creep.carry.energy == 0) {
 			this.harvest(creep);
     } else {

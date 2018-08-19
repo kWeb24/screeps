@@ -12,9 +12,13 @@ export default class Builder {
 	run(creep) {
     creep.job('building');
 
-    if (!creep.isEnergyCapFull()) {
+    if ((creep.status() != 'harvesting' && creep.carry.energy == 0) ||
+        (creep.status() == 'harvesting' && !creep.isEnergyCapFull())) {
 			this.harvest(creep);
-    } else {
+    }
+
+    if ((creep.status() != 'building' && creep.isEnergyCapFull()) ||
+        (creep.status() == 'building' && creep.carry.energy > 0)) {
 			this.build(creep);
 		}
 	}
