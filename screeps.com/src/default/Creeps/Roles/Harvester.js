@@ -32,9 +32,9 @@ export default class Harvester {
   transfer(creep) {
     const targets = creep.getEnergySinks();
     creep.status('transfering');
-    creep.target(targets[0].id);
 
     if (targets.length > 0) {
+      creep.target(targets[0].id);
       if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(targets[0]);
         creep.status('moving');

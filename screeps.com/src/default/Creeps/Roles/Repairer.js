@@ -44,6 +44,7 @@ export default class Repairer {
 		} else {
 			creep.moveTo(Game.flags['BuildersGatherPoint'], {visualizePathStyle: {stroke: '#faff00'}});
 			creep.status('bored');
+      creep.target('none');
 		}
 	}
 
