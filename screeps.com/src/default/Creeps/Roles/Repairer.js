@@ -18,7 +18,8 @@ export default class Repairer {
     }
 
     if ((creep.status() != 'repairing' && creep.isEnergyCapFull()) ||
-        (creep.status() == 'repairing' && creep.carry.energy > 0)) {
+        (creep.status() == 'repairing' && creep.carry.energy > 0) ||
+        (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.repair(creep);
 		}
 

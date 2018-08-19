@@ -18,7 +18,8 @@ export default class Builder {
     }
 
     if ((creep.status() != 'building' && creep.isEnergyCapFull()) ||
-        (creep.status() == 'building' && creep.carry.energy > 0)) {
+        (creep.status() == 'building' && creep.carry.energy > 0) ||
+        (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.build(creep);
 		}
 	}
@@ -31,6 +32,7 @@ export default class Builder {
 
 		if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
 			creep.moveTo(sources[1]);
+      creep.status('moving');
 		}
   }
 

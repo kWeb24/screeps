@@ -18,7 +18,8 @@ export default class Upgrader {
     }
 
     if ((creep.status() != 'upgrading' && creep.isEnergyCapFull()) ||
-        (creep.status() == 'upgrading' && creep.carry.energy > 0)) {
+        (creep.status() == 'upgrading' && creep.carry.energy > 0) ||
+        (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.upgrade(creep);
 		}
   }
