@@ -20,7 +20,7 @@ export default class Upgrader {
   }
 
   harvest(creep) {
-    var sources = creep.room.find(FIND_SOURCES);
+    const sources = creep.getSources();
 
 		creep.status('harvesting');
 		creep.target(sources[0].id);
