@@ -39,7 +39,7 @@ export default class Builder {
       if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
         creep.moveTo(targets[0]);
         creep.status('moving');
-        creep.target(sources[0].id);
+        creep.target(targets[0].id);
       }
     } else {
       creep.moveTo(Game.flags['BuildersGatherPoint']);
