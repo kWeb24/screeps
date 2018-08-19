@@ -5,6 +5,9 @@ console.log('>> Loading Core...');
 import Logger from '../Utils/Logger.js';
 
 import {} from '../Prototypes/Prototypes.js';
+
+import Planner from '../Planners/Planner.js';
+
 import Tower from '../Structures/Tower.js';
 import RoleManager from '../Managers/RoleManager.js';
 
@@ -22,11 +25,14 @@ export default class Core {
     console.log('-- -- CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED);
     console.log('-- -- PARAM_ADAPTIVE_ROLES:' + this.PARAM_ADAPTIVE_ROLES);
 
+    this.Planner = new Planner();
+
     this.Tower = new Tower();
     this.RoleManager = new RoleManager();
   }
 
   loop() {
+    // this.Planner.ROOMS['W52S54'].drawVisuals();
     this.clearDeadCreeps();
     this.spawnCreeps();
     this.Tower.run();
