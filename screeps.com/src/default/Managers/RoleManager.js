@@ -38,8 +38,8 @@ export default class RoleManager {
         needsHelp: (fromCreep) => this.Upgrader.needsHelp(fromCreep)
       },{
         role: 'builder',
-        population: 1,
-        genome: [WORK, CARRY, MOVE],
+        population: 2,
+        genome: [WORK, CARRY, MOVE, MOVE],
         capableOf: ['harvester', 'upgrader'],
         run: (creep) => this.Builder.run(creep),
         needsHelp: (fromCreep) => this.Builder.needsHelp(fromCreep)
