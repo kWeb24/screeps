@@ -12,7 +12,7 @@ export default class Builder {
 	run(creep) {
     creep.job('building');
 
-    if (creep.carry.energy == 0) {
+    if (!creep.isEnergyCapFull()) {
 			this.harvest(creep);
     } else {
 			this.build(creep);
@@ -23,23 +23,23 @@ export default class Builder {
     const sources = creep.getSources();
 
 		creep.status('harvesting');
-		creep.target(sources[0].id);
+		creep.target(sources[1].id);
 
-		if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-			creep.moveTo(sources[0]);
+		if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
+			creep.moveTo(sources[1]);
 		}
   }
 
   build(creep) {
-    var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+    var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 
     creep.status('building');
 
-    if (targets.length) {
-      if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(targets[0]);
+    if (targets) {
+      if (creep.build(targets) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(targets);
         creep.status('moving');
-        creep.target(targets[0].id);
+        creep.target(targets.id);
       }
     } else {
       creep.moveTo(Game.flags['BuildersGatherPoint']);
