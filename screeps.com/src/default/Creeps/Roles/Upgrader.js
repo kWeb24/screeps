@@ -30,6 +30,8 @@ export default class Upgrader extends Role {
         (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.upgrade(creep);
 		}
+
+    this.dropRoad(creep);
   }
 
   /** @param {Creep} creep **/

@@ -36,6 +36,8 @@ export default class Repairer extends Role {
     } else {
 			this.repair(creep);
 		}
+
+		this.dropRoad(creep);
 	}
 
 	/** @param {Creep} creep **/

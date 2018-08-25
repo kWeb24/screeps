@@ -24,6 +24,8 @@ export default class Harvester extends Role {
     } else {
       this.transfer(creep);
     }
+
+    this.dropRoad(creep);
   }
 
   /** @param {Creep} creep **/
