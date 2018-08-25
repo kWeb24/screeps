@@ -22,35 +22,10 @@ export default class RoleManager {
     this.Repairer = new Repairer();
 
     this.ROLES = [
-      {
-        role: 'harvester',
-        population: 3,
-        genome: [WORK, CARRY, MOVE],
-        capableOf: ['upgrader', 'builder'],
-        run: (creep) => this.Harvester.run(creep),
-        needsHelp: (fromCreep) => this.Harvester.needsHelp(fromCreep)
-      },{
-        role: 'upgrader',
-        population: 2,
-        genome: [WORK, CARRY, MOVE],
-        capableOf: ['harvester', 'builder'],
-        run: (creep) => this.Upgrader.run(creep),
-        needsHelp: (fromCreep) => this.Upgrader.needsHelp(fromCreep)
-      },{
-        role: 'builder',
-        population: 2,
-        genome: [WORK, WORK, CARRY, MOVE],
-        capableOf: ['harvester', 'upgrader'],
-        run: (creep) => this.Builder.run(creep),
-        needsHelp: (fromCreep) => this.Builder.needsHelp(fromCreep)
-      },{
-        role: 'repairer',
-        population: 2,
-        genome: [WORK, WORK, CARRY, MOVE],
-        capableOf: ['harvester', 'upgrader', 'builder'],
-        run: (creep) => this.Repairer.run(creep),
-        needsHelp: (fromCreep) => this.Repairer.needsHelp(fromCreep)
-      }
+      this.Harvester,
+      this.Builder,
+      this.Upgrader,
+      this.Repairer
     ];
   }
 
