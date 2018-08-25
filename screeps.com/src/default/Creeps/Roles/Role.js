@@ -23,7 +23,7 @@ export default class Role {
 	}
 
   shouldSpawn() {
-    if (this.countCreeps < this.POPULATION) {
+    if (this.countCreeps() < this.POPULATION) {
       return true;
     }
 
@@ -31,10 +31,23 @@ export default class Role {
   }
 
   getCreeps() {
-    return _.filter(Game.creeps, (creep) => this.ROLE);
+    return _.filter(Game.creeps, (creep) => creep.memory.role == this.ROLE);
   }
 
   countCreeps() {
-    return getCreeps().length;
+    return this.getCreeps().length;
+  }
+
+  /** @param {Creep} fromCreep **/
+  dropRoad(creep) {
+    const CONSTRUCTION_SITES = CACHE.ROOMS[creep.room.name].getMyConstructionSites();
+
+    if (CONSTRUCTION_SITES.length < 10) {
+      const tileContent = creep.room.lookAt(creep.pos);
+
+      if (tileContent.type != 'structure' && tileContent.type != 'constructionSite') {
+        creep.room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
+      }
+    }
   }
 }
