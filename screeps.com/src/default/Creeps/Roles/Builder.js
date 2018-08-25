@@ -12,7 +12,7 @@ export default class Builder extends Role {
     this.ROLE = 'builder';
     this.POPULATION = 2;
     this.GENOME = [WORK, WORK, CARRY, MOVE];
-    this.CAPABLE_OF = ['harvester', 'upgrader'];
+    this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = true;
   }
 
