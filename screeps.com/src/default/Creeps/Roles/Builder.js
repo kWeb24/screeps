@@ -2,10 +2,18 @@
 
 console.log('>> Loading Builder Role...');
 
-export default class Builder {
+import Role from './Role.js';
+
+export default class Builder extends Role {
 
   constructor() {
+    super();
 
+    this.ROLE = 'builder';
+    this.POPULATION = 2;
+    this.GENOME = [WORK, WORK, CARRY, MOVE];
+    this.CAPABLE_OF = ['harvester', 'upgrader'];
+    this.ON_DEMAND = true;
   }
 
 	/** @param {Creep} creep **/
@@ -24,6 +32,7 @@ export default class Builder {
 		}
 	}
 
+  /** @param {Creep} creep **/
   harvest(creep) {
     const sources = creep.getSources();
 
@@ -36,6 +45,7 @@ export default class Builder {
 		}
   }
 
+  /** @param {Creep} creep **/
   build(creep) {
     var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 
@@ -54,6 +64,7 @@ export default class Builder {
     }
   }
 
+  /** @param {Creep} fromCreep **/
 	needsHelp(fromCreep) {
 		var targets = fromCreep.room.find(FIND_CONSTRUCTION_SITES);
 		return targets.length;

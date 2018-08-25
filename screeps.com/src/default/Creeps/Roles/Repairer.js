@@ -2,10 +2,18 @@
 
 console.log('>> Loading Repairer Role...');
 
-export default class Repairer {
+import Role from './Role.js';
+
+export default class Repairer extends Role {
 
   constructor() {
+    super();
 
+		this.ROLE = 'repairer';
+    this.POPULATION = 2;
+    this.GENOME = [WORK, WORK, CARRY, MOVE];
+    this.CAPABLE_OF = ['harvester', 'upgrader', 'builder'];
+    this.ON_DEMAND = false;
   }
 
 	/** @param {Creep} creep **/
@@ -30,6 +38,7 @@ export default class Repairer {
 		}
 	}
 
+	/** @param {Creep} creep **/
 	harvest(creep) {
 		const sources = creep.getSources();
 
@@ -41,6 +50,7 @@ export default class Repairer {
 		}
 	}
 
+	/** @param {Creep} creep **/
 	repair(creep) {
 		var target = this.findClosestRepairableStructure(creep);
 
@@ -59,6 +69,7 @@ export default class Repairer {
 		}
 	}
 
+	/** @param {Creep} fromCreep **/
 	needsHelp(fromCreep) {
 		var target = this.findClosestRepairableStructure(fromCreep);
 		return (target) ? true : false;

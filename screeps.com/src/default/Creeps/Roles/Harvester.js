@@ -1,10 +1,18 @@
 /*jshint esversion: 6 */
 console.log('>> Loading Harvester Role...');
 
-export default class Harvester {
+import Role from './Role.js';
+
+export default class Harvester extends Role {
 
   constructor() {
+    super();
 
+    this.ROLE = 'harvester';
+    this.POPULATION = 3;
+    this.GENOME = [WORK, CARRY, MOVE];
+    this.CAPABLE_OF = ['upgrader', 'builder'];
+    this.ON_DEMAND = false;
   }
 
   /** @param {Creep} creep **/
@@ -18,6 +26,7 @@ export default class Harvester {
     }
   }
 
+  /** @param {Creep} creep **/
   harvest(creep) {
     const sources = creep.getSources();
     creep.status('harvesting');
@@ -29,6 +38,7 @@ export default class Harvester {
     }
   }
 
+  /** @param {Creep} creep **/
   transfer(creep) {
     const targets = creep.getEnergySinks();
     creep.status('transfering');
@@ -42,7 +52,8 @@ export default class Harvester {
     }
   }
 
+  /** @param {Creep} fromCreep **/
   needsHelp(fromCreep) {
-    return !fromCreep.isEnergyCapFull() && fromCreep.getSources().length
+    return !fromCreep.isEnergyCapFull() && fromCreep.getSources().length;
   }
 }

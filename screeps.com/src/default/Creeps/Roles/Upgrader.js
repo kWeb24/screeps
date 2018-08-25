@@ -2,10 +2,18 @@
 
 console.log('>> Loading Upgrader Role...');
 
-export default class Upgrader {
+import Role from './Role.js';
+
+export default class Upgrader extends Role {
 
   constructor() {
+    super();
 
+    this.ROLE = 'upgrader';
+    this.POPULATION = 2;
+    this.GENOME = [WORK, CARRY, MOVE];
+    this.CAPABLE_OF = ['harvester', 'builder'];
+    this.ON_DEMAND = false;
   }
 
   /** @param {Creep} creep **/
@@ -24,6 +32,7 @@ export default class Upgrader {
 		}
   }
 
+  /** @param {Creep} creep **/
   harvest(creep) {
     const sources = creep.getSources();
 
@@ -35,6 +44,7 @@ export default class Upgrader {
 		}
   }
 
+  /** @param {Creep} creep **/
   upgrade(creep) {
     creep.status('upgrading');
     creep.target(creep.room.controller.name);
@@ -45,6 +55,7 @@ export default class Upgrader {
     }
   }
 
+  /** @param {Creep} fromCreep **/
   needsHelp(fromCreep) {
     return fromCreep.carry.energy == fromCreep.carryCapacity;
   }
