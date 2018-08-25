@@ -8,12 +8,13 @@ export default class SpawnManager {
 
   }
 
-	/** @param {Creep} creep **/
-	run(creep) {
-
-	}
-
-	needsHelp(fromCreep) {
-		return false;
-	}
+  spawn() {
+    ROLE_MANAGER.ROLES.forEach((role) => {
+      var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.ROLE);
+      if (role.shouldSpawn()) {
+        const NAME = role.ROLE + '_' + UTILS.guidGenerator();
+        Game.spawns['CipciaObfita'].createCreep(role.GENOME, name, {role: role.ROLE});
+      }
+    });
+  }
 }

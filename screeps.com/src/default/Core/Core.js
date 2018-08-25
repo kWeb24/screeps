@@ -39,19 +39,14 @@ export default class Core {
   }
 
   spawnCreeps() {
-    ROLE_MANAGER.ROLES.forEach((role) => {
-      var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.role);
-      if (creeps.length < role.population) {
-        var newName = Game.spawns['CipciaObfita'].createCreep(role.genome, undefined, {role: role.role});
-      }
-    });
+    SPAWN_MANAGER.spawn();
   }
 
   runCreeps() {
     for (var names in Game.creeps) {
       var creep = Game.creeps[names];
       ROLE_MANAGER.ROLES.forEach((role) => {
-        if (creep.memory.role == role.role) {
+        if (creep.memory.role == role.ROLE) {
           if (this.PARAM_ADAPTIVE_ROLES) {
             ROLE_MANAGER.selectRole(creep);
           } else {
