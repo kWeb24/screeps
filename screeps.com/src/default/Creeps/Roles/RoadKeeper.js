@@ -2,19 +2,23 @@
 
 console.log('>> Loading Road Keeper...');
 
-export default class RoadKeeper {
+import Repairer from './Repairer.js';
+
+export default class RoadKeeper extends Repairer {
 
   constructor() {
-    // Since road upkeep is the most work but required little energy
-    // roadkeepers should be mainly fast with low build and storage
+    super();
+
+		this.ROLE = 'roadKeeper';
+    this.POPULATION = 2;
+    this.GENOME = [WORK, CARRY, MOVE, MOVE];
+    this.CAPABLE_OF = ['upgrader'];
+    this.ON_DEMAND = false;
   }
 
-	/** @param {Creep} creep **/
-	run(creep) {
-
-	}
-
-	needsHelp(fromCreep) {
-		return false;
+	findClosestRepairableStructure(creep) {
+		return creep.pos.findClosestByRange(FIND_STRUCTURES, {
+				filter: (structure) => (structure.hits < structure.hitsMax / 1.3) && structure.structureType == STRUCTURE_ROAD
+		});
 	}
 }

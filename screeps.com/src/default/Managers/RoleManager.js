@@ -8,6 +8,7 @@ import Harvester from '../Creeps/Roles/Harvester.js';
 import Upgrader from '../Creeps/Roles/Upgrader.js';
 import Builder from '../Creeps/Roles/Builder.js';
 import Repairer from '../Creeps/Roles/Repairer.js';
+import RoadKeeper from '../Creeps/Roles/RoadKeeper.js';
 
 const LOGGER = new Logger({
   enabled: false
@@ -20,12 +21,14 @@ export default class RoleManager {
     this.Builder = new Builder();
     this.Upgrader = new Upgrader();
     this.Repairer = new Repairer();
+    this.RoadKeeper = new RoadKeeper();
 
     this.ROLES = [
       this.Harvester,
       this.Builder,
       this.Upgrader,
-      this.Repairer
+      this.Repairer,
+      this.RoadKeeper
     ];
   }
 
