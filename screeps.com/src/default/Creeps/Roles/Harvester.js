@@ -19,25 +19,44 @@ export default class Harvester extends Role {
   run(creep) {
     creep.job('harvesting');
 
-    if (!creep.isEnergyCapFull()) {
-      this.harvest(creep);
-    } else {
-      this.transfer(creep);
+    if ((creep.status() != 'harvesting' && creep.carry.energy == 0) ||
+        (creep.status() == 'harvesting' && !creep.isEnergyCapFull())) {
+			this.harvest(creep);
     }
+
+    if ((creep.status() != 'transfering' && creep.isEnergyCapFull()) ||
+        (creep.status() == 'transfering' && creep.carry.energy > 0) ||
+        (creep.status() == 'moving' && creep.carry.energy > 0)) {
+			this.transfer(creep);
+		}
 
     this.dropRoad(creep);
   }
 
   /** @param {Creep} creep **/
   harvest(creep) {
-    const sources = creep.getSources();
-    creep.status('harvesting');
-    creep.target(sources[0].id);
+    const selectedSource = this.selectSource(creep);
 
-    if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(sources[0]);
+    creep.status('harvesting');
+    creep.target(selectedSource.id);
+
+    if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(selectedSource);
       creep.status('moving');
     }
+  }
+
+  /** @param {Creep} creep **/
+  selectSource(creep) {
+    let sources = creep.getSources();
+    const primarySource = _.filter(sources, (source) => source.id == creep.memory.primarySource);
+    let selectedSource = primarySource[0];
+
+    if (primarySource.energy < creep.carryCapacity || primarySource.ticksToRegeneration > 10) {
+      selectedSource = creep.getClosestActiveSource();
+    }
+
+    return selectedSource;
   }
 
   /** @param {Creep} creep **/
