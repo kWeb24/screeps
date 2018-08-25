@@ -50,4 +50,26 @@ export default class Role {
       }
     }
   }
+
+  /** @param {Room} room **/
+  getPrimarySource(room) {
+    const SOURCES = CACHE.ROOMS[room.name].getSources();
+    let creepsInSource = [];
+
+    for (const SOURCE in SOURCES) {
+      const CREEP_COUNT = _.filter(Game.creeps, (creep) => creep.memory.primarySource == SOURCE.id);
+      creepsInSource.push(CREEP_COUNT.length);
+    }
+
+    let lastSourceVal;
+    let bestSourceIndex;
+    creepsInSource.forEach((val, i) => {
+      if (!lastSourceVal || val < lastSourceVal) {
+        lastSourceVal = val;
+        bestSourceIndex = i;
+      }
+    });
+
+    return SOURCES[bestSourceIndex].id;
+  }
 }

@@ -13,7 +13,10 @@ export default class SpawnManager {
       var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.ROLE);
       if (role.shouldSpawn()) {
         const NAME = role.ROLE + '_' + UTILS.guidGenerator();
-        Game.spawns['CipciaObfita'].createCreep(role.GENOME, NAME, {role: role.ROLE});
+        Game.spawns['CipciaObfita'].createCreep(role.GENOME, NAME, {
+          role: role.ROLE,
+          primarySource: role.getPrimarySource(Game.spawns['CipciaObfita'].room)
+        });
       }
     });
   }
