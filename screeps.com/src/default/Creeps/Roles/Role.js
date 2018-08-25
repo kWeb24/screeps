@@ -57,14 +57,14 @@ export default class Role {
     let creepsInSource = [];
 
     for (const SOURCE in SOURCES) {
-      const CREEP_COUNT = _.filter(Game.creeps, (creep) => creep.memory.primarySource == SOURCE.id);
+      const CREEP_COUNT = _.filter(Game.creeps, (creep) => creep.memory.primarySource == SOURCES[SOURCE].id);
       creepsInSource.push(CREEP_COUNT.length);
     }
 
     let lastSourceVal;
     let bestSourceIndex;
     creepsInSource.forEach((val, i) => {
-      if (!lastSourceVal || val < lastSourceVal) {
+      if (lastSourceVal === undefined || val < lastSourceVal) {
         lastSourceVal = val;
         bestSourceIndex = i;
       }
