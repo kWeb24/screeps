@@ -336,7 +336,7 @@ nav ul li ul {
 
 nav>ul>li {
     border-bottom: 1px solid #e2e2e2;
-    padding: 10px 0 20px 0;
+    padding: 10px 0;
 }
 
 nav>ul>li.active ul {
@@ -354,12 +354,12 @@ nav>ul>li.active a {
 
 nav>ul>li>a {
     color: #706d77;
-    padding: 20px 0;
+    padding: 10px 0;
     font-size: 18px;
 }
 
 nav ul ul {
-    margin-bottom: 10px padding-left: 0;
+    padding-left: 0;
 }
 
 nav ul ul a {
@@ -369,9 +369,7 @@ nav ul ul a {
 nav ul ul a, nav ul ul a:active {
     font-family: 'bt_mono', monospace;
     font-size: 14px;
-    padding-left: 20px;
-    padding-top: 3px;
-    padding-bottom: 9px;
+    padding: 5px 0 5px 15px;
 }
 
 nav h2 {
