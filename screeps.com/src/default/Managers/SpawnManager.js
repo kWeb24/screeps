@@ -5,7 +5,18 @@ console.log('>> Loading SpawnManager...');
 export default class SpawnManager {
 
   constructor() {
+    this.BODY_PARTS_PRICES = {
+      move: 50,
+      work: 100,
+      carry: 50,
+      attack: 80,
+      rangedAttack: 150,
+      heal: 250,
+      claim: 600,
+      tough: 10
+    };
 
+    this.MAX_BODY_PARTS = 50;
   }
 
   spawn() {
