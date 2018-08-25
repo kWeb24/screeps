@@ -12,7 +12,7 @@ export default class Repairer extends Role {
 		this.ROLE = 'repairer';
     this.POPULATION = 2;
     this.GENOME = [WORK, WORK, CARRY, MOVE];
-    this.CAPABLE_OF = ['harvester', 'upgrader', 'builder'];
+    this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = false;
   }
 
@@ -65,7 +65,7 @@ export default class Repairer extends Role {
 				creep.status('moving');
 			}
 		} else {
-			creep.moveTo(Game.flags['BuildersGatherPoint'], {visualizePathStyle: {stroke: '#faff00'}});
+			creep.moveTo(Game.flags['BuildersGatherPoint']);
 			creep.status('bored');
       creep.target('none');
 		}
@@ -79,7 +79,7 @@ export default class Repairer extends Role {
 
 	findClosestRepairableStructure(creep) {
 		return creep.pos.findClosestByRange(FIND_STRUCTURES, {
-				filter: (structure) => (structure.hits < structure.hitsMax / 1.3) && structure.structureType != STRUCTURE_WALL
+				filter: (structure) => (structure.hits < structure.hitsMax / 1.3) && structure.structureType != STRUCTURE_WALL && structure.structureType != STRUCTURE_ROAD
 		});
 	}
 }
