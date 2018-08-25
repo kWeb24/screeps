@@ -5,11 +5,12 @@ console.log('>> Loading Creep prototype...');
 import {} from './Jobs/Harvester.js';
 
 Object.assign(Creep.prototype, {
-  injectMemory(role = 'none', job = 'none', target = 'none', status = 'bored') {
+  injectMemory(role = 'none', job = 'none', target = 'none', status = 'bored', source = 'none') {
     this.memory.role = role;
     this.memory.job = job;
     this.memory.target = target;
     this.memory.status = status;
+    this.memory.primarySource = source;
   }
 });
 
@@ -57,6 +58,16 @@ Object.assign(Creep.prototype, {
       return this.memory.status;
     } else {
       this.memory.status = status;
+    }
+  }
+});
+
+Object.assign(Creep.prototype, {
+  primarySource(source = false) {
+    if (!source) {
+      return this.memory.primarySource;
+    } else {
+      this.memory.primarySource = source;
     }
   }
 });
