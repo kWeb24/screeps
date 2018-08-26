@@ -66,25 +66,6 @@ export default class Harvester extends Role {
 
   /**
    * @memberof Harvester
-   * @desc Finding best energy source for given creep
-   * @private
-   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
-   * @returns {Source} best energy {@link https://docs.screeps.com/api/#Source|Screeps Source}
-   **/
-  selectSource(creep) {
-    let sources = creep.getSources();
-    const primarySource = _.filter(sources, (source) => source.id == creep.memory.primarySource);
-    let selectedSource = primarySource[0];
-
-    if (primarySource.energy < creep.carryCapacity || primarySource.ticksToRegeneration > 10) {
-      selectedSource = creep.getClosestActiveSource();
-    }
-
-    return selectedSource;
-  }
-
-  /**
-   * @memberof Harvester
    * @desc Transfering energy to given container
    * @private
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
