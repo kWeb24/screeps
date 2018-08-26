@@ -60,14 +60,14 @@ export default class Repairer extends Role {
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
 	harvest(creep) {
-		const sources = creep.getSources();
+    const selectedSource = this.selectSource(creep);
 
-		creep.status('harvesting');
-		creep.target(sources[0].id);
+    creep.status('harvesting');
+    creep.target(selectedSource.id);
 
-		if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-			creep.moveTo(sources[0]);
-		}
+    if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(selectedSource);
+    }
 	}
 
   /**
