@@ -170,7 +170,7 @@ export default class RoomCache {
     this.MY_EXTRACTOR = undefined;
     this.MY_LINKS = undefined;
     this.MY_NUKERS = undefined;
-    this.MY_OVSERVERS = undefined;
+    this.MY_OBSERVERS = undefined;
     this.MY_POWERSPAWNS = undefined;
     this.MY_RAMPARTS = undefined;
     this.MY_STORAGES = undefined;
