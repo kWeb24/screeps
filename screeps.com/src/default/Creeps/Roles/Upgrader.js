@@ -4,6 +4,12 @@ console.log('>> Loading Upgrader Role...');
 
 import Role from './Role.js';
 
+/**
+ * @class Upgrader
+ * @classdesc Upgrader role class
+ * @abstract
+ * @augments Role
+ */
 export default class Upgrader extends Role {
 
   constructor() {
@@ -16,7 +22,14 @@ export default class Upgrader extends Role {
     this.ON_DEMAND = false;
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Repairer
+   * @desc Run actual Upgrader loop
+   * @public
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+	 * @override
+	 * @see Role
+   **/
   run(creep) {
     creep.job('upgrading');
 
@@ -34,7 +47,12 @@ export default class Upgrader extends Role {
     this.dropRoad(creep);
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Upgrader
+   * @desc Harvest energy
+   * @private
+   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   **/
   harvest(creep) {
     const sources = creep.getSources();
 
@@ -46,7 +64,12 @@ export default class Upgrader extends Role {
 		}
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Upgrader
+   * @desc Upgrade {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
+   * @private
+   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   **/
   upgrade(creep) {
     creep.status('upgrading');
     creep.target(creep.room.controller.name);
@@ -57,7 +80,15 @@ export default class Upgrader extends Role {
     }
   }
 
-  /** @param {Creep} fromCreep **/
+  /**
+   * @memberof Upgrader
+   * @desc Check if given role needs help from asking {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+   * @public
+   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object that call this method
+   * @returns {Boolean}
+	 * @override
+	 * @see Role
+   **/
   needsHelp(fromCreep) {
     return fromCreep.carry.energy == fromCreep.carryCapacity;
   }

@@ -9,11 +9,26 @@ const LOGGER = new Logger({
   enabled: false
 });
 
+/**
+ * @class Core
+ * @classdesc AI Core
+ * @global
+ */
+
 export default class Core {
 
   constructor() {
-    // TODO: Fix Adaptive roles, doesn't work with new prototypes
+    /**
+    * @member {Boolean} Core#PARAM_ADAPTIVE_ROLES
+    * @desc {@link RoleManager} adaptive roles flag
+    * @todo Fix Adaptive roles, doesn't work with new prototypes
+    **/
     this.PARAM_ADAPTIVE_ROLES = false;
+
+    /**
+    * @member {Integer} Core#LOOP
+    * @desc Current Loop of Core instance
+    **/
     this.LOOP = 1;
 
     console.log('-- -- CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED);
@@ -22,6 +37,11 @@ export default class Core {
     this.Tower = new Tower();
   }
 
+  /**
+   * @memberof Core
+   * @desc Actual Core loop that handle game ticks
+   * @public
+   **/
   loop() {
     this.clearDeadCreeps();
     this.spawnCreeps();
@@ -30,6 +50,11 @@ export default class Core {
     this.LOOP++;
   }
 
+  /**
+   * @memberof Core
+   * @desc Clear dead {@link https://docs.screeps.com/api/#Creep|Screeps Creep} from memory
+   * @private
+   **/
   clearDeadCreeps() {
     for (var name in Memory.creeps) {
       if (!Game.creeps[name]) {
@@ -38,10 +63,21 @@ export default class Core {
     }
   }
 
+  /**
+   * @memberof Core
+   * @desc Spawning {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+   * @private
+   **/
   spawnCreeps() {
     SPAWN_MANAGER.spawn();
   }
 
+  /**
+   * @memberof Core
+   * @desc Running {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+   * based on role and handles Adaptive Roles conditions
+   * @private
+   **/
   runCreeps() {
     for (var names in Game.creeps) {
       var creep = Game.creeps[names];

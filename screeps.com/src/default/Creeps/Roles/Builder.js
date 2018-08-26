@@ -4,6 +4,12 @@ console.log('>> Loading Builder Role...');
 
 import Role from './Role.js';
 
+/**
+ * @class Builder
+ * @classdesc Builder role class
+ * @abstract
+ * @augments Role
+ */
 export default class Builder extends Role {
 
   constructor() {
@@ -16,7 +22,14 @@ export default class Builder extends Role {
     this.ON_DEMAND = true;
   }
 
-	/** @param {Creep} creep **/
+  /**
+   * @memberof Builder
+   * @desc Run actual Builder Role loop
+   * @public
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+	 * @override
+	 * @see Role
+   **/
 	run(creep) {
     creep.job('building');
 
@@ -32,7 +45,12 @@ export default class Builder extends Role {
 		}
 	}
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Builder
+   * @desc Harvest energy
+   * @private
+   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   **/
   harvest(creep) {
     const sources = creep.getSources();
 
@@ -45,7 +63,12 @@ export default class Builder extends Role {
 		}
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Builder
+   * @desc Build {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
+   * @private
+   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   **/
   build(creep) {
     var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 
@@ -64,7 +87,15 @@ export default class Builder extends Role {
     }
   }
 
-  /** @param {Creep} fromCreep **/
+  /**
+   * @memberof Builder
+   * @desc Check if given role needs help from asking {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+   * @public
+   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object that call this method
+   * @returns {Boolean}
+	 * @override
+	 * @see Role
+   **/
 	needsHelp(fromCreep) {
 		var targets = fromCreep.room.find(FIND_CONSTRUCTION_SITES);
 		return targets.length;

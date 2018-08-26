@@ -14,15 +14,43 @@ const LOGGER = new Logger({
   enabled: false
 });
 
+/**
+ * @class RoleManager
+ * @classdesc RoleManager class, manages roles
+ * @global
+ */
+
 export default class RoleManager {
 
   constructor() {
+    /**
+    * @member {Object<Harvester>} RoleManager#Harvester
+    **/
     this.Harvester = new Harvester();
+
+    /**
+    * @member {Object<Builder>} RoleManager#Builder
+    **/
     this.Builder = new Builder();
+
+    /**
+    * @member {Object<Upgrader>} RoleManager#Upgrader
+    **/
     this.Upgrader = new Upgrader();
+
+    /**
+    * @member {Object<Repairer>} RoleManager#Repairer
+    **/
     this.Repairer = new Repairer();
+
+    /**
+    * @member {Object<RoadKeeper>} RoleManager#RoadKeeper
+    **/
     this.RoadKeeper = new RoadKeeper();
 
+    /**
+    * @member {Array<Role>} RoleManager#Roles
+    **/
     this.ROLES = [
       this.Harvester,
       this.Builder,
@@ -32,6 +60,12 @@ export default class RoleManager {
     ];
   }
 
+  /**
+   * @memberof RoleManager
+   * @desc Select role based on current load and needs
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   * @public
+   **/
 	selectRole(creep) {
     const matchedRole = this.getCreepRoleReference(creep);
 
@@ -49,6 +83,14 @@ export default class RoleManager {
     }
 	}
 
+
+  /**
+   * @memberof RoleManager
+   * @desc Find role that needs help
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   * @param {Role} matchedRole {@link Role} object
+   * @public
+   **/
   findRoleInNeed(creep, matchedRole) {
     let selectedRole = false;
     const roleArray = matchedRole[0].capableOf;
@@ -65,6 +107,12 @@ export default class RoleManager {
     return selectedRole;
   }
 
+  /**
+   * @memberof RoleManager
+   * @desc Find creep with selected(proposal) Role
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   * @public
+   **/
   getCreepRoleReference(creep) {
     return this.ROLES.filter(role => {
       return role.role === creep.memory.role;

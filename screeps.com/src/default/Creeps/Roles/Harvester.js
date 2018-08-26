@@ -3,6 +3,12 @@ console.log('>> Loading Harvester Role...');
 
 import Role from './Role.js';
 
+/**
+ * @class Harvester
+ * @classdesc Harvester role class
+ * @abstract
+ * @augments Role
+ */
 export default class Harvester extends Role {
 
   constructor() {
@@ -15,7 +21,14 @@ export default class Harvester extends Role {
     this.ON_DEMAND = false;
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Harvester
+   * @desc Run actual Harvester Role loop
+   * @public
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+	 * @override
+	 * @see Role
+   **/
   run(creep) {
     creep.job('harvesting');
 
@@ -33,7 +46,12 @@ export default class Harvester extends Role {
     this.dropRoad(creep);
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Harvester
+   * @desc Harvest energy
+   * @private
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   **/
   harvest(creep) {
     const selectedSource = this.selectSource(creep);
 
@@ -46,7 +64,13 @@ export default class Harvester extends Role {
     }
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Harvester
+   * @desc Finding best energy source for given creep
+   * @private
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   * @returns {Source} best energy {@link https://docs.screeps.com/api/#Source|Screeps Source}
+   **/
   selectSource(creep) {
     let sources = creep.getSources();
     const primarySource = _.filter(sources, (source) => source.id == creep.memory.primarySource);
@@ -59,7 +83,12 @@ export default class Harvester extends Role {
     return selectedSource;
   }
 
-  /** @param {Creep} creep **/
+  /**
+   * @memberof Harvester
+   * @desc Transfering energy to given container
+   * @private
+   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   **/
   transfer(creep) {
     const targets = creep.getEnergySinks();
     creep.status('transfering');
@@ -73,7 +102,15 @@ export default class Harvester extends Role {
     }
   }
 
-  /** @param {Creep} fromCreep **/
+  /**
+   * @memberof Harvester
+   * @desc Check if given role needs help from asking {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+   * @public
+   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object that call this method
+   * @returns {Boolean}
+	 * @override
+	 * @see Role
+   **/
   needsHelp(fromCreep) {
     return !fromCreep.isEnergyCapFull() && fromCreep.getSources().length;
   }

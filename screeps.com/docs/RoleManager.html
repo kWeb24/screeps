@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      RoleManager - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      Braintree SDK Client Reference
+    </h3>
+
+    <h3>Classes</h3><ul><li id="Builder-nav"><a href="Builder.html">Builder</a><ul class='methods'><li data-type="method" id="Builder-build-nav"><a href="Builder.html#.build">build</a></li><li data-type="method" id="Builder-harvest-nav"><a href="Builder.html#.harvest">harvest</a></li><li data-type="method" id="Builder-needsHelp-nav"><a href="Builder.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Builder-run-nav"><a href="Builder.html#.run">run</a></li></ul></li><li id="Core-nav"><a href="Core.html">Core</a><ul class='methods'><li data-type="method" id="Core-clearDeadCreeps-nav"><a href="Core.html#.clearDeadCreeps">clearDeadCreeps</a></li><li data-type="method" id="Core-loop-nav"><a href="Core.html#.loop">loop</a></li><li data-type="method" id="Core-runCreeps-nav"><a href="Core.html#.runCreeps">runCreeps</a></li><li data-type="method" id="Core-spawnCreeps-nav"><a href="Core.html#.spawnCreeps">spawnCreeps</a></li></ul></li><li id="GlobalCache-nav"><a href="GlobalCache.html">GlobalCache</a><ul class='methods'><li data-type="method" id="GlobalCache-initRoomCache-nav"><a href="GlobalCache.html#.initRoomCache">initRoomCache</a></li></ul></li><li id="Guard-nav"><a href="Guard.html">Guard</a><ul class='methods'><li data-type="method" id="Guard-needsHelp-nav"><a href="Guard.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Guard-run-nav"><a href="Guard.html#.run">run</a></li></ul></li><li id="Harvester-nav"><a href="Harvester.html">Harvester</a><ul class='methods'><li data-type="method" id="Harvester-harvest-nav"><a href="Harvester.html#.harvest">harvest</a></li><li data-type="method" id="Harvester-needsHelp-nav"><a href="Harvester.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Harvester-run-nav"><a href="Harvester.html#.run">run</a></li><li data-type="method" id="Harvester-selectSource-nav"><a href="Harvester.html#.selectSource">selectSource</a></li><li data-type="method" id="Harvester-transfer-nav"><a href="Harvester.html#.transfer">transfer</a></li></ul></li><li id="Hauler-nav"><a href="Hauler.html">Hauler</a><ul class='methods'><li data-type="method" id="Hauler-needsHelp-nav"><a href="Hauler.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Hauler-run-nav"><a href="Hauler.html#.run">run</a></li></ul></li><li id="Miner-nav"><a href="Miner.html">Miner</a><ul class='methods'><li data-type="method" id="Miner-needsHelp-nav"><a href="Miner.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Miner-run-nav"><a href="Miner.html#.run">run</a></li></ul></li><li id="Planner-nav"><a href="Planner.html">Planner</a><ul class='methods'><li data-type="method" id="Planner-initRoomPlanning-nav"><a href="Planner.html#.initRoomPlanning">initRoomPlanning</a></li></ul></li><li id="Repairer-nav"><a href="Repairer.html">Repairer</a><ul class='methods'><li data-type="method" id="Repairer-findClosestRepairableStructure-nav"><a href="Repairer.html#.findClosestRepairableStructure">findClosestRepairableStructure</a></li><li data-type="method" id="Repairer-harvest-nav"><a href="Repairer.html#.harvest">harvest</a></li><li data-type="method" id="Repairer-needsHelp-nav"><a href="Repairer.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Repairer-repair-nav"><a href="Repairer.html#.repair">repair</a></li><li data-type="method" id="Repairer-run-nav"><a href="Repairer.html#.run">run</a></li><li data-type="method" id="Repairer-run-nav"><a href="Repairer.html#.run">run</a></li></ul></li><li id="RoadKeeper-nav"><a href="RoadKeeper.html">RoadKeeper</a><ul class='methods'><li data-type="method" id="RoadKeeper-findClosestRepairableStructure-nav"><a href="RoadKeeper.html#.findClosestRepairableStructure">findClosestRepairableStructure</a></li></ul></li><li id="Role-nav"><a href="Role.html">Role</a><ul class='methods'><li data-type="method" id="Role-countCreeps-nav"><a href="Role.html#.countCreeps">countCreeps</a></li><li data-type="method" id="Role-dropRoad-nav"><a href="Role.html#.dropRoad">dropRoad</a></li><li data-type="method" id="Role-getCreeps-nav"><a href="Role.html#.getCreeps">getCreeps</a></li><li data-type="method" id="Role-getPrimarySource-nav"><a href="Role.html#.getPrimarySource">getPrimarySource</a></li><li data-type="method" id="Role-needsHelp-nav"><a href="Role.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Role-run-nav"><a href="Role.html#.run">run</a></li><li data-type="method" id="Role-shouldSpawn-nav"><a href="Role.html#.shouldSpawn">shouldSpawn</a></li></ul></li><li id="RoleManager-nav"><a href="RoleManager.html">RoleManager</a><ul class='methods'><li data-type="method" id="RoleManager-findRoleInNeed-nav"><a href="RoleManager.html#.findRoleInNeed">findRoleInNeed</a></li><li data-type="method" id="RoleManager-getCreepRoleReference-nav"><a href="RoleManager.html#.getCreepRoleReference">getCreepRoleReference</a></li><li data-type="method" id="RoleManager-selectRole-nav"><a href="RoleManager.html#.selectRole">selectRole</a></li></ul></li><li id="RoomCache-nav"><a href="RoomCache.html">RoomCache</a><ul class='methods'><li data-type="method" id="RoomCache-getActiveSources-nav"><a href="RoomCache.html#.getActiveSources">getActiveSources</a></li><li data-type="method" id="RoomCache-getConstructionSites-nav"><a href="RoomCache.html#.getConstructionSites">getConstructionSites</a></li><li data-type="method" id="RoomCache-getCreeps-nav"><a href="RoomCache.html#.getCreeps">getCreeps</a></li><li data-type="method" id="RoomCache-getDroppedEnergy-nav"><a href="RoomCache.html#.getDroppedEnergy">getDroppedEnergy</a></li><li data-type="method" id="RoomCache-getDroppedResources-nav"><a href="RoomCache.html#.getDroppedResources">getDroppedResources</a></li><li data-type="method" id="RoomCache-getEnergySinks-nav"><a href="RoomCache.html#.getEnergySinks">getEnergySinks</a></li><li data-type="method" id="RoomCache-getFlags-nav"><a href="RoomCache.html#.getFlags">getFlags</a></li><li data-type="method" id="RoomCache-getHostileConstructionSites-nav"><a href="RoomCache.html#.getHostileConstructionSites">getHostileConstructionSites</a></li><li data-type="method" id="RoomCache-getHostileCreeps-nav"><a href="RoomCache.html#.getHostileCreeps">getHostileCreeps</a></li><li data-type="method" id="RoomCache-getHostileSpawns-nav"><a href="RoomCache.html#.getHostileSpawns">getHostileSpawns</a></li><li data-type="method" id="RoomCache-getHostileStructures-nav"><a href="RoomCache.html#.getHostileStructures">getHostileStructures</a></li><li data-type="method" id="RoomCache-getMinerals-nav"><a href="RoomCache.html#.getMinerals">getMinerals</a></li><li data-type="method" id="RoomCache-getMyConstructionSites-nav"><a href="RoomCache.html#.getMyConstructionSites">getMyConstructionSites</a></li><li data-type="method" id="RoomCache-getMyCreeps-nav"><a href="RoomCache.html#.getMyCreeps">getMyCreeps</a></li><li data-type="method" id="RoomCache-getMySpawns-nav"><a href="RoomCache.html#.getMySpawns">getMySpawns</a></li><li data-type="method" id="RoomCache-getMyStructures-nav"><a href="RoomCache.html#.getMyStructures">getMyStructures</a></li><li data-type="method" id="RoomCache-getNukes-nav"><a href="RoomCache.html#.getNukes">getNukes</a></li><li data-type="method" id="RoomCache-getSources-nav"><a href="RoomCache.html#.getSources">getSources</a></li><li data-type="method" id="RoomCache-getStructures-nav"><a href="RoomCache.html#.getStructures">getStructures</a></li><li data-type="method" id="RoomCache-getTombstones-nav"><a href="RoomCache.html#.getTombstones">getTombstones</a></li></ul></li><li id="RoomPlanner-nav"><a href="RoomPlanner.html">RoomPlanner</a><ul class='methods'><li data-type="method" id="RoomPlanner-buildRoads-nav"><a href="RoomPlanner.html#.buildRoads">buildRoads</a></li><li data-type="method" id="RoomPlanner-drawVisuals-nav"><a href="RoomPlanner.html#.drawVisuals">drawVisuals</a></li><li data-type="method" id="RoomPlanner-findPath-nav"><a href="RoomPlanner.html#.findPath">findPath</a></li><li data-type="method" id="RoomPlanner-planRoads-nav"><a href="RoomPlanner.html#.planRoads">planRoads</a></li></ul></li><li id="SpawnManager-nav"><a href="SpawnManager.html">SpawnManager</a><ul class='methods'><li data-type="method" id="SpawnManager-spawn-nav"><a href="SpawnManager.html#.spawn">spawn</a></li></ul></li><li id="Upgrader-nav"><a href="Upgrader.html">Upgrader</a><ul class='methods'><li data-type="method" id="Upgrader-harvest-nav"><a href="Upgrader.html#.harvest">harvest</a></li><li data-type="method" id="Upgrader-needsHelp-nav"><a href="Upgrader.html#.needsHelp">needsHelp</a></li><li data-type="method" id="Upgrader-upgrade-nav"><a href="Upgrader.html#.upgrade">upgrade</a></li></ul></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        RoleManager
+      </h1>
+    
+
+    
+
+<section>
+  <header>
+    
+      <h2>
+        
+        RoleManager
+        
+      </h2>
+
+      
+        <div class="class-description">
+          RoleManager class, manages roles
+        </div>
+      
+    
+  </header>
+
+  <article>
+    <div class="container-overview">
+      
+        
+
+
+  
+    <h2>Constructor</h2>
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#RoleManager">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="RoleManager">
+      <span class="type-signature"></span>new RoleManager<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line17">line 17</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+
+<h4 class="name" id="Builder">
+  <span class="type-signature"></span>Builder<span class="type-signature"> :Object.&lt;<a href="Builder.html">Builder</a>></span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line31">line 31</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="Harvester">
+  <span class="type-signature"></span>Harvester<span class="type-signature"> :Object.&lt;<a href="Harvester.html">Harvester</a>></span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line26">line 26</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="Repairer">
+  <span class="type-signature"></span>Repairer<span class="type-signature"> :Object.&lt;<a href="Repairer.html">Repairer</a>></span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line41">line 41</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="RoadKeeper">
+  <span class="type-signature"></span>RoadKeeper<span class="type-signature"> :Object.&lt;<a href="RoadKeeper.html">RoadKeeper</a>></span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line46">line 46</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="Roles">
+  <span class="type-signature"></span>Roles<span class="type-signature"> :Array.&lt;<a href="Role.html">Role</a>></span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line51">line 51</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="Upgrader">
+  <span class="type-signature"></span>Upgrader<span class="type-signature"> :Object.&lt;<a href="Upgrader.html">Upgrader</a>></span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line36">line 36</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+    
+
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.findRoleInNeed">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".findRoleInNeed">
+      <span class="type-signature">(static) </span>findRoleInNeed<span class="signature">(creep, matchedRole)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Find role that needs help
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>creep</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Creep
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <a href="https://docs.screeps.com/api/#Creep">Screeps Creep</a> object
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>matchedRole</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="Role.html">Role</a>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <a href="Role.html">Role</a> object
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line94">line 94</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.getCreepRoleReference">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".getCreepRoleReference">
+      <span class="type-signature">(static) </span>getCreepRoleReference<span class="signature">(creep)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Find creep with selected(proposal) Role
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>creep</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Creep
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <a href="https://docs.screeps.com/api/#Creep">Screeps Creep</a> object
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line116">line 116</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.selectRole">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".selectRole">
+      <span class="type-signature">(static) </span>selectRole<span class="signature">(creep)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Select role based on current load and needs
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>creep</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Creep
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <a href="https://docs.screeps.com/api/#Creep">Screeps Creep</a> object
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Managers_RoleManager.js.html">Managers/RoleManager.js</a>, <a href="Managers_RoleManager.js.html#line69">line 69</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    
+
+    
+
+    
+  </article>
+</section>
+
+
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+  
+</body>
+</html>

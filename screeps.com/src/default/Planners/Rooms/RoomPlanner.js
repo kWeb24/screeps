@@ -2,15 +2,34 @@
 
 console.log('>> Loading RoomPlanner module...');
 
+/**
+ * @class RoomPlanner
+ * @classdesc RoomPlanner class
+ * @global
+ */
 export default class RoomPlanner {
 
   constructor(room) {
+    /**
+    * @member {Object} RoomPlanner#ROOM
+    * @desc {@link https://docs.screeps.com/api/#Room|Screeps Room} object reference
+    **/
     this.ROOM = room;
+
+    /**
+    * @member {Array<RoomPosition>} RoomPlanner#PATHS
+    * @desc {@link https://docs.screeps.com/api/#RoomPosition|Screeps RoomPosition} objects array
+    **/
     this.PATHS = [];
     this.planRoads();
     this.buildRoads();
   }
 
+  /**
+   * @memberof RoomPlanner
+   * @desc Plan roads for given room based on predefined Points of Interest (PoI)
+   * @private
+   **/
   planRoads() {
     this.findPath(
       this.ROOM.controller.pos,
@@ -28,6 +47,13 @@ export default class RoomPlanner {
     );
   }
 
+  /**
+   * @memberof RoomPlanner
+   * @desc Find path from given position to given targets
+   * @param {RoomPosition} from {@link https://docs.screeps.com/api/#RoomPosition|Screeps RoomPosition} object
+   * @param {Object} targets SOURCE, MINERAL or SPAWN object
+   * @private
+   **/
   findPath(from, targets) {
     for (const target in targets) {
       const path = PathFinder.search(from, {
@@ -41,6 +67,11 @@ export default class RoomPlanner {
     }
   }
 
+  /**
+   * @memberof RoomPlanner
+   * @desc BuildRoads method
+   * @private
+   **/
   buildRoads() {
     this.PATHS.forEach((path) => {
       path.forEach((pos) => {
@@ -55,6 +86,11 @@ export default class RoomPlanner {
     });
   }
 
+  /**
+   * @memberof RoomPlanner
+   * @desc DrawVisuals optional method. Require refresh each tick
+   * @private
+   **/
   drawVisuals() {
     this.PATHS.forEach((path) => {
       this.ROOM.visual.poly(path, {
