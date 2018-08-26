@@ -20,6 +20,7 @@ export default class Repairer extends Role {
     this.GENOME = [WORK, WORK, CARRY, MOVE];
     this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = false;
+    this.USE_ENERGY_DEPOSITS = true;
   }
 
   /**

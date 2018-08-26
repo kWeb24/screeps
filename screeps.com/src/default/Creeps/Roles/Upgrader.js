@@ -20,6 +20,7 @@ export default class Upgrader extends Role {
     this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ['harvester', 'builder'];
     this.ON_DEMAND = false;
+    this.USE_ENERGY_DEPOSITS = true;
   }
 
   /**

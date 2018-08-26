@@ -20,6 +20,7 @@ export default class RoadKeeper extends Repairer {
     this.GENOME = [WORK, CARRY, MOVE, MOVE];
     this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = false;
+    this.USE_ENERGY_DEPOSITS = true;
   }
 
   /**

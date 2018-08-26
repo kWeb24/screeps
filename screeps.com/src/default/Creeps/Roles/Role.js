@@ -44,6 +44,13 @@ export default class Role {
     * should be spawned only if there's demand of it's role work
     **/
     this.ON_DEMAND = true;
+
+    /**
+    * @member {Boolean} Role#USE_ENERGY_DEPOSITS
+    * @desc Flag that indicates if {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+    * should withdraw energy from energy deposits
+    **/
+    this.USE_ENERGY_DEPOSITS = true;
   }
 
   /**
@@ -169,4 +176,6 @@ export default class Role {
 
     return selectedSource;
   }
+
+  
 }

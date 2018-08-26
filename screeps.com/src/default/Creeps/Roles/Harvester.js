@@ -19,6 +19,7 @@ export default class Harvester extends Role {
     this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ['upgrader', 'builder'];
     this.ON_DEMAND = false;
+    this.USE_ENERGY_DEPOSITS = false;
   }
 
   /**
