@@ -16,7 +16,7 @@ export default class RoadKeeper extends Repairer {
     super();
 
 		this.ROLE = 'roadKeeper';
-    this.POPULATION = 2;
+    this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE, MOVE];
     this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = false;

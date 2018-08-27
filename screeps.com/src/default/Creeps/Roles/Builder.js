@@ -16,8 +16,8 @@ export default class Builder extends Role {
     super();
 
     this.ROLE = 'builder';
-    this.POPULATION = 2;
-    this.GENOME = [WORK, WORK, CARRY, MOVE];
+    this.POPULATION = 1;
+    this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = true;
     this.USE_ENERGY_DEPOSITS = true;
