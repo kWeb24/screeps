@@ -71,6 +71,6 @@ export default class SpawnManager {
       });
     }
 
-    return (finalGenome.length < role.GENOME) ? false : finalGenome;
+    return (finalGenome.length < role.GENOME.length) ? false : finalGenome;
   }
 }
