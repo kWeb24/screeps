@@ -32,7 +32,7 @@ export default class SpawnManager {
         const GENOME = this.createAffordableGenome(role, ROOM);
 
         if (!GENOME) return false;
-        
+
         Game.spawns['CipciaObfita'].createCreep(GENOME, NAME, {
           role: role.ROLE,
           primarySource: role.getPrimarySource(ROOM)
@@ -45,6 +45,7 @@ export default class SpawnManager {
    * @memberof SpawnManager
    * @desc Create body parts array that could be spawned with given energy amount
    * @private
+   * @returns {Array<BodyParts>} Array of body parts or false
    **/
   createAffordableGenome(role, room) {
     const maxPrice = room.energyAvailable();
