@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      Managers/SpawnManager.js - Documentation
+      Creep - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -78,96 +76,383 @@
   <div id="main">
     
       <h1 class="page-title">
-        Managers/SpawnManager.js
+        Creep
       </h1>
     
 
     
-      
 
 <section>
+  <header>
+    
+      <h2>
+        
+        Creep
+        
+      </h2>
+
+      
+    
+  </header>
+
   <article>
-    <pre class="prettyprint source linenums"><code>/*jshint esversion: 6 */
+    <div class="container-overview">
+      
+        
+            <div class="description">
+              Extends <a href="https://docs.screeps.com/api/#Creep">Screeps Creep</a> prototype
+            </div>
+        
 
-console.log('>> Loading SpawnManager...');
+        
 
-/**
- * @class SpawnManager
- * @classdesc SpawnManager class, manages spawns
- * @global
- */
-export default class SpawnManager {
+<dl class="details">
 
-  constructor() {
-    /**
-    * @member {Integer} SpawnManager#MAX_BODY_PARTS
-    * @desc Set max {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * body parts limit
-    **/
-    this.MAX_BODY_PARTS = 50;
-  }
+  
 
-  /**
-   * @memberof SpawnManager
-   * @desc Spawn {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-   * @public
-   **/
-  spawn() {
-    ROLE_MANAGER.ROLES.forEach((role) => {
-      var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.ROLE);
-      if (role.shouldSpawn()) {
-        const NAME = role.ROLE + '_' + UTILS.guidGenerator();
-        const ROOM = Game.spawns['CipciaObfita'].room;
-        const GENOME = this.createAffordableGenome(role, ROOM);
+  
 
-        if (!GENOME) return false;
+  
 
-        Game.spawns['CipciaObfita'].createCreep(GENOME, NAME, {
-          role: role.ROLE,
-          primarySource: role.getPrimarySource(ROOM)
-        });
-      }
-    });
-  }
+  
 
-  /**
-   * @memberof SpawnManager
-   * @desc Create body parts array that could be spawned with given energy amount
-   * @private
-   * @returns {Array&lt;BodyParts>} Array of body parts or false
-   **/
-  createAffordableGenome(role, room) {
-    const maxPrice = room.energyAvailable;
-    const possiblePrice = room.energyCapacityAvailable;
-    let currentPrice = 0;
-    let finalGenome = [];
+  
 
-    let search = true;
-    while (currentPrice &lt; maxPrice &amp;&amp; search) {
-      role.GENOME.forEach((part) => {
-        let priceOffset = 0;
+  
 
-        if (part == 'carry') {
-          priceOffset = BODYPART_COST[MOVE];
-        }
+  
 
-        if (currentPrice + BODYPART_COST[part] + priceOffset &lt; maxPrice) {
-          finalGenome += part;
-          currentPrice += BODYPART_COST[part];
-        } else {
-          search = false;
-        }
-      });
-    }
+  
 
-    return (finalGenome.length &lt; role.GENOME) ? false : finalGenome;
-  }
-}
-</code></pre>
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Prototypes_Creep_CreepPrototype.js.html">Prototypes/Creep/CreepPrototype.js</a>, <a href="Prototypes_Creep_CreepPrototype.js.html#line7">line 7</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul>
+        
+          <li>
+            <a href="https://docs.screeps.com/api/#Creep">Screeps Creep</a>
+          </li>
+        
+      </ul>
+    </dd>
+  
+
+  
+</dl>
+
+
+        
+      
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#injectMemory">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="injectMemory">
+      <span class="type-signature"></span>injectMemory<span class="signature">(role, job, target, status, source)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Assign injectMemory method method do prototype
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>role</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>job</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>target</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>status</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>source</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Prototypes_Creep_CreepPrototype.js.html">Prototypes/Creep/CreepPrototype.js</a>, <a href="Prototypes_Creep_CreepPrototype.js.html#line13">line 13</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    
+
+    
+
+    
   </article>
 </section>
 
-    
+
 
 
   </div>

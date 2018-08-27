@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      Managers/SpawnManager.js - Documentation
+      Prototypes/Creep/CreepPrototype.js - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -78,7 +78,7 @@
   <div id="main">
     
       <h1 class="page-title">
-        Managers/SpawnManager.js
+        Prototypes/Creep/CreepPrototype.js
       </h1>
     
 
@@ -89,80 +89,99 @@
   <article>
     <pre class="prettyprint source linenums"><code>/*jshint esversion: 6 */
 
-console.log('>> Loading SpawnManager...');
+console.log('>> Loading Creep prototype...');
+
+import {} from './Jobs/Harvester.js';
 
 /**
- * @class SpawnManager
- * @classdesc SpawnManager class, manages spawns
- * @global
+ * @external Creep
+ * @see {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+ * @desc Extends {@link https://docs.screeps.com/api/#Creep|Screeps Creep} prototype
  */
-export default class SpawnManager {
 
-  constructor() {
-    /**
-    * @member {Integer} SpawnManager#MAX_BODY_PARTS
-    * @desc Set max {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * body parts limit
-    **/
-    this.MAX_BODY_PARTS = 50;
+ /**
+  * @func external:Creep#injectMemory
+  * @desc Assign injectMemory method method do prototype
+  * @extends external:Creep
+  * @param {String} role
+  * @param {String} job
+  * @param {String} target
+  * @param {String} status
+  * @param {String} source
+  **/
+Object.assign(Creep.prototype, {
+  injectMemory(role = 'none', job = 'none', target = 'none', status = 'bored', source = 'none') {
+    this.memory.role = role;
+    this.memory.job = job;
+    this.memory.target = target;
+    this.memory.status = status;
+    this.memory.primarySource = source;
   }
+});
 
-  /**
-   * @memberof SpawnManager
-   * @desc Spawn {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-   * @public
-   **/
-  spawn() {
-    ROLE_MANAGER.ROLES.forEach((role) => {
-      var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.ROLE);
-      if (role.shouldSpawn()) {
-        const NAME = role.ROLE + '_' + UTILS.guidGenerator();
-        const ROOM = Game.spawns['CipciaObfita'].room;
-        const GENOME = this.createAffordableGenome(role, ROOM);
-
-        if (!GENOME) return false;
-
-        Game.spawns['CipciaObfita'].createCreep(GENOME, NAME, {
-          role: role.ROLE,
-          primarySource: role.getPrimarySource(ROOM)
-        });
-      }
-    });
+Object.assign(Creep.prototype, {
+  remember(key, value) {
+    this.memory['key'] = value;
   }
+});
 
-  /**
-   * @memberof SpawnManager
-   * @desc Create body parts array that could be spawned with given energy amount
-   * @private
-   * @returns {Array&lt;BodyParts>} Array of body parts or false
-   **/
-  createAffordableGenome(role, room) {
-    const maxPrice = room.energyAvailable;
-    const possiblePrice = room.energyCapacityAvailable;
-    let currentPrice = 0;
-    let finalGenome = [];
+Object.assign(Creep.prototype, {
+  forget(key) {
+    delete this.memory['key'];
+  }
+});
 
-    let search = true;
-    while (currentPrice &lt; maxPrice &amp;&amp; search) {
-      role.GENOME.forEach((part) => {
-        let priceOffset = 0;
+Object.assign(Creep.prototype, {
+  role() {
+    return this.memory.role;
+  }
+});
 
-        if (part == 'carry') {
-          priceOffset = BODYPART_COST[MOVE];
-        }
-
-        if (currentPrice + BODYPART_COST[part] + priceOffset &lt; maxPrice) {
-          finalGenome += part;
-          currentPrice += BODYPART_COST[part];
-        } else {
-          search = false;
-        }
-      });
+Object.assign(Creep.prototype, {
+  job(job = false) {
+    if (!job) {
+      return this.memory.job;
+    } else {
+      this.memory.job = job;
     }
-
-    return (finalGenome.length &lt; role.GENOME) ? false : finalGenome;
   }
-}
+});
+
+Object.assign(Creep.prototype, {
+  target(target = false) {
+    if (!target) {
+      return this.memory.target;
+    } else {
+      this.memory.target = target;
+    }
+  }
+});
+
+Object.assign(Creep.prototype, {
+  status(status = false) {
+    if (!status) {
+      return this.memory.status;
+    } else {
+      this.memory.status = status;
+    }
+  }
+});
+
+Object.assign(Creep.prototype, {
+  primarySource(source = false) {
+    if (!source) {
+      return this.memory.primarySource;
+    } else {
+      this.memory.primarySource = source;
+    }
+  }
+});
+
+Object.assign(Creep.prototype, {
+  isEnergyCapFull() {
+    return this.carry.energy >= this.carryCapacity;
+  }
+});
 </code></pre>
   </article>
 </section>

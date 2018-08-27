@@ -4,6 +4,22 @@ console.log('>> Loading Creep prototype...');
 
 import {} from './Jobs/Harvester.js';
 
+/**
+ * @external Creep
+ * @see {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+ * @desc Extends {@link https://docs.screeps.com/api/#Creep|Screeps Creep} prototype
+ */
+
+ /**
+  * @func external:Creep#injectMemory
+  * @desc Assign injectMemory method method do prototype
+  * @extends external:Creep
+  * @param {String} role
+  * @param {String} job
+  * @param {String} target
+  * @param {String} status
+  * @param {String} source
+  **/
 Object.assign(Creep.prototype, {
   injectMemory(role = 'none', job = 'none', target = 'none', status = 'bored', source = 'none') {
     this.memory.role = role;

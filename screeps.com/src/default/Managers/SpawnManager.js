@@ -48,8 +48,8 @@ export default class SpawnManager {
    * @returns {Array<BodyParts>} Array of body parts or false
    **/
   createAffordableGenome(role, room) {
-    const maxPrice = room.energyAvailable();
-    const possiblePrice = room.energyCapacityAvailable();
+    const maxPrice = room.energyAvailable;
+    const possiblePrice = room.energyCapacityAvailable;
     let currentPrice = 0;
     let finalGenome = [];
 
