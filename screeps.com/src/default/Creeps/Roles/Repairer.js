@@ -44,12 +44,6 @@ export default class Repairer extends Role {
 			this.repair(creep);
 		}
 
-    if (creep.carry.energy == 0) {
-			this.harvest(creep);
-    } else {
-			this.repair(creep);
-		}
-
 		this.dropRoad(creep);
 	}
 
