@@ -159,13 +159,26 @@ export default class RoomCache {
     **/
     this.ENERGY_SINKS = undefined;
 
+    /**
+    * @member {Array<StructureContainer>} RoomCache#CONTAINERS
+    * @desc Array of {@link https://docs.screeps.com/api/#StructureContainer|Screeps StructureContainer}
+    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+    **/
+    this.CONTAINERS = undefined;
+
+    /**
+    * @member {Array<StructureStorage>} RoomCache#MY_STORAGE
+    * @desc {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage}
+    * object in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+    **/
+    this.MY_STORAGE = undefined;
+
     // Not implemented yet
     this.KEEPERLIARS = undefined;
     this.PORTALS = undefined;
     this.POWERBANKS = undefined;
 
     this.MY_EXTENSIONS = undefined;
-    this.MY_CONTAINERS = undefined;
     this.MY_CONTROLLER = undefined;
     this.MY_EXTRACTOR = undefined;
     this.MY_LINKS = undefined;
@@ -173,7 +186,6 @@ export default class RoomCache {
     this.MY_OBSERVERS = undefined;
     this.MY_POWERSPAWNS = undefined;
     this.MY_RAMPARTS = undefined;
-    this.MY_STORAGES = undefined;
     this.MY_TERMINALS = undefined;
     this.MY_TOWERS = undefined;
     this.MY_WALLS = undefined;
@@ -184,7 +196,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#Source|Screeps Source}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Source>} Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
   getSources() {
@@ -200,7 +212,7 @@ export default class RoomCache {
    * @desc Find active {@link https://docs.screeps.com/api/#Source|Screeps Source}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Source>} Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
   getActiveSources() {
@@ -216,7 +228,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Creep>} Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    **/
   getCreeps() {
@@ -232,7 +244,7 @@ export default class RoomCache {
    * @desc Find player controlled {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Creep>} Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    **/
   getMyCreeps() {
@@ -248,7 +260,7 @@ export default class RoomCache {
    * @desc Find hostile {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Creep>} Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    **/
   getHostileCreeps() {
@@ -264,7 +276,7 @@ export default class RoomCache {
    * @desc Find all ENERGY type {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
    * dropped on the ground in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Resource>} Array of {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
    **/
   getDroppedEnergy() {
@@ -280,7 +292,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
    * dropped on the ground in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Resource>} Array of {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
    **/
   getDroppedResources() {
@@ -296,7 +308,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#Flag|Screeps Flag}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Flag>} Array of {@link https://docs.screeps.com/api/#Flag|Screeps Flag}
    **/
   getFlags() {
@@ -312,7 +324,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<ConstructionSite>} Array of {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    **/
   getConstructionSites() {
@@ -328,7 +340,7 @@ export default class RoomCache {
    * @desc Find player controlled {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<ConstructionSite>} Array of {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    **/
   getMyConstructionSites() {
@@ -344,7 +356,7 @@ export default class RoomCache {
    * @desc Find hostile {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<ConstructionSite>} Array of {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    **/
   getHostileConstructionSites() {
@@ -360,7 +372,7 @@ export default class RoomCache {
    * @desc Find player controlled {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<StructureSpawn>} Array of {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
    **/
   getMySpawns() {
@@ -376,7 +388,7 @@ export default class RoomCache {
    * @desc Find all hostile {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<StructureSpawn>} Array of {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
    **/
   getHostileSpawns() {
@@ -392,7 +404,7 @@ export default class RoomCache {
    * @desc Find all  {@link https://docs.screeps.com/api/#Mineral|Screeps Mineral}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Mineral>} Array of {@link https://docs.screeps.com/api/#Mineral|Screeps Mineral}
    **/
   getMinerals() {
@@ -408,7 +420,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#StructureNuker|Screeps StructureNuker}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<StructureNuker>} Array of {@link https://docs.screeps.com/api/#StructureNuker|Screeps StructureNuker}
    **/
   getNukes() {
@@ -424,7 +436,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#Tombstone|Screeps Tombstone}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Tombstone>} Array of {@link https://docs.screeps.com/api/#Tombstone|Screeps Tombstone}
    **/
   getTombstones() {
@@ -440,7 +452,7 @@ export default class RoomCache {
    * @desc Find all {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
   getStructures() {
@@ -456,7 +468,7 @@ export default class RoomCache {
    * @desc Find all player controlled {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
   getMyStructures() {
@@ -472,7 +484,7 @@ export default class RoomCache {
    * @desc Find all hostile {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
   getHostileStructures() {
@@ -489,7 +501,7 @@ export default class RoomCache {
    * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
    * that are one of the given types: STRUCTURE_SPAWN, STRUCTURE_EXTENSION,
    * STRUCTURE_STORAGE, STRUCTURE_CONTAINER, STRUCTURE_TOWER and cache if not cached
-   * @private
+   * @public
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
   getEnergySinks() {
@@ -507,5 +519,37 @@ export default class RoomCache {
     }
 
     return this.ENERGY_SINKS;
+  }
+
+  /**
+   * @memberof RoomCache
+   * @desc Find all {@link https://docs.screeps.com/api/#StructureContainer|Screeps StructureContainer}
+   * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+   * @public
+   * @returns {Array<StructureContainer>} Array of {@link https://docs.screeps.com/api/#StructureContainer|Screeps StructureContainer}
+   **/
+  getContainers() {
+    if (this.CONTAINERS === undefined) {
+      const structures = this.getStructures();
+        this.CONTAINERS = _.filter(structures, (structure) => structure.structureType == STRUCTURE_CONTAINER);
+    }
+
+    return this.CONTAINERS;
+  }
+
+  /**
+   * @memberof RoomCache
+   * @desc Find {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage}
+   * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+   * @public
+   * @returns {Array<StructureStorage>} object of {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage} type
+   **/
+  getMyStorage() {
+    if (this.MY_STORAGE === undefined) {
+      const structures = this.getStructures();
+        this.MY_STORAGE = _.filter(structures, (structure) => structure.structureType == STRUCTURE_STORAGE);
+    }
+
+    return this.MY_STORAGE;
   }
 }
