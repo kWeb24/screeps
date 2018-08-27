@@ -41,6 +41,7 @@ export default class Builder extends Role {
 
     if ((creep.status() != 'building' && creep.isEnergyCapFull()) ||
         (creep.status() == 'building' && creep.carry.energy > 0) ||
+        (creep.status() == 'bored' && creep.carry.energy > 0) ||
         (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.build(creep);
 		}

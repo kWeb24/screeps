@@ -41,6 +41,7 @@ export default class Repairer extends Role {
 
     if ((creep.status() != 'repairing' && creep.isEnergyCapFull()) ||
         (creep.status() == 'repairing' && creep.carry.energy > 0) ||
+        (creep.status() == 'bored' && creep.carry.energy > 0) ||
         (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.repair(creep);
 		}
