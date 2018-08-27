@@ -63,7 +63,7 @@ export default class SpawnManager {
         }
 
         if (currentPrice + BODYPART_COST[part] + priceOffset < maxPrice) {
-          finalGenome += part;
+          finalGenome.push(part);
           currentPrice += BODYPART_COST[part];
         } else {
           search = false;
