@@ -31,8 +31,6 @@ export default class Harvester extends Role {
 	 * @see Role
    **/
   run(creep) {
-    creep.job('harvesting');
-
     if ((creep.status() != 'harvesting' && creep.carry.energy == 0) ||
         (creep.status() == 'harvesting' && !creep.isEnergyCapFull())) {
 			this.harvest(creep);
