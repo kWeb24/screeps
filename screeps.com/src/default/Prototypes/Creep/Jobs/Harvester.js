@@ -25,9 +25,3 @@ Object.assign(Creep.prototype, {
     return CACHE.ROOMS[this.room.name].getEnergySinks();
   }
 });
-
-Object.assign(Creep.prototype, {
-  isEnergyCapFull() {
-    return this.carry.energy >= this.carryCapacity;
-  }
-});
