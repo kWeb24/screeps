@@ -49,24 +49,6 @@ export default class Harvester extends Role {
 
   /**
    * @memberof Harvester
-   * @desc Harvest energy
-   * @private
-   * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
-   **/
-  harvest(creep) {
-    const selectedSource = this.selectSource(creep);
-
-    creep.status('harvesting');
-    creep.target(selectedSource.id);
-
-    if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(selectedSource);
-      creep.status('moving');
-    }
-  }
-
-  /**
-   * @memberof Harvester
    * @desc Transfering energy to given container
    * @private
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object

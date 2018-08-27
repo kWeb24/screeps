@@ -49,24 +49,6 @@ export default class Builder extends Role {
 
   /**
    * @memberof Builder
-   * @desc Harvest energy
-   * @private
-   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
-   **/
-  harvest(creep) {
-    const sources = creep.getSources();
-
-		creep.status('harvesting');
-		creep.target(sources[1].id);
-
-		if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-			creep.moveTo(sources[1]);
-      creep.status('moving');
-		}
-  }
-
-  /**
-   * @memberof Builder
    * @desc Build {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    * @private
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object

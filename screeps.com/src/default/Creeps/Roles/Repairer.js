@@ -57,23 +57,6 @@ export default class Repairer extends Role {
 
   /**
    * @memberof Repairer
-   * @desc Harvest energy
-   * @private
-   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
-   **/
-	harvest(creep) {
-    const selectedSource = this.selectSource(creep);
-
-    creep.status('harvesting');
-    creep.target(selectedSource.id);
-
-    if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(selectedSource);
-    }
-	}
-
-  /**
-   * @memberof Repairer
    * @desc Repair {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    * @private
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object

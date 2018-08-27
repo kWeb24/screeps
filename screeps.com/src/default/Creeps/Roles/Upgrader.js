@@ -50,23 +50,6 @@ export default class Upgrader extends Role {
 
   /**
    * @memberof Upgrader
-   * @desc Harvest energy
-   * @private
-   * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
-   **/
-  harvest(creep) {
-    const sources = creep.getSources();
-
-		creep.status('harvesting');
-		creep.target(sources[0].id);
-
-		if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-			creep.moveTo(sources[0]);
-		}
-  }
-
-  /**
-   * @memberof Upgrader
    * @desc Upgrade {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    * @private
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
