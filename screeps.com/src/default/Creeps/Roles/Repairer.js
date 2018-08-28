@@ -58,7 +58,6 @@ export default class Repairer extends Role {
 
 		creep.status('repairing');
 
-		console.log(this.ROLE + ' ' + target);
 		if (target) {
 			creep.target(target.id);
 			if (creep.repair(target) == ERR_NOT_IN_RANGE) {
