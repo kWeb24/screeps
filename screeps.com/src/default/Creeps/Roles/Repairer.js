@@ -58,6 +58,7 @@ export default class Repairer extends Role {
 
 		creep.status('repairing');
 
+		console.log(this.ROLE + ' ' + target);
 		if (target) {
 			creep.target(target.id);
 			if (creep.repair(target) == ERR_NOT_IN_RANGE) {
@@ -93,8 +94,17 @@ export default class Repairer extends Role {
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
 	findClosestRepairableStructure(creep) {
-		return creep.pos.findClosestByRange(FIND_STRUCTURES, {
+		let closest = creep.pos.findClosestByRange(FIND_STRUCTURES, {
 				filter: (structure) => (structure.hits < structure.hitsMax / 1.3) && structure.structureType != STRUCTURE_WALL && structure.structureType != STRUCTURE_ROAD
 		});
+
+		if (!closest || closest === null) {
+			closest = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+					filter: (structure) => (structure.hits < structure.hitsMax / 1.3)
+			});
+			return closest;
+		} else {
+			return closest;
+		}
 	}
 }
