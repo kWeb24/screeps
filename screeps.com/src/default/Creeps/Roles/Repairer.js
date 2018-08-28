@@ -16,7 +16,7 @@ export default class Repairer extends Role {
     super();
 
 		this.ROLE = 'repairer';
-    this.POPULATION = 2;
+    this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = false;
