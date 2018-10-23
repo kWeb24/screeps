@@ -80,6 +80,7 @@ export default class Role {
    * {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    * @public
    * @returns {Boolean}
+   * @TODO: Spawn only when  needed
    **/
   shouldSpawn() {
     if (this.countCreeps() < this.POPULATION) {
