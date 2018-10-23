@@ -65,7 +65,8 @@ export default class Repairer extends Role {
 				creep.status('moving');
 			}
 		} else {
-			creep.moveTo(Game.flags['BuildersGatherPoint']);
+      const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
+			creep.moveTo(spawn.pos);
 			creep.status('bored');
       creep.target('none');
 		}

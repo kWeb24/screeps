@@ -61,7 +61,7 @@ export default class Builder extends Role {
     if (!targets) {
       targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
     }
-    
+
     creep.status('building');
 
     if (targets) {
@@ -71,7 +71,8 @@ export default class Builder extends Role {
         creep.target(targets.id);
       }
     } else {
-      creep.moveTo(Game.flags['BuildersGatherPoint']);
+      const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
+			creep.moveTo(spawn.pos);
       creep.status('bored');
       creep.target('BuildersGatherPoint');
     }
