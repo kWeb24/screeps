@@ -30,3 +30,5 @@ module.exports.loop = () => CORE.loop();
 
 // prefab layouts droppend near core far exits
 // core with storage spawns MY_TOWERS
+
+// cargo creeps between storages and extensions, harvesters only for storage/

@@ -15,7 +15,7 @@ export default class Harvester extends Role {
     super();
 
     this.ROLE = 'harvester';
-    this.POPULATION = 3;
+    this.POPULATION = 4;
     this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ['upgrader', 'builder'];
     this.ON_DEMAND = false;
@@ -37,8 +37,7 @@ export default class Harvester extends Role {
     }
 
     if ((creep.status() != 'transfering' && creep.isEnergyCapFull()) ||
-        (creep.status() == 'transfering' && creep.carry.energy > 0) ||
-        (creep.status() == 'moving' && creep.carry.energy > 0)) {
+        (creep.status() == 'transfering' && creep.carry.energy > 0)) {
 			this.transfer(creep);
 		}
 
@@ -52,7 +51,24 @@ export default class Harvester extends Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   transfer(creep) {
-    const targets = creep.getEnergySinks();
+    const sinks = creep.getEnergySinks();
+
+    const spawnRelated = _.filter(sinks, (sink) => {
+      return ((sink.structureType == STRUCTURE_EXTENSION || sink.structureType == STRUCTURE_SPAWN) && sink.energy < sink.energyCapacity)
+    });
+
+    const storageRelated = _.filter(sinks, (sink) => {
+      return (sink.structureType == STRUCTURE_CONTAINER || sink.structureType == STRUCTURE_STORAGE) && (_.sum(sink.store) < sink.storeCapacity)
+    });
+
+    let targets = [];
+
+    if (spawnRelated.length) {
+      targets = spawnRelated;
+    } else if (storageRelated.length) {
+      targets = storageRelated;
+    }
+
     creep.status('transfering');
 
     if (targets.length > 0) {

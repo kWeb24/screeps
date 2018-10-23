@@ -187,24 +187,34 @@ export default class Role {
   selectEnergyDeposit(creep) {
     const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();
     const roomStorage = CACHE.ROOMS[creep.room.name].getMyStorage()[0];
+    let shouldWait = false;
 
     if (roomStorage !== undefined) {
-      if (roomStorage.isActive && roomStorage.store[RESOURCE_ENERGY] >= creep.carryCapacity) {
-        return roomStorage;
+      if (roomStorage.isActive()) {
+        shouldWait = roomStorage.id;
+        if (roomStorage.store[RESOURCE_ENERGY] >= creep.carryCapacity) {
+          return roomStorage;
+        }
       }
     }
 
     if (roomContainers !== undefined) {
       const activeContainers = _.filter(roomContainers, (container) => {
-        return container.isActive() && container.store[RESOURCE_ENERGY] >= creep.carryCapacity;
+        return container.isActive();
       });
 
       if (activeContainers.length) {
-        return activeContainers[0];
+        shouldWait = activeContainers[0].id;
+        const notEmptyContainers = _.filter(activeContainers, (container) => {
+          return container.store[RESOURCE_ENERGY] >= creep.carryCapacity;
+        });
+        if (notEmptyContainers.length) {
+          return notEmptyContainers[0];
+        }
       }
     }
 
-    return false;
+    return shouldWait;
   }
 
   /**
@@ -212,24 +222,35 @@ export default class Role {
    * @desc Harvest energy, support both harvesting and withdrawal for USE_ENERGY DEPOSITS ROLE
    * @private
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
+   * @todo refactor needed
    **/
 	harvest(creep) {
     creep.status('harvesting');
-    let selectedSource = this.selectEnergyDeposit(creep);
 
-    if (selectedSource !== false && selectedSource !== undefined && this.USE_ENERGY_DEPOSITS) {
+    let selectedSource = this.selectEnergyDeposit(creep);
+    if (selectedSource !== false && typeof selectedSource != 'string' && selectedSource !== undefined && this.USE_ENERGY_DEPOSITS) {
+
       if (creep.withdraw(selectedSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
         creep.status('moving');
       }
-    } else {
+      creep.target(selectedSource.id);
+    } else if (typeof selectedSource != 'string' || !this.USE_ENERGY_DEPOSITS) {
       selectedSource = this.selectSource(creep);
+
       if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
         creep.status('moving');
       }
-    }
+      creep.target(selectedSource.id);
+    } else {
+      const t = creep.getSources();
 
-    creep.target(selectedSource.id);
+      if (creep.harvest(t[1]) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(t[1]);
+        creep.status('moving');
+      }
+      creep.target(t[1].id);
+    }
 	}
 }
