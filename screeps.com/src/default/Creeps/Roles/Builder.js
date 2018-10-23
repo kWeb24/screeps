@@ -72,7 +72,7 @@ export default class Builder extends Role {
       }
     } else {
       const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
-      const pos = this.ROOM.getPositionAt(spawn.pos.x - 4, spawn.pos.y = 5);
+      const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(spawn.pos.x - 4, spawn.pos.y = 5);
 			creep.moveTo(pos);
       creep.status('bored');
       creep.target('BuildersGatherPoint');
