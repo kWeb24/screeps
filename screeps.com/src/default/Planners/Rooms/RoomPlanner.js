@@ -17,10 +17,78 @@ export default class RoomPlanner {
     this.ROOM = room;
 
     /**
+    * @member {Object} RoomPlanner#ROOM
+    * @desc First SPAWN object in {@link https://docs.screeps.com/api/#Room|Screeps Room}
+    **/
+    [this.SPAWN] = this.ROOM.find(FIND_MY_SPAWNS);
+
+    /**
     * @member {Array<RoomPosition>} RoomPlanner#PATHS
     * @desc {@link https://docs.screeps.com/api/#RoomPosition|Screeps RoomPosition} objects array
     **/
     this.PATHS = [];
+
+    /**
+    * @member {Array} RoomPlanner#RLC2_EXTENSIONS
+    * @desc Array of objects with relative position to Room Spawn (RLC2)
+    **/
+    this.RLC2_EXTENSIONS = [
+      {x: 0, y: -2},
+      {x: -1, y: -2},
+      {x: -2, y: -1},
+      {x: -2, y: 0},
+      {x: 2, y: 1},
+    ];
+
+    /**
+    * @member {Array} RoomPlanner#RLC3_EXTENSIONS
+    * @desc Array of objects with relative position to Room Spawn (RLC3)
+    **/
+    this.RLC3_EXTENSIONS = [
+      {x: 2, y: 0},
+      {x: 1, y: 2},
+      {x: 0, y: 2},
+      {x: -2, y: 1},
+      {x: -1, y: 2},
+    ];
+
+    /**
+    * @member {Array} RoomPlanner#RLC4_EXTENSIONS
+    * @desc Array of objects with relative position to Room Spawn (RLC4)
+    **/
+    this.RLC4_EXTENSIONS = [
+      {x: 1, y: -2},
+      {x: 2, y: -1},
+      {x: 2, y: 3},
+      {x: 1, y: 3},
+      {x: 0, y: 3},
+    ];
+
+    /**
+    * @member {Array} RoomPlanner#RLC5_EXTENSIONS
+    * @desc Array of objects with relative position to Room Spawn (RLC5)
+    **/
+    this.RLC5_EXTENSIONS = [
+      {x: 3, y: 2},
+      {x: 3, y: 1},
+      {x: 3, y: 0},
+      {x: -3, y: 0},
+      {x: -3, y: -1},
+    ];
+
+    /**
+    * @member {Array} RoomPlanner#RLC5_EXTENSIONS
+    * @desc Array of objects with relative position to Room Spawn (RLC6)
+    **/
+    this.RLC6_EXTENSIONS = [
+      {x: -3, y: -2},
+      {x: -2, y: -3},
+      {x: -1, y: -3},
+      {x: 0, y: -3},
+      // {x: -3, y: -1},
+    ];
+
+    this.selectExtensions();
     this.planRoads();
     this.buildRoads();
   }
@@ -98,6 +166,56 @@ export default class RoomPlanner {
         stroke: '#dfff1b',
         lineStyle: 'dotted'
       });
+    });
+  }
+
+  /**
+   * @memberof RoomPlanner
+   * @desc SelectExtensions builds room extensions based on controller level
+   * @private
+   **/
+  selectExtensions() {
+    if (this.ROOM.controller.owner.username == 'kWeb24') {
+      switch(this.ROOM.controller.level) {
+        case 2: this.buildExtensions(this.RLC2_EXTENSIONS, '#6bf7ff'); break;
+        case 3: this.buildExtensions(this.RLC3_EXTENSIONS, '#f95eff'); break;
+        case 4: this.buildExtensions(this.RLC4_EXTENSIONS, '#a4ff4'); break;
+        case 5: this.buildExtensions(this.RLC5_EXTENSIONS, '#ffd749'); break;
+        case 6: this.buildExtensions(this.RLC6_EXTENSIONS, '#ff4949'); break;
+      }
+
+      // this.buildExtensions(this.RLC2_EXTENSIONS, '#6bf7ff');
+      // this.buildExtensions(this.RLC3_EXTENSIONS, '#f95eff');
+      // this.buildExtensions(this.RLC4_EXTENSIONS, '#a4ff49');
+      // this.buildExtensions(this.RLC5_EXTENSIONS, '#ffd749');
+      // this.buildExtensions(this.RLC6_EXTENSIONS, '#ff4949');
+    }
+  }
+
+  /**
+   * @memberof RoomPlanner
+   * @desc BuildExtensions builds given extensions
+   * @param {Array} extensions with extension relative positions
+   * @param {String} color Visuals color
+   * @private
+   **/
+  buildExtensions(extensions, color) {
+    extensions.forEach((extension) => {
+      const pos = this.ROOM.getPositionAt(this.SPAWN.pos.x + extension.x, this.SPAWN.pos.y + extension.y);
+
+      if (pos !== null) {
+        const tileContents = this.ROOM.lookAt(pos);
+
+        tileContents.forEach((content) => {
+          if (content.type != 'structure' && content.type != 'constructionSite') {
+            this.ROOM.createConstructionSite(pos, STRUCTURE_EXTENSION);
+          }
+        });
+      }
+
+      // this.ROOM.visual.circle(pos.x, pos.y, {
+      //   fill: color
+      // });
     });
   }
 }

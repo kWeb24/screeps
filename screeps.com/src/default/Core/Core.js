@@ -48,6 +48,7 @@ export default class Core {
     this.Tower.run();
     this.runCreeps();
     this.LOOP++;
+    // PLANNER.ROOMS['E4N27'].selectExtensions(); // when visuals on
   }
 
   /**
