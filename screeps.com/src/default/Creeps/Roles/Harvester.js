@@ -37,7 +37,8 @@ export default class Harvester extends Role {
     }
 
     if ((creep.status() != 'transfering' && creep.isEnergyCapFull()) ||
-        (creep.status() == 'transfering' && creep.carry.energy > 0)) {
+        (creep.status() == 'transfering' && creep.carry.energy > 0) ||
+        (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.transfer(creep);
 		}
 
