@@ -20,7 +20,7 @@ export default class RoomPlanner {
     * @member {Object} RoomPlanner#ROOM
     * @desc First SPAWN object in {@link https://docs.screeps.com/api/#Room|Screeps Room}
     **/
-    [this.SPAWN] = this.ROOM.find(FIND_MY_SPAWNS);
+    [this.SPAWN] = CACHE.ROOMS[this.ROOM.name].getMySpawns();
 
     /**
     * @member {Array<RoomPosition>} RoomPlanner#PATHS
@@ -101,17 +101,17 @@ export default class RoomPlanner {
   planRoads() {
     this.findPath(
       this.ROOM.controller.pos,
-      CACHE.ROOMS[this.ROOM.name].getSources()
+      CACHE.ROOMS[this.ROOM.name].getSources(),
     );
 
     this.findPath(
       this.ROOM.controller.pos,
-      CACHE.ROOMS[this.ROOM.name].getMinerals()
+      CACHE.ROOMS[this.ROOM.name].getMinerals(),
     );
 
     this.findPath(
       this.ROOM.controller.pos,
-      CACHE.ROOMS[this.ROOM.name].getMySpawns()
+      CACHE.ROOMS[this.ROOM.name].getMySpawns(),
     );
   }
 
