@@ -16,7 +16,7 @@ export default class Builder extends Role {
     super();
 
     this.ROLE = 'builder';
-    this.POPULATION = 1;
+    this.POPULATION = 2;
     this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = true;
@@ -52,8 +52,16 @@ export default class Builder extends Role {
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   build(creep) {
-    var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+    let targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+      filter: (obj) => {
+        return (obj.structureType == STRUCTURE_EXTENSION);
+      }
+    });
 
+    if (!targets) {
+      targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+    }
+    
     creep.status('building');
 
     if (targets) {
