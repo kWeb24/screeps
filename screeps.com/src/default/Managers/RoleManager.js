@@ -52,11 +52,11 @@ export default class RoleManager {
     * @member {Array<Role>} RoleManager#Roles
     **/
     this.ROLES = [
-      this.Harvester,
+      this.RoadKeeper,
+      this.Repairer,
       this.Builder,
       this.Upgrader,
-      this.Repairer,
-      this.RoadKeeper
+      this.Harvester,
     ];
   }
 
