@@ -88,7 +88,20 @@ export default class RoomPlanner {
       // {x: -3, y: -1},
     ];
 
+    /**
+    * @member {Array} RoomPlanner#RLC3_CONTAINERS
+    * @desc Array of objects with relative position to Room Spawn (RLC3)
+    **/
+    this.RLC3_CONTAINERS = [
+      {x: 1, y: -1},
+      {x: 1, y: 0},
+      {x: 0, y: -1},
+      {x: -1, y: 1},
+      {x: -1, y: 0},
+    ];
+
     this.selectExtensions();
+    this.selectContainers();
     this.planRoads();
     this.buildRoads();
   }
@@ -209,6 +222,48 @@ export default class RoomPlanner {
         tileContents.forEach((content) => {
           if (content.type != 'structure' && content.type != 'constructionSite') {
             this.ROOM.createConstructionSite(pos, STRUCTURE_EXTENSION);
+          }
+        });
+      }
+
+      // this.ROOM.visual.circle(pos.x, pos.y, {
+      //   fill: color
+      // });
+    });
+  }
+
+  /**
+   * @memberof RoomPlanner
+   * @desc SelectContainers builds room container based on controller level
+   * @private
+   **/
+  selectContainers() {
+    if (this.ROOM.controller.owner.username == 'kWeb24') {
+      switch(this.ROOM.controller.level) {
+        case 3: this.buildContainers(this.RLC3_CONTAINERS, '#f95eff'); break;
+      }
+
+      // this.buildContainers(this.RLC3_CONTAINERS, '#f95eff');
+    }
+  }
+
+  /**
+   * @memberof RoomPlanner
+   * @desc BuildContainers builds given containers
+   * @param {Array} containers with containers relative positions
+   * @param {String} color Visuals color
+   * @private
+   **/
+  buildContainers(containers, color) {
+    containers.forEach((container) => {
+      const pos = this.ROOM.getPositionAt(this.SPAWN.pos.x + container.x, this.SPAWN.pos.y + container.y);
+
+      if (pos !== null) {
+        const tileContents = this.ROOM.lookAt(pos);
+
+        tileContents.forEach((content) => {
+          if (content.type != 'structure' && content.type != 'constructionSite') {
+            this.ROOM.createConstructionSite(pos, STRUCTURE_CONTAINER);
           }
         });
       }

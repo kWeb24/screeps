@@ -49,6 +49,7 @@ export default class Core {
     this.runCreeps();
     this.LOOP++;
     // PLANNER.ROOMS['E4N27'].selectExtensions(); // when visuals on
+    // PLANNER.ROOMS['E4N27'].selectContainers(); // when visuals on
   }
 
   /**
