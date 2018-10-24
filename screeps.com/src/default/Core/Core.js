@@ -45,7 +45,7 @@ export default class Core {
   loop() {
     this.clearDeadCreeps();
     this.spawnCreeps();
-    this.Tower.run();
+    this.runStructures();
     this.runCreeps();
     this.LOOP++;
     // PLANNER.ROOMS['E4N27'].selectExtensions(); // when visuals on
@@ -91,6 +91,19 @@ export default class Core {
           }
         }
       });
+    }
+  }
+
+  /**
+   * @memberof Core
+   * @desc Running structures like towers, labs etc
+   * @private
+   **/
+  runStructures() {
+    for (let structure in Game.structures) {
+      if (structure.structureType == STRUCTURE_TOWER) {
+        this.Tower.run(structure);
+      }
     }
   }
 }

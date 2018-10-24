@@ -8,20 +8,13 @@ export default class Tower {
 
   }
 
-	run() {
-    for (var structure in Game.structures) {
-      if (structure.structureType == STRUCTURE_TOWER) {
-        var tower = structure;
+	run(tower) {
+    var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 
-        if (this.findClosestDamagedStructure(tower)) {
-          tower.repair(closestDamagedStructure);
-        }
-
-        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if (closestHostile) {
-          tower.attack(closestHostile);
-        }
-      }
+    if (closestHostile) {
+      tower.attack(closestHostile);
+    } else {
+      tower.repair(this.findClosestDamagedStructure(tower));
     }
 	}
 

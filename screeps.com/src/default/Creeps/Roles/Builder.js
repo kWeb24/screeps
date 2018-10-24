@@ -54,7 +54,7 @@ export default class Builder extends Role {
   build(creep) {
     let targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
       filter: (obj) => {
-        return (obj.structureType == STRUCTURE_EXTENSION);
+        return (obj.structureType == STRUCTURE_EXTENSION || obj.structureType == STRUCTURE_TOWER);
       }
     });
 
