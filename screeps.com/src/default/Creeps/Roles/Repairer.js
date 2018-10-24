@@ -63,7 +63,12 @@ export default class Repairer extends Role {
 			if (creep.repair(target) == ERR_NOT_IN_RANGE) {
 				creep.moveTo(target);
 				creep.status('moving');
-			}
+			} else if (target.structureType == STRUCTURE_TOWER) {
+        if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(target);
+  				creep.status('moving');
+        }
+      }
 		} else {
       const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
       const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(spawn.pos.x - 4, spawn.pos.y + 5);
@@ -95,6 +100,14 @@ export default class Repairer extends Role {
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
 	findClosestRepairableStructure(creep) {
+    const towers = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+				filter: (structure) => (structure.energy < structure.energyCapacity) && structure.structureType == STRUCTURE_TOWER
+		});
+
+    if (towers) {
+      return towers;
+    }
+
 		let closest = creep.pos.findClosestByRange(FIND_STRUCTURES, {
 				filter: (structure) => (structure.hits < structure.hitsMax / 1.3) && structure.structureType != STRUCTURE_WALL && structure.structureType != STRUCTURE_ROAD
 		});
