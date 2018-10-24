@@ -173,6 +173,13 @@ export default class RoomCache {
     **/
     this.MY_STORAGE = undefined;
 
+    /**
+    * @member {Array<StructureTower>} RoomCache#MY_TOWERS
+    * @desc {@link https://docs.screeps.com/api/#StructureTower|Screeps StructureTower}
+    * object in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+    **/
+    this.MY_TOWERS = undefined;
+
     // Not implemented yet
     this.KEEPERLIARS = undefined;
     this.PORTALS = undefined;
@@ -187,7 +194,6 @@ export default class RoomCache {
     this.MY_POWERSPAWNS = undefined;
     this.MY_RAMPARTS = undefined;
     this.MY_TERMINALS = undefined;
-    this.MY_TOWERS = undefined;
     this.MY_WALLS = undefined;
   }
 
@@ -550,5 +556,21 @@ export default class RoomCache {
     }
 
     return this.MY_STORAGE;
+  }
+
+  /**
+   * @memberof RoomCache
+   * @desc Find {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage}
+   * in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+   * @public
+   * @returns {Array<StructureTower>} object of {@link https://docs.screeps.com/api/#StructureTower|Screeps StructureTower} type
+   **/
+  getMyTowers() {
+    if (this.MY_TOWERS === undefined) {
+      const structures = this.getStructures();
+        this.MY_TOWERS = _.filter(structures, (structure) => structure.structureType == STRUCTURE_TOWER);
+    }
+
+    return this.MY_TOWERS;
   }
 }

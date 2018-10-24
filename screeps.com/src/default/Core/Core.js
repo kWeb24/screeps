@@ -101,10 +101,11 @@ export default class Core {
    * @private
    **/
   runStructures() {
-    for (let structure in Game.structures) {
-      if (structure.structureType == STRUCTURE_TOWER) {
-        this.Tower.run(structure);
-      }
-    }
+    const [tower] = CACHE.ROOMS['E4N27'].getMyTowers();
+    this.Tower.run(tower);
+
+    // for (let structure in CACHE.ROOMS['E4N27'].getMyTowers()) {
+    //   this.Tower.run(structure);
+    // }
   }
 }
