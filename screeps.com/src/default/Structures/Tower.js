@@ -14,13 +14,25 @@ export default class Tower {
     if (closestHostile) {
       tower.attack(closestHostile);
     } else {
-      tower.repair(this.findClosestDamagedStructure(tower));
+      if (tower.energyCapacity < 4000) {
+        tower.repair(this.findClosestDamagedStructureNotRoad(tower));
+      } else {
+        tower.repair(this.findClosestDamagedStructure(tower));
+      }
     }
 	}
 
   findClosestDamagedStructure(tower) {
     var structure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
       filter: (building) => building.hits < building.hitsMax
+    });
+
+    return structure;
+  }
+
+  findClosestDamagedStructureNotRoad(tower) {
+    var structure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+      filter: (building) => building.hits < building.hitsMax && building.structureType != STRUCTURE_ROAD
     });
 
     return structure;
