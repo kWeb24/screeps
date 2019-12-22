@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Room Cache module...');
+console.log(">> Loading Room Cache module...");
 
 /**
  * @class RoomCache
@@ -9,175 +9,174 @@ console.log('>> Loading Room Cache module...');
  */
 
 export default class RoomCache {
-
   constructor(room) {
     /**
-    * @member {Object} RoomCache#ROOM
-    * @desc {@link https://docs.screeps.com/api/#Room|Screeps Room} object reference
-    **/
+     * @member {Object} RoomCache#ROOM
+     * @desc {@link https://docs.screeps.com/api/#Room|Screeps Room} object reference
+     **/
     this.ROOM = room;
 
     /**
-    * @member {Array<Source>} RoomCache#SOURCES
-    * @desc Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Source>} RoomCache#SOURCES
+     * @desc Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.SOURCES = undefined;
 
     /**
-    * @member {Array<Source>} RoomCache#SOURCES_ACTIVE
-    * @desc Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
-    * objects that contains energy in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Source>} RoomCache#SOURCES_ACTIVE
+     * @desc Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
+     * objects that contains energy in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.SOURCES_ACTIVE = undefined;
 
     /**
-    * @member {Array<Creep>} RoomCache#CREEPS
-    * @desc Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Creep>} RoomCache#CREEPS
+     * @desc Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.CREEPS = undefined;
 
     /**
-    * @member {Array<Creep>} RoomCache#MY_CREEPS
-    * @desc Array of player controlled {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Creep>} RoomCache#MY_CREEPS
+     * @desc Array of player controlled {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.MY_CREEPS = undefined;
 
     /**
-    * @member {Array<Creep>} RoomCache#MY_CREEPS
-    * @desc Array of hostile {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Creep>} RoomCache#MY_CREEPS
+     * @desc Array of hostile {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.HOSTILE_CREEPS = undefined;
 
     /**
-    * @member {Array<Resource>} RoomCache#DROPPED_ENERGY
-    * @desc Array of energy type {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
-    * objects dropped on the groud in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Resource>} RoomCache#DROPPED_ENERGY
+     * @desc Array of energy type {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
+     * objects dropped on the groud in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.DROPPED_ENERGY = undefined;
 
     /**
-    * @member {Array<Resource>} RoomCache#DROPPED_RESOURCES
-    * @desc Array of all {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
-    * objects dropped on the groud in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Resource>} RoomCache#DROPPED_RESOURCES
+     * @desc Array of all {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
+     * objects dropped on the groud in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.DROPPED_RESOURCES = undefined;
 
     /**
-    * @member {Array<Flag>} RoomCache#FLAGS
-    * @desc Array of {@link https://docs.screeps.com/api/#Flag|Screeps Flags}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Flag>} RoomCache#FLAGS
+     * @desc Array of {@link https://docs.screeps.com/api/#Flag|Screeps Flags}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.FLAGS = undefined;
 
     /**
-    * @member {Array<ConstructionSite>} RoomCache#CONSTRUCTION_SITES
-    * @desc Array of all {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<ConstructionSite>} RoomCache#CONSTRUCTION_SITES
+     * @desc Array of all {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.CONSTRUCTION_SITES = undefined;
 
     /**
-    * @member {Array<StructureSpawn>} RoomCache#MY_SPAWNS
-    * @desc Array of player controlled {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<StructureSpawn>} RoomCache#MY_SPAWNS
+     * @desc Array of player controlled {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.MY_SPAWNS = undefined;
 
     /**
-    * @member {Array<StructureSpawn>} RoomCache#HOSTILE_SPAWNS
-    * @desc Array of hostile {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<StructureSpawn>} RoomCache#HOSTILE_SPAWNS
+     * @desc Array of hostile {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.HOSTILE_SPAWNS = undefined;
 
     /**
-    * @member {Array<ConstructionSite>} RoomCache#MY_CONSTRUCTION_SITES
-    * @desc Array of player controlled {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<ConstructionSite>} RoomCache#MY_CONSTRUCTION_SITES
+     * @desc Array of player controlled {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.MY_CONSTRUCTION_SITES = undefined;
 
     /**
-    * @member {Array<ConstructionSite>} RoomCache#HOSTILE_CONSTRUCTION_SITES
-    * @desc Array of hostile {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<ConstructionSite>} RoomCache#HOSTILE_CONSTRUCTION_SITES
+     * @desc Array of hostile {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.HOSTILE_CONSTRUCTION_SITES = undefined;
 
     /**
-    * @member {Array<Mineral>} RoomCache#MINERALS
-    * @desc Array of {@link https://docs.screeps.com/api/#Mineral|Screeps Mineral}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Mineral>} RoomCache#MINERALS
+     * @desc Array of {@link https://docs.screeps.com/api/#Mineral|Screeps Mineral}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.MINERALS = undefined;
 
     /**
-    * @member {Array<StructureNuker>} RoomCache#NUKES
-    * @desc Array of {@link https://docs.screeps.com/api/#StructureNuker|Screeps StructureNuker}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<StructureNuker>} RoomCache#NUKES
+     * @desc Array of {@link https://docs.screeps.com/api/#StructureNuker|Screeps StructureNuker}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.NUKES = undefined;
 
     /**
-    * @member {Array<Tombstone>} RoomCache#TOMBSTONES
-    * @desc Array of {@link https://docs.screeps.com/api/#Tombstone|Screeps Tombstone}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Tombstone>} RoomCache#TOMBSTONES
+     * @desc Array of {@link https://docs.screeps.com/api/#Tombstone|Screeps Tombstone}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.TOMBSTONES = undefined;
 
     /**
-    * @member {Array<Tombstone>} RoomCache#STRUCTURES
-    * @desc Array of all {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Tombstone>} RoomCache#STRUCTURES
+     * @desc Array of all {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.STRUCTURES = undefined;
 
     /**
-    * @member {Array<Tombstone>} RoomCache#MY_STRUCTURES
-    * @desc Array of player controlled {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Tombstone>} RoomCache#MY_STRUCTURES
+     * @desc Array of player controlled {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.MY_STRUCTURES = undefined;
 
     /**
-    * @member {Array<Tombstone>} RoomCache#HOSTILE_STRUCTURES
-    * @desc Array of hostile {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<Tombstone>} RoomCache#HOSTILE_STRUCTURES
+     * @desc Array of hostile {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.HOSTILE_STRUCTURES = undefined;
 
     /**
-    * @member {Array<Tombstone>} RoomCache#ENERGY_SINKS
-    * @desc Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    * that are Structure with one of given types: STRUCTURE_SPAWN, STRUCTURE_EXTENSION,
-    * STRUCTURE_STORAGE, STRUCTURE_CONTAINER, STRUCTURE_TOWER
-    **/
+     * @member {Array<Tombstone>} RoomCache#ENERGY_SINKS
+     * @desc Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     * that are Structure with one of given types: STRUCTURE_SPAWN, STRUCTURE_EXTENSION,
+     * STRUCTURE_STORAGE, STRUCTURE_CONTAINER, STRUCTURE_TOWER
+     **/
     this.ENERGY_SINKS = undefined;
 
     /**
-    * @member {Array<StructureContainer>} RoomCache#CONTAINERS
-    * @desc Array of {@link https://docs.screeps.com/api/#StructureContainer|Screeps StructureContainer}
-    * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<StructureContainer>} RoomCache#CONTAINERS
+     * @desc Array of {@link https://docs.screeps.com/api/#StructureContainer|Screeps StructureContainer}
+     * objects in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.CONTAINERS = undefined;
 
     /**
-    * @member {Array<StructureStorage>} RoomCache#MY_STORAGE
-    * @desc {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage}
-    * object in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<StructureStorage>} RoomCache#MY_STORAGE
+     * @desc {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage}
+     * object in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.MY_STORAGE = undefined;
 
     /**
-    * @member {Array<StructureTower>} RoomCache#MY_TOWERS
-    * @desc {@link https://docs.screeps.com/api/#StructureTower|Screeps StructureTower}
-    * object in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
-    **/
+     * @member {Array<StructureTower>} RoomCache#MY_TOWERS
+     * @desc {@link https://docs.screeps.com/api/#StructureTower|Screeps StructureTower}
+     * object in current {@link https://docs.screeps.com/api/#Room|Screeps Room}
+     **/
     this.MY_TOWERS = undefined;
 
     // Not implemented yet
@@ -367,7 +366,9 @@ export default class RoomCache {
    **/
   getHostileConstructionSites() {
     if (this.HOSTILE_CONSTRUCTION_SITES === undefined) {
-      this.HOSTILE_CONSTRUCTION_SITES = this.ROOM.find(FIND_HOSTILE_CONSTRUCTION_SITES);
+      this.HOSTILE_CONSTRUCTION_SITES = this.ROOM.find(
+        FIND_HOSTILE_CONSTRUCTION_SITES
+      );
     }
 
     return this.HOSTILE_CONSTRUCTION_SITES;
@@ -511,17 +512,19 @@ export default class RoomCache {
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
   getEnergySinks() {
-    if (this.ENERGY_SINKS === undefined) {
-      this.ENERGY_SINKS = this.ROOM.find(FIND_STRUCTURES, {
-          filter: (structure) => {
-            return (structure.structureType == STRUCTURE_SPAWN ||
-                    structure.structureType == STRUCTURE_EXTENSION ||
-                    structure.structureType == STRUCTURE_STORAGE ||
-                    structure.structureType == STRUCTURE_CONTAINER ||
-                    structure.structureType == STRUCTURE_TOWER);
-          }
-      });
-    }
+    // if (this.ENERGY_SINKS === undefined) {
+    this.ENERGY_SINKS = this.ROOM.find(FIND_STRUCTURES, {
+      filter: structure => {
+        return (
+          structure.structureType == STRUCTURE_SPAWN ||
+          structure.structureType == STRUCTURE_EXTENSION ||
+          structure.structureType == STRUCTURE_STORAGE ||
+          structure.structureType == STRUCTURE_CONTAINER ||
+          structure.structureType == STRUCTURE_TOWER
+        );
+      }
+    });
+    // }
 
     return this.ENERGY_SINKS;
   }
@@ -536,7 +539,10 @@ export default class RoomCache {
   getContainers() {
     if (this.CONTAINERS === undefined) {
       const structures = this.getStructures();
-        this.CONTAINERS = _.filter(structures, (structure) => structure.structureType == STRUCTURE_CONTAINER);
+      this.CONTAINERS = _.filter(
+        structures,
+        structure => structure.structureType == STRUCTURE_CONTAINER
+      );
     }
 
     return this.CONTAINERS;
@@ -552,7 +558,10 @@ export default class RoomCache {
   getMyStorage() {
     if (this.MY_STORAGE === undefined) {
       const structures = this.getStructures();
-        this.MY_STORAGE = _.filter(structures, (structure) => structure.structureType == STRUCTURE_STORAGE);
+      this.MY_STORAGE = _.filter(
+        structures,
+        structure => structure.structureType == STRUCTURE_STORAGE
+      );
     }
 
     return this.MY_STORAGE;
@@ -568,7 +577,10 @@ export default class RoomCache {
   getMyTowers() {
     if (this.MY_TOWERS === undefined) {
       const structures = this.getStructures();
-        this.MY_TOWERS = _.filter(structures, (structure) => structure.structureType == STRUCTURE_TOWER);
+      this.MY_TOWERS = _.filter(
+        structures,
+        structure => structure.structureType == STRUCTURE_TOWER
+      );
     }
 
     return this.MY_TOWERS;

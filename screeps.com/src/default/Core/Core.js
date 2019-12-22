@@ -1,9 +1,9 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Core...');
+console.log(">> Loading Core...");
 
-import Logger from '../Utils/Logger.js';
-import Tower from '../Structures/Tower.js';
+import Logger from "../Utils/Logger.js";
+import Tower from "../Structures/Tower.js";
 
 const LOGGER = new Logger({
   enabled: false
@@ -16,23 +16,22 @@ const LOGGER = new Logger({
  */
 
 export default class Core {
-
   constructor() {
     /**
-    * @member {Boolean} Core#PARAM_ADAPTIVE_ROLES
-    * @desc {@link RoleManager} adaptive roles flag
-    * @todo Fix Adaptive roles, doesn't work with new prototypes
-    **/
+     * @member {Boolean} Core#PARAM_ADAPTIVE_ROLES
+     * @desc {@link RoleManager} adaptive roles flag
+     * @todo Fix Adaptive roles, doesn't work with new prototypes
+     **/
     this.PARAM_ADAPTIVE_ROLES = false;
 
     /**
-    * @member {Integer} Core#LOOP
-    * @desc Current Loop of Core instance
-    **/
+     * @member {Integer} Core#LOOP
+     * @desc Current Loop of Core instance
+     **/
     this.LOOP = 1;
 
-    console.log('-- -- CORE_LOGGER_ENABLED: ' + LOGGER.ENABLED);
-    console.log('-- -- PARAM_ADAPTIVE_ROLES:' + this.PARAM_ADAPTIVE_ROLES);
+    console.log("-- -- CORE_LOGGER_ENABLED: " + LOGGER.ENABLED);
+    console.log("-- -- PARAM_ADAPTIVE_ROLES:" + this.PARAM_ADAPTIVE_ROLES);
 
     this.Tower = new Tower();
   }
@@ -83,7 +82,7 @@ export default class Core {
   runCreeps() {
     for (var names in Game.creeps) {
       var creep = Game.creeps[names];
-      ROLE_MANAGER.ROLES.forEach((role) => {
+      ROLE_MANAGER.ROLES.forEach(role => {
         if (creep.memory.role == role.ROLE) {
           if (this.PARAM_ADAPTIVE_ROLES) {
             ROLE_MANAGER.selectRole(creep);
@@ -101,7 +100,7 @@ export default class Core {
    * @private
    **/
   runStructures() {
-    const [tower] = CACHE.ROOMS['E4N27'].getMyTowers();
+    const [tower] = CACHE.ROOMS["E9S16"].getMyTowers();
     this.Tower.run(tower);
 
     // for (let structure in CACHE.ROOMS['E4N27'].getMyTowers()) {

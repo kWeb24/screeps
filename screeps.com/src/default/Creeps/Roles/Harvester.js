@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
-console.log('>> Loading Harvester Role...');
+console.log(">> Loading Harvester Role...");
 
-import Role from './Role.js';
+import Role from "./Role.js";
 
 /**
  * @class Harvester
@@ -10,14 +10,13 @@ import Role from './Role.js';
  * @augments Role
  */
 export default class Harvester extends Role {
-
   constructor() {
     super();
 
-    this.ROLE = 'harvester';
-    this.POPULATION = 4;
+    this.ROLE = "harvester";
+    this.POPULATION = 5;
     this.GENOME = [WORK, CARRY, MOVE];
-    this.CAPABLE_OF = ['upgrader', 'builder'];
+    this.CAPABLE_OF = ["upgrader", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = false;
   }
@@ -27,20 +26,24 @@ export default class Harvester extends Role {
    * @desc Run actual Harvester Role loop
    * @public
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
-	 * @override
-	 * @see Role
+   * @override
+   * @see Role
    **/
   run(creep) {
-    if ((creep.status() != 'harvesting' && creep.carry.energy == 0) ||
-        (creep.status() == 'harvesting' && !creep.isEnergyCapFull())) {
-			this.harvest(creep);
+    if (
+      (creep.status() != "harvesting" && creep.carry.energy == 0) ||
+      (creep.status() == "harvesting" && !creep.isEnergyCapFull())
+    ) {
+      this.harvest(creep);
     }
 
-    if ((creep.status() != 'transfering' && creep.isEnergyCapFull()) ||
-        (creep.status() == 'transfering' && creep.carry.energy > 0) ||
-        (creep.status() == 'moving' && creep.carry.energy > 0)) {
-			this.transfer(creep);
-		}
+    if (
+      (creep.status() != "transfering" && creep.isEnergyCapFull()) ||
+      (creep.status() == "transfering" && creep.carry.energy > 0) ||
+      (creep.status() == "moving" && creep.carry.energy > 0)
+    ) {
+      this.transfer(creep);
+    }
 
     this.dropRoad(creep);
   }
@@ -54,12 +57,20 @@ export default class Harvester extends Role {
   transfer(creep) {
     const sinks = creep.getEnergySinks();
 
-    const spawnRelated = _.filter(sinks, (sink) => {
-      return ((sink.structureType == STRUCTURE_EXTENSION || sink.structureType == STRUCTURE_SPAWN) && sink.energy < sink.energyCapacity)
+    const spawnRelated = _.filter(sinks, sink => {
+      return (
+        (sink.structureType == STRUCTURE_EXTENSION ||
+          sink.structureType == STRUCTURE_SPAWN) &&
+        sink.energy < sink.energyCapacity
+      );
     });
 
-    const storageRelated = _.filter(sinks, (sink) => {
-      return (sink.structureType == STRUCTURE_CONTAINER || sink.structureType == STRUCTURE_STORAGE) && (_.sum(sink.store) < sink.storeCapacity)
+    const storageRelated = _.filter(sinks, sink => {
+      return (
+        (sink.structureType == STRUCTURE_CONTAINER ||
+          sink.structureType == STRUCTURE_STORAGE) &&
+        _.sum(sink.store) < sink.storeCapacity
+      );
     });
 
     let targets = [];
@@ -70,13 +81,13 @@ export default class Harvester extends Role {
       targets = storageRelated;
     }
 
-    creep.status('transfering');
+    creep.status("transfering");
 
     if (targets.length > 0) {
       creep.target(targets[0].id);
       if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(targets[0]);
-        creep.status('moving');
+        creep.status("moving");
       }
     }
   }
@@ -87,8 +98,8 @@ export default class Harvester extends Role {
    * @public
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object that call this method
    * @returns {Boolean}
-	 * @override
-	 * @see Role
+   * @override
+   * @see Role
    **/
   needsHelp(fromCreep) {
     return !fromCreep.isEnergyCapFull() && fromCreep.getSources().length;

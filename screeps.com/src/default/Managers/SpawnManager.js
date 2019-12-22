@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading SpawnManager...');
+console.log(">> Loading SpawnManager...");
 
 /**
  * @class SpawnManager
@@ -8,13 +8,12 @@ console.log('>> Loading SpawnManager...');
  * @global
  */
 export default class SpawnManager {
-
   constructor() {
     /**
-    * @member {Integer} SpawnManager#MAX_BODY_PARTS
-    * @desc Set max {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * body parts limit
-    **/
+     * @member {Integer} SpawnManager#MAX_BODY_PARTS
+     * @desc Set max {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * body parts limit
+     **/
     this.MAX_BODY_PARTS = 50;
   }
 
@@ -24,16 +23,19 @@ export default class SpawnManager {
    * @public
    **/
   spawn() {
-    ROLE_MANAGER.ROLES.forEach((role) => {
-      var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role.ROLE);
+    ROLE_MANAGER.ROLES.forEach(role => {
+      var creeps = _.filter(
+        Game.creeps,
+        creep => creep.memory.role == role.ROLE
+      );
       if (role.shouldSpawn()) {
-        const NAME = role.ROLE + '_' + UTILS.guidGenerator();
-        const ROOM = Game.spawns['CipciaObfita'].room;
+        const NAME = role.ROLE + "_" + UTILS.guidGenerator();
+        const ROOM = Game.spawns["Spawn1"].room;
         const GENOME = this.createAffordableGenome(role, ROOM);
 
         if (!GENOME) return false;
 
-        Game.spawns['CipciaObfita'].createCreep(GENOME, NAME, {
+        Game.spawns["Spawn1"].createCreep(GENOME, NAME, {
           role: role.ROLE,
           primarySource: role.getPrimarySource(ROOM)
         });
@@ -55,10 +57,10 @@ export default class SpawnManager {
 
     let search = true;
     while (currentPrice < maxPrice && search) {
-      role.GENOME.forEach((part) => {
+      role.GENOME.forEach(part => {
         let priceOffset = 0;
 
-        if (part == 'carry') {
+        if (part == "carry") {
           priceOffset = BODYPART_COST[MOVE];
         }
 
@@ -71,6 +73,6 @@ export default class SpawnManager {
       });
     }
 
-    return (finalGenome.length < role.GENOME.length) ? false : finalGenome;
+    return finalGenome.length < role.GENOME.length ? false : finalGenome;
   }
 }

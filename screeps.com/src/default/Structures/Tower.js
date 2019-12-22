@@ -1,30 +1,27 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Tower Structure...');
+console.log(">> Loading Tower Structure...");
 
 export default class Tower {
+  constructor() {}
 
-  constructor() {
-
-  }
-
-	run(tower) {
+  run(tower) {
     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 
     if (closestHostile) {
       tower.attack(closestHostile);
     } else {
-      if (tower.energyCapacity < 4000) {
+      if (tower.energyCapacity > 500) {
         tower.repair(this.findClosestDamagedStructureNotRoad(tower));
       } else {
-        tower.repair(this.findClosestDamagedStructure(tower));
+        // tower.repair(this.findClosestDamagedStructure(tower));
       }
     }
-	}
+  }
 
   findClosestDamagedStructure(tower) {
     var structure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: (building) => building.hits < building.hitsMax
+      filter: building => building.hits < building.hitsMax
     });
 
     return structure;
@@ -32,7 +29,9 @@ export default class Tower {
 
   findClosestDamagedStructureNotRoad(tower) {
     var structure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: (building) => building.hits < building.hitsMax && building.structureType != STRUCTURE_ROAD
+      filter: building =>
+        building.hits < building.hitsMax &&
+        building.structureType != STRUCTURE_ROAD
     });
 
     return structure;

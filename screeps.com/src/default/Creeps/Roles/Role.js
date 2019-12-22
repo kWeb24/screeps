@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Role...');
+console.log(">> Loading Role...");
 
 /**
  * @class Role
@@ -10,46 +10,45 @@ console.log('>> Loading Role...');
  */
 
 export default class Role {
-
   constructor() {
     /**
-    * @member {String} Role#ROLE
-    * @desc Role name
-    **/
-    this.ROLE = 'universal';
+     * @member {String} Role#ROLE
+     * @desc Role name
+     **/
+    this.ROLE = "universal";
 
     /**
-    * @member {Integer} Role#POPULATION
-    * @desc Target population of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * with gieven role per room
-    **/
+     * @member {Integer} Role#POPULATION
+     * @desc Target population of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * with gieven role per room
+     **/
     this.POPULATION = 2;
 
     /**
-    * @member {Integer} Role#GENOME
-    * @desc Base {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * Genome that contains body parts
-    **/
+     * @member {Integer} Role#GENOME
+     * @desc Base {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * Genome that contains body parts
+     **/
     this.GENOME = [WORK, CARRY, MOVE];
 
     /**
-    * @member {Array} Role#CAPABLE_OF
-    * @desc List of Roles that could be executed when given one has nothing to do
-    **/
+     * @member {Array} Role#CAPABLE_OF
+     * @desc List of Roles that could be executed when given one has nothing to do
+     **/
     this.CAPABLE_OF = [];
 
     /**
-    * @member {Boolean} Role#ON_DEMAND
-    * @desc Flag that indicates if {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * should be spawned only if there's demand of it's role work
-    **/
+     * @member {Boolean} Role#ON_DEMAND
+     * @desc Flag that indicates if {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * should be spawned only if there's demand of it's role work
+     **/
     this.ON_DEMAND = true;
 
     /**
-    * @member {Boolean} Role#USE_ENERGY_DEPOSITS
-    * @desc Flag that indicates if {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
-    * should withdraw energy from energy deposits
-    **/
+     * @member {Boolean} Role#USE_ENERGY_DEPOSITS
+     * @desc Flag that indicates if {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
+     * should withdraw energy from energy deposits
+     **/
     this.USE_ENERGY_DEPOSITS = true;
   }
 
@@ -59,9 +58,7 @@ export default class Role {
    * @public
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
-	run(creep) {
-
-	}
+  run(creep) {}
 
   /**
    * @memberof Role
@@ -70,9 +67,9 @@ export default class Role {
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object that call this method
    * @returns {Boolean}
    **/
-	needsHelp(fromCreep) {
-		return false;
-	}
+  needsHelp(fromCreep) {
+    return false;
+  }
 
   /**
    * @memberof Role
@@ -97,7 +94,7 @@ export default class Role {
    * @returns {Array<Creep>} Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    **/
   getCreeps() {
-    return _.filter(Game.creeps, (creep) => creep.memory.role == this.ROLE);
+    return _.filter(Game.creeps, creep => creep.memory.role == this.ROLE);
   }
 
   /**
@@ -120,12 +117,17 @@ export default class Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object that call this method
    **/
   dropRoad(creep) {
-    const CONSTRUCTION_SITES = CACHE.ROOMS[creep.room.name].getMyConstructionSites();
+    const CONSTRUCTION_SITES = CACHE.ROOMS[
+      creep.room.name
+    ].getMyConstructionSites();
 
     if (CONSTRUCTION_SITES.length < 10) {
       const tileContent = creep.room.lookAt(creep.pos);
 
-      if (tileContent.type != 'structure' && tileContent.type != 'constructionSite') {
+      if (
+        tileContent.type != "structure" &&
+        tileContent.type != "constructionSite"
+      ) {
         creep.room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
       }
     }
@@ -143,7 +145,10 @@ export default class Role {
     let creepsInSource = [];
 
     for (const SOURCE in SOURCES) {
-      const CREEP_COUNT = _.filter(Game.creeps, (creep) => creep.memory.primarySource == SOURCES[SOURCE].id);
+      const CREEP_COUNT = _.filter(
+        Game.creeps,
+        creep => creep.memory.primarySource == SOURCES[SOURCE].id
+      );
       creepsInSource.push(CREEP_COUNT.length);
     }
 
@@ -168,10 +173,16 @@ export default class Role {
    **/
   selectSource(creep) {
     let sources = creep.getSources();
-    const primarySource = _.filter(sources, (source) => source.id == creep.memory.primarySource);
+    const primarySource = _.filter(
+      sources,
+      source => source.id == creep.memory.primarySource
+    );
     let selectedSource = primarySource[0];
 
-    if (primarySource.energy < creep.carryCapacity || primarySource.ticksToRegeneration > 10) {
+    if (
+      primarySource.energy < creep.carryCapacity ||
+      primarySource.ticksToRegeneration > 10
+    ) {
       selectedSource = creep.getClosestActiveSource();
     }
 
@@ -200,13 +211,13 @@ export default class Role {
     }
 
     if (roomContainers !== undefined) {
-      const activeContainers = _.filter(roomContainers, (container) => {
+      const activeContainers = _.filter(roomContainers, container => {
         return container.isActive();
       });
 
       if (activeContainers.length) {
         shouldWait = activeContainers[0].id;
-        const notEmptyContainers = _.filter(activeContainers, (container) => {
+        const notEmptyContainers = _.filter(activeContainers, container => {
           return container.store[RESOURCE_ENERGY] >= creep.carryCapacity;
         });
         if (notEmptyContainers.length) {
@@ -225,23 +236,27 @@ export default class Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    * @todo refactor needed
    **/
-	harvest(creep) {
-    creep.status('harvesting');
+  harvest(creep) {
+    creep.status("harvesting");
 
     let selectedSource = this.selectEnergyDeposit(creep);
-    if (selectedSource !== false && typeof selectedSource != 'string' && selectedSource !== undefined && this.USE_ENERGY_DEPOSITS) {
-
+    if (
+      selectedSource !== false &&
+      typeof selectedSource != "string" &&
+      selectedSource !== undefined &&
+      this.USE_ENERGY_DEPOSITS
+    ) {
       if (creep.withdraw(selectedSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
-        creep.status('moving');
+        creep.status("moving");
       }
       creep.target(selectedSource.id);
-    } else if (typeof selectedSource != 'string' || !this.USE_ENERGY_DEPOSITS) {
+    } else if (typeof selectedSource != "string" || !this.USE_ENERGY_DEPOSITS) {
       selectedSource = this.selectSource(creep);
 
       if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
-        creep.status('moving');
+        creep.status("moving");
       }
       creep.target(selectedSource.id);
     } else {
@@ -249,9 +264,9 @@ export default class Role {
 
       if (creep.harvest(t[1]) == ERR_NOT_IN_RANGE) {
         creep.moveTo(t[1]);
-        creep.status('moving');
+        creep.status("moving");
       }
       creep.target(t[1].id);
     }
-	}
+  }
 }
