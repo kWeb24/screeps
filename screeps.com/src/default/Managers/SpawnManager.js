@@ -71,6 +71,16 @@ export default class SpawnManager {
           search = false;
         }
       });
+
+      if (role.ROLE === "roadKeeper" && finalGenome.length >= 3) {
+        search = false;
+      }
+      if (
+        (role.ROLE === "builder" || role.ROLE === "repairer") &&
+        finalGenome.length >= 6
+      ) {
+        search = false;
+      }
     }
 
     return finalGenome.length < role.GENOME.length ? false : finalGenome;

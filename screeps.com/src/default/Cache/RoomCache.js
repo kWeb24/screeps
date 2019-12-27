@@ -269,9 +269,9 @@ export default class RoomCache {
    * @returns {Array<Creep>} Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    **/
   getHostileCreeps() {
-    if (this.HOSTILE_CREEPS === undefined) {
-      this.HOSTILE_CREEPS = this.ROOM.find(FIND_HOSTILE_CREEPS);
-    }
+    // if (this.HOSTILE_CREEPS === undefined) {
+    this.HOSTILE_CREEPS = this.ROOM.find(FIND_HOSTILE_CREEPS);
+    // }
 
     return this.HOSTILE_CREEPS;
   }
@@ -285,9 +285,9 @@ export default class RoomCache {
    * @returns {Array<Resource>} Array of {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
    **/
   getDroppedEnergy() {
-    if (this.DROPPED_ENERGY === undefined) {
-      this.DROPPED_ENERGY = this.ROOM.find(FIND_DROPPED_ENERGY);
-    }
+    // if (this.DROPPED_ENERGY === undefined) {
+    this.DROPPED_ENERGY = this.ROOM.find(FIND_DROPPED_ENERGY);
+    // }
 
     return this.DROPPED_ENERGY;
   }
@@ -301,9 +301,9 @@ export default class RoomCache {
    * @returns {Array<Resource>} Array of {@link https://docs.screeps.com/api/#Resource|Screeps Resource}
    **/
   getDroppedResources() {
-    if (this.DROPPED_RESOURCES === undefined) {
-      this.DROPPED_RESOURCES = this.ROOM.find(FIND_DROPPED_RESOURCES);
-    }
+    // if (this.DROPPED_RESOURCES === undefined) {
+    this.DROPPED_RESOURCES = this.ROOM.find(FIND_DROPPED_RESOURCES);
+    // }
 
     return this.DROPPED_RESOURCES;
   }
@@ -317,9 +317,9 @@ export default class RoomCache {
    * @returns {Array<Flag>} Array of {@link https://docs.screeps.com/api/#Flag|Screeps Flag}
    **/
   getFlags() {
-    if (this.FLAGS === undefined) {
-      this.FLAGS = this.ROOM.find(FIND_FLAGS);
-    }
+    // if (this.FLAGS === undefined) {
+    this.FLAGS = this.ROOM.find(FIND_FLAGS);
+    // }
 
     return this.FLAGS;
   }
@@ -447,9 +447,9 @@ export default class RoomCache {
    * @returns {Array<Tombstone>} Array of {@link https://docs.screeps.com/api/#Tombstone|Screeps Tombstone}
    **/
   getTombstones() {
-    if (this.TOMBSTONES === undefined) {
-      this.TOMBSTONES = this.ROOM.find(FIND_TOMBSTONES);
-    }
+    // if (this.TOMBSTONES === undefined) {
+    this.TOMBSTONES = this.ROOM.find(FIND_TOMBSTONES);
+    // }
 
     return this.TOMBSTONES;
   }
@@ -575,13 +575,13 @@ export default class RoomCache {
    * @returns {Array<StructureTower>} object of {@link https://docs.screeps.com/api/#StructureTower|Screeps StructureTower} type
    **/
   getMyTowers() {
-    if (this.MY_TOWERS === undefined) {
-      const structures = this.getStructures();
-      this.MY_TOWERS = _.filter(
-        structures,
-        structure => structure.structureType == STRUCTURE_TOWER
-      );
-    }
+    // if (this.MY_TOWERS === undefined) {
+    const structures = this.getStructures();
+    this.MY_TOWERS = _.filter(
+      structures,
+      structure => structure.structureType == STRUCTURE_TOWER
+    );
+    // }
 
     return this.MY_TOWERS;
   }

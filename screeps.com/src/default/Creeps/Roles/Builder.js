@@ -15,7 +15,7 @@ export default class Builder extends Role {
     super();
 
     this.ROLE = "builder";
-    this.POPULATION = 2;
+    this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ["upgrader"];
     this.ON_DEMAND = true;
@@ -78,14 +78,27 @@ export default class Builder extends Role {
         creep.target(targets.id);
       }
     } else {
-      const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
-      const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(
-        spawn.pos.x - 4,
-        spawn.pos.y - 5
-      );
-      creep.moveTo(pos);
-      creep.status("bored");
-      creep.target("BuildersGatherPoint");
+      const wallToBuild = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: structure =>
+          structure.hits < structure.hitsMax / 1.3 &&
+          structure.structureType == STRUCTURE_WALL
+      });
+
+      if (wallToBuild) {
+        if (creep.repair(wallToBuild) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(wallToBuild);
+          creep.status("moving");
+        }
+      } else {
+        const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
+        const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(
+          spawn.pos.x - 4,
+          spawn.pos.y - 5
+        );
+        creep.moveTo(pos);
+        creep.status("bored");
+        creep.target("BuildersGatherPoint");
+      }
     }
   }
 

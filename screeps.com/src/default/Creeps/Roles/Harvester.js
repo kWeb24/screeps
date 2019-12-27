@@ -14,7 +14,7 @@ export default class Harvester extends Role {
     super();
 
     this.ROLE = "harvester";
-    this.POPULATION = 5;
+    this.POPULATION = 4;
     this.GENOME = [WORK, CARRY, MOVE];
     this.CAPABLE_OF = ["upgrader", "builder"];
     this.ON_DEMAND = false;
