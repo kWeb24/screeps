@@ -17,6 +17,7 @@ export default class Builder extends Role {
     this.ROLE = "builder";
     this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
+    this.MAX_GENOME_LENGTH = 6;
     this.CAPABLE_OF = ["upgrader"];
     this.ON_DEMAND = true;
     this.USE_ENERGY_DEPOSITS = true;
@@ -65,6 +66,23 @@ export default class Builder extends Role {
       }
     });
 
+    let sites = null;
+    for (const room in Game.rooms) {
+      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+        sites = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+          filter: obj => {
+            return (
+              obj.structureType == STRUCTURE_SPAWN
+            );
+          }
+        });
+      }
+    }
+
+    if (sites) {
+      targets = sites;
+    }
+
     if (!targets) {
       targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
     }
@@ -90,14 +108,14 @@ export default class Builder extends Role {
           creep.status("moving");
         }
       } else {
-        const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
-        const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(
-          spawn.pos.x - 4,
-          spawn.pos.y - 5
-        );
-        creep.moveTo(pos);
+        // const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
+        // const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(
+        //   spawn.pos.x - 4,
+        //   spawn.pos.y - 5
+        // );
+        creep.moveTo(CACHE.ROOMS[creep.room.name].ROOM.controller.pos);
         creep.status("bored");
-        creep.target("BuildersGatherPoint");
+        // creep.target("BuildersGatherPoint");
       }
     }
   }
@@ -114,5 +132,22 @@ export default class Builder extends Role {
   needsHelp(fromCreep) {
     var targets = fromCreep.room.find(FIND_CONSTRUCTION_SITES);
     return targets.length;
+  }
+
+  shouldSpawn(room) {
+    let sitesCount = 0;
+
+    for (const room in Game.rooms) {
+      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+        sitesCount += CACHE.ROOMS[room].getConstructionSites().length;
+      }
+    }
+
+    const buildersCount = _.filter(
+      Game.creeps,
+      creep => creep.memory.role == 'builder' && creep.memory.room == room.name
+    ).length;
+
+    return !buildersCount && sitesCount;
   }
 }

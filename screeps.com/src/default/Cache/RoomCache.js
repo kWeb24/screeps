@@ -9,13 +9,13 @@ console.log(">> Loading Room Cache module...");
  */
 
 export default class RoomCache {
-  constructor(room) {
+  constructor(room, id) {
     /**
      * @member {Object} RoomCache#ROOM
      * @desc {@link https://docs.screeps.com/api/#Room|Screeps Room} object reference
      **/
     this.ROOM = room;
-
+    this.ID = id;
     /**
      * @member {Array<Source>} RoomCache#SOURCES
      * @desc Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
@@ -179,6 +179,9 @@ export default class RoomCache {
      **/
     this.MY_TOWERS = undefined;
 
+    this.BASE_POSSIBLE_POSITIONS = {};
+    this.BASE_POSSIBLE_POLY = {};
+
     // Not implemented yet
     this.KEEPERLIARS = undefined;
     this.PORTALS = undefined;
@@ -205,9 +208,9 @@ export default class RoomCache {
    * @returns {Array<Source>} Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
   getSources() {
-    if (this.SOURCES === undefined) {
+    // if (this.SOURCES === undefined) {
       this.SOURCES = this.ROOM.find(FIND_SOURCES);
-    }
+    // }
 
     return this.SOURCES;
   }
@@ -221,9 +224,9 @@ export default class RoomCache {
    * @returns {Array<Source>} Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
   getActiveSources() {
-    if (this.SOURCES_ACTIVE === undefined) {
+    // if (this.SOURCES_ACTIVE === undefined) {
       this.SOURCES_ACTIVE = this.ROOM.find(FIND_SOURCES_ACTIVE);
-    }
+    // }
 
     return this.SOURCES_ACTIVE;
   }
@@ -349,9 +352,9 @@ export default class RoomCache {
    * @returns {Array<ConstructionSite>} Array of {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    **/
   getMyConstructionSites() {
-    if (this.MY_CONSTRUCTION_SITES === undefined) {
+    // if (this.MY_CONSTRUCTION_SITES === undefined) {
       this.MY_CONSTRUCTION_SITES = this.ROOM.find(FIND_MY_CONSTRUCTION_SITES);
-    }
+    // }
 
     return this.MY_CONSTRUCTION_SITES;
   }
@@ -537,13 +540,13 @@ export default class RoomCache {
    * @returns {Array<StructureContainer>} Array of {@link https://docs.screeps.com/api/#StructureContainer|Screeps StructureContainer}
    **/
   getContainers() {
-    if (this.CONTAINERS === undefined) {
+    // if (this.CONTAINERS === undefined) {
       const structures = this.getStructures();
       this.CONTAINERS = _.filter(
         structures,
         structure => structure.structureType == STRUCTURE_CONTAINER
       );
-    }
+    // }
 
     return this.CONTAINERS;
   }
@@ -584,5 +587,78 @@ export default class RoomCache {
     // }
 
     return this.MY_TOWERS;
+  }
+
+  getBasePossiblePositions(name, layout) {
+    if (this.BASE_POSSIBLE_POSITIONS[name] === undefined) {
+      const base = layout;
+      this.BASE_POSSIBLE_POSITIONS[name] = [];
+      const positions = [];
+
+      for (let x = 0; x < 50 - base.core.size.x; x++) {
+        for (let y = 0; y < 50 - base.core.size.y; y++) {
+          const area = this.ROOM.lookAtArea(y, x, y + base.core.size.y, x + base.core.size.x, true);
+          let hasObstacles = false;
+          area.forEach((tile) => {
+            if (tile.type === 'structure' && tile[tile.type].structureType !== 'road') {
+              hasObstacles = true;
+            } else if (tile[tile.type] === 'wall') {
+              hasObstacles = true;
+            }
+          });
+
+          if (!hasObstacles) {
+            const distToController = PathFinder.search(
+              this.ROOM.getPositionAt(x + Math.ceil(base.core.size.x / 2), Math.ceil(base.core.size.y/2)),
+              {
+                pos: this.ROOM.controller.pos,
+                range: 1
+              },
+              {
+                plainCost: 1,
+                swampCost: 1,
+              }
+            ).path.length;
+
+            let sourcesSum = 0;
+            this.getSources().forEach((src) => {
+              sourcesSum += PathFinder.search(
+                this.ROOM.getPositionAt(x + Math.ceil(base.core.size.x / 2), Math.ceil(base.core.size.y/2)),
+                {
+                  pos: src.pos,
+                  range: 1
+                },
+                {
+                  plainCost: 1,
+                  swampCost: 1,
+                }
+              ).path.length;
+            })
+
+            positions.push({
+              x,
+              y,
+              x2: base.core.size.x,
+              y2: base.core.size.y,
+              totalPathsRequired: distToController
+            });
+
+            y += Math.ceil(base.core.size.y / 2);
+          }
+        }
+      }
+
+      let lowest = positions[0];
+      positions.forEach((pos) => {
+        if (pos.totalPathsRequired < lowest.totalPathsRequired) {
+          lowest = pos;
+        }
+      });
+
+      this.BASE_POSSIBLE_POSITIONS[name].push(lowest);
+      // this.BASE_POSSIBLE_POSITIONS[name] = positions;
+    }
+
+    return this.BASE_POSSIBLE_POSITIONS[name];
   }
 }

@@ -14,8 +14,9 @@ export default class Harvester extends Role {
     super();
 
     this.ROLE = "harvester";
-    this.POPULATION = 4;
+    this.POPULATION = 5;
     this.GENOME = [WORK, CARRY, MOVE];
+    this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = ["upgrader", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = false;
@@ -73,8 +74,14 @@ export default class Harvester extends Role {
       );
     });
 
+    const haulersCount = _.filter(
+      Game.creeps,
+      creep2 => creep2.memory.role == 'hauler' && creep2.memory.room == creep.memory.room
+    ).length;
+
     let targets = [];
 
+    // if (spawnRelated.length && (!haulersCount && storageRelated)) {
     if (spawnRelated.length) {
       targets = spawnRelated;
     } else if (storageRelated.length) {
@@ -103,5 +110,24 @@ export default class Harvester extends Role {
    **/
   needsHelp(fromCreep) {
     return !fromCreep.isEnergyCapFull() && fromCreep.getSources().length;
+  }
+
+  shouldSpawn(room) {
+    const sourcesCount = CACHE.ROOMS[room.name].getSources().length;
+
+    const harvestersCount = _.filter(
+      Game.creeps,
+      creep => creep.memory.role == 'harvester' && creep.memory.room == room.name
+    ).length;
+
+    const dyingHarvestersCount = _.filter(
+      Game.creeps,
+      creep => creep.memory.role == 'harvester' && creep.memory.room == room.name && creep.ticksToLive < 100
+    ).length;
+
+    const maxPrice = room.energyAvailable;
+    const possiblePrice = room.energyCapacityAvailable;
+
+    return harvestersCount < sourcesCount || (dyingHarvestersCount && harvestersCount - 1 < sourcesCount);
   }
 }

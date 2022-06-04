@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+import layouts from '../../Layouts/Layouts';
 
 console.log(">> Loading RoomPlanner module...");
 
@@ -27,82 +28,9 @@ export default class RoomPlanner {
      **/
     this.PATHS = [];
 
-    /**
-     * @member {Array} RoomPlanner#RLC2_EXTENSIONS
-     * @desc Array of objects with relative position to Room Spawn (RLC2)
-     **/
-    this.RLC2_EXTENSIONS = [
-      { x: -2, y: 3 },
-      { x: -1, y: 3 },
-      { x: 0, y: 3 },
-      { x: 1, y: 3 },
-      { x: 2, y: 3 }
-    ];
-
-    /**
-     * @member {Array} RoomPlanner#RLC3_EXTENSIONS
-     * @desc Array of objects with relative position to Room Spawn (RLC3)
-     **/
-    this.RLC3_EXTENSIONS = [
-      { x: -2, y: 4 },
-      { x: -1, y: 4 },
-      { x: 0, y: 4 },
-      { x: 1, y: 4 },
-      { x: 2, y: 4 }
-    ];
-
-    /**
-     * @member {Array} RoomPlanner#RLC4_EXTENSIONS
-     * @desc Array of objects with relative position to Room Spawn (RLC4)
-     **/
-    this.RLC4_EXTENSIONS = [
-      // { x: -7, y: 5 },
-      // { x: -7, y: 4 },
-      // { x: -6, y: 4 },
-      // { x: -5, y: 4 },
-      // { x: -4, y: 4 }
-    ];
-
-    /**
-     * @member {Array} RoomPlanner#RLC5_EXTENSIONS
-     * @desc Array of objects with relative position to Room Spawn (RLC5)
-     **/
-    this.RLC5_EXTENSIONS = [
-      // { x: 3, y: 2 },
-      // { x: 3, y: 1 },
-      // { x: 3, y: 0 },
-      // { x: -3, y: 0 },
-      // { x: -3, y: -1 }
-    ];
-
-    /**
-     * @member {Array} RoomPlanner#RLC5_EXTENSIONS
-     * @desc Array of objects with relative position to Room Spawn (RLC6)
-     **/
-    this.RLC6_EXTENSIONS = [
-      // { x: -3, y: -2 },
-      // { x: -2, y: -3 },
-      // { x: -1, y: -3 },
-      // { x: 0, y: -3 }
-      // {x: -3, y: -1},
-    ];
-
-    /**
-     * @member {Array} RoomPlanner#RLC3_CONTAINERS
-     * @desc Array of objects with relative position to Room Spawn (RLC3)
-     **/
-    this.RLC3_CONTAINERS = [
-      { x: 1, y: -1 },
-      { x: 1, y: 0 },
-      { x: 0, y: -1 },
-      { x: -1, y: 1 },
-      { x: -1, y: 0 }
-    ];
-
-    this.selectExtensions();
-    this.selectContainers();
     this.planRoads();
     this.buildRoads();
+    this.buildContainers();
   }
 
   /**
@@ -144,7 +72,8 @@ export default class RoomPlanner {
         },
         {
           plainCost: 1,
-          swampCost: 1
+          swampCost: 1,
+          // heuristicWeight: 1.5,
         }
       );
       this.PATHS.push(path.path);
@@ -186,121 +115,144 @@ export default class RoomPlanner {
         lineStyle: "dotted"
       });
     });
+
+    this.findCoreBaseSpace();
   }
 
-  /**
-   * @memberof RoomPlanner
-   * @desc SelectExtensions builds room extensions based on controller level
-   * @private
-   **/
-  selectExtensions() {
-    if (this.ROOM.controller.owner.username == "kWeb24") {
-      switch (this.ROOM.controller.level) {
-        case 2:
-          this.buildExtensions(this.RLC2_EXTENSIONS, "#6bf7ff");
-          break;
-        case 3:
-          this.buildExtensions(this.RLC3_EXTENSIONS, "#f95eff");
-          break;
-        case 4:
-          this.buildExtensions(this.RLC4_EXTENSIONS, "#a4ff4");
-          break;
-        case 5:
-          this.buildExtensions(this.RLC5_EXTENSIONS, "#ffd749");
-          break;
-        case 6:
-          this.buildExtensions(this.RLC6_EXTENSIONS, "#ff4949");
-          break;
-      }
+  findCoreBaseSpace() {
+    for (const [name, base] of Object.entries(layouts)) {
 
-      // this.buildExtensions(this.RLC2_EXTENSIONS, '#6bf7ff');
-      // this.buildExtensions(this.RLC3_EXTENSIONS, '#f95eff');
-      // this.buildExtensions(this.RLC4_EXTENSIONS, '#a4ff49');
-      // this.buildExtensions(this.RLC5_EXTENSIONS, '#ffd749');
-      // this.buildExtensions(this.RLC6_EXTENSIONS, '#ff4949');
+      const solutions = CACHE.ROOMS[this.ROOM.name].getBasePossiblePositions(name, base);
+
+      solutions.forEach((solution) => {
+        // this.ROOM.visual.rect(solution.x, solution.y, solution.x2, solution.y2, {
+        //   fill: 'transparent',
+        //   stroke: '#60f542',
+        //   opacity: 0.2,
+        // });
+
+        base.core.levels.forEach((level) => {
+          level.forEach((site) => {
+            if (site.type === 'road')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#ffffff',
+                radius: 0.15,
+              });
+            }
+
+            if (site.type === 'spawn')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#66c7ff',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'link')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#00fffb',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'powerSpawn')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#ff00e1',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'tower')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#ff0026',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'storage')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#ff0026',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'nuke')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#ff7300',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'factory')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#00ff88',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'terminal')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#a2ff00',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+            if (site.type === 'wall')
+            {
+              this.ROOM.visual.circle(solution.x + site.pos[0], solution.y + site.pos[1], {
+                fill: '#000000',
+                radius: 0.30,
+                opacity: 1,
+              });
+            }
+
+          });
+        });
+      });
+
     }
   }
 
   /**
    * @memberof RoomPlanner
-   * @desc BuildExtensions builds given extensions
-   * @param {Array} extensions with extension relative positions
-   * @param {String} color Visuals color
+   * @desc BuildContainers builds containers
    * @private
    **/
-  buildExtensions(extensions, color) {
-    extensions.forEach(extension => {
-      const pos = this.ROOM.getPositionAt(
-        this.SPAWN.pos.x + extension.x,
-        this.SPAWN.pos.y + extension.y
-      );
-
-      if (pos !== null) {
-        const tileContents = this.ROOM.lookAt(pos);
-
-        tileContents.forEach(content => {
-          if (
-            content.type != "structure" &&
-            content.type != "constructionSite"
-          ) {
-            this.ROOM.createConstructionSite(pos, STRUCTURE_EXTENSION);
-          }
-        });
-      }
-
-      // this.ROOM.visual.circle(pos.x, pos.y, {
-      //   fill: color
-      // });
-    });
-  }
-
-  /**
-   * @memberof RoomPlanner
-   * @desc SelectContainers builds room container based on controller level
-   * @private
-   **/
-  selectContainers() {
-    if (this.ROOM.controller.owner.username == "kWeb24") {
-      switch (this.ROOM.controller.level) {
-        case 3:
-          this.buildContainers(this.RLC3_CONTAINERS, "#f95eff");
-          break;
-      }
-
-      // this.buildContainers(this.RLC3_CONTAINERS, '#f95eff');
-    }
-  }
-
-  /**
-   * @memberof RoomPlanner
-   * @desc BuildContainers builds given containers
-   * @param {Array} containers with containers relative positions
-   * @param {String} color Visuals color
-   * @private
-   **/
-  buildContainers(containers, color) {
-    containers.forEach(container => {
-      const pos = this.ROOM.getPositionAt(
-        this.SPAWN.pos.x + container.x,
-        this.SPAWN.pos.y + container.y
-      );
-
-      if (pos !== null) {
-        const tileContents = this.ROOM.lookAt(pos);
-
-        tileContents.forEach(content => {
-          if (
-            content.type != "structure" &&
-            content.type != "constructionSite"
-          ) {
-            this.ROOM.createConstructionSite(pos, STRUCTURE_CONTAINER);
-          }
-        });
-      }
-
-      // this.ROOM.visual.circle(pos.x, pos.y, {
-      //   fill: color
-      // });
-    });
+  buildContainers() {
+    // containers.forEach(container => {
+    //   const pos = this.ROOM.getPositionAt(
+    //     this.SPAWN.pos.x + container.x,
+    //     this.SPAWN.pos.y + container.y
+    //   );
+    //
+    //   if (pos !== null) {
+    //     const tileContents = this.ROOM.lookAt(pos);
+    //
+    //     tileContents.forEach(content => {
+    //       if (
+    //         content.type != "structure" &&
+    //         content.type != "constructionSite"
+    //       ) {
+    //         this.ROOM.createConstructionSite(pos, STRUCTURE_CONTAINER);
+    //       }
+    //     });
+    //   }
+    // });
   }
 }

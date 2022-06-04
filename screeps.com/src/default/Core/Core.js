@@ -49,6 +49,7 @@ export default class Core {
     this.LOOP++;
     // PLANNER.ROOMS['E4N27'].selectExtensions(); // when visuals on
     // PLANNER.ROOMS['E4N27'].selectContainers(); // when visuals on
+    // PLANNER.ROOMS['W7N3'].drawVisuals();
   }
 
   /**
@@ -100,11 +101,15 @@ export default class Core {
    * @private
    **/
   runStructures() {
-    const [tower] = CACHE.ROOMS["E9S16"].getMyTowers();
-    this.Tower.run(tower);
-
-    // for (let structure in CACHE.ROOMS['E4N27'].getMyTowers()) {
-    //   this.Tower.run(structure);
-    // }
+    for (const room in Game.rooms) {
+      if (CACHE.ROOMS[room] !== undefined) {
+        if (CACHE.ROOMS[room].getMyTowers().length) {
+          const towers = CACHE.ROOMS[room].getMyTowers();
+          towers.forEach((tower, index) => {
+            this.Tower.run(tower);
+          });
+        }
+      }
+    }
   }
 }

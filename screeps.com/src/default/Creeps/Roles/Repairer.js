@@ -18,6 +18,7 @@ export default class Repairer extends Role {
 		this.ROLE = 'repairer';
     this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
+    this.MAX_GENOME_LENGTH = 6;
     this.CAPABLE_OF = ['upgrader'];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -43,8 +44,6 @@ export default class Repairer extends Role {
         (creep.status() == 'moving' && creep.carry.energy > 0)) {
 			this.repair(creep);
 		}
-
-		this.dropRoad(creep);
 	}
 
   /**
@@ -121,4 +120,13 @@ export default class Repairer extends Role {
 			return closest;
 		}
 	}
+
+  shouldSpawn(room) {
+    const upgradersCount = _.filter(
+      Game.creeps,
+      creep => creep.memory.role == 'repairer' && creep.memory.room == room.name
+    ).length;
+
+    return upgradersCount < this.POPULATION;
+  }
 }

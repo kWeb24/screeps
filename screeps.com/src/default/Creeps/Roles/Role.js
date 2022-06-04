@@ -79,8 +79,11 @@ export default class Role {
    * @returns {Boolean}
    * @TODO: Spawn only when  needed
    **/
-  shouldSpawn() {
-    if (this.countCreeps() < this.POPULATION) {
+  shouldSpawn(room) {
+    const maxPrice = room.energyAvailable;
+    const possiblePrice = room.energyCapacityAvailable;
+
+    if (maxPrice === possiblePrice && this.countCreeps() < this.POPULATION) {
       return true;
     }
 
@@ -196,21 +199,23 @@ export default class Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    * @returns {Structure} matched {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
-  selectEnergyDeposit(creep) {
+  selectEnergyDeposit(creep, storageOnly = true, reverse = false) {
     const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();
     const roomStorage = CACHE.ROOMS[creep.room.name].getMyStorage()[0];
     let shouldWait = false;
+    let storage = false;
+    let containers = false;
 
     if (roomStorage !== undefined) {
       if (roomStorage.isActive()) {
         shouldWait = roomStorage.id;
         if (roomStorage.store[RESOURCE_ENERGY] >= creep.carryCapacity) {
-          return roomStorage;
+          storage = roomStorage;
         }
       }
     }
 
-    if (roomContainers !== undefined) {
+    if (!storageOnly && roomContainers !== undefined) {
       const activeContainers = _.filter(roomContainers, container => {
         return container.isActive();
       });
@@ -221,8 +226,18 @@ export default class Role {
           return container.store[RESOURCE_ENERGY] >= creep.carryCapacity;
         });
         if (notEmptyContainers.length) {
-          return notEmptyContainers[0];
+          containers = notEmptyContainers[0];
         }
+      }
+    }
+
+    if (storage || containers) {
+      if (reverse) {
+        if (containers) return containers;
+        if (storage) return storage;
+      } else {
+        if (storage) return storage;
+        if (containers) return containers;
       }
     }
 
@@ -258,7 +273,18 @@ export default class Role {
         creep.moveTo(selectedSource);
         creep.status("moving");
       }
-      creep.target(selectedSource.id);
+
+      if (!selectedSource) {
+        const t = creep.getSources();
+
+        if (creep.harvest(t[1]) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(t[1]);
+          creep.status("moving");
+        }
+        creep.target(t[1].id);
+      } else {
+        creep.target(selectedSource.id);
+      }
     } else {
       const t = creep.getSources();
 

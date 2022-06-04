@@ -29,7 +29,7 @@ export default class GlobalCache {
   initRoomCache() {
     for (const room in Game.rooms) {
       if (this.ROOMS[room] === undefined) {
-        this.ROOMS[room] = new RoomCache(Game.rooms[room]);
+        this.ROOMS[room] = new RoomCache(Game.rooms[room], room);
       }
     }
   }

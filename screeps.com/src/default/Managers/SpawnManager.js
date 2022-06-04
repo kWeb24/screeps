@@ -23,24 +23,31 @@ export default class SpawnManager {
    * @public
    **/
   spawn() {
-    ROLE_MANAGER.ROLES.forEach(role => {
-      var creeps = _.filter(
-        Game.creeps,
-        creep => creep.memory.role == role.ROLE
-      );
-      if (role.shouldSpawn()) {
-        const NAME = role.ROLE + "_" + UTILS.guidGenerator();
-        const ROOM = Game.spawns["Spawn1"].room;
-        const GENOME = this.createAffordableGenome(role, ROOM);
+    for (const room in Game.rooms) {
+      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].getMySpawns().length) {
+        const ROOM = CACHE.ROOMS[room].ROOM;
+        const SPAWN = CACHE.ROOMS[room].getMySpawns()[0];
 
-        if (!GENOME) return false;
+        ROLE_MANAGER.ROLES.reverse().forEach(role => {
+          var creeps = _.filter(
+            Game.creeps,
+            creep => creep.memory.role == role.ROLE && creep.memory.room == ROOM.name
+          );
+          if (role.shouldSpawn(ROOM)) {
+            const NAME = role.ROLE + "_" + UTILS.guidGenerator();
+            const GENOME = this.createAffordableGenome(role, ROOM);
 
-        Game.spawns["Spawn1"].createCreep(GENOME, NAME, {
-          role: role.ROLE,
-          primarySource: role.getPrimarySource(ROOM)
+            if (!GENOME) return false;
+
+            SPAWN.createCreep(GENOME, NAME, {
+              role: role.ROLE,
+              primarySource: role.getPrimarySource(ROOM),
+              room: ROOM.name
+            });
+          }
         });
       }
-    });
+    }
   }
 
   /**
@@ -71,13 +78,8 @@ export default class SpawnManager {
           search = false;
         }
       });
-
-      if (role.ROLE === "roadKeeper" && finalGenome.length >= 3) {
-        search = false;
-      }
       if (
-        (role.ROLE === "builder" || role.ROLE === "repairer") &&
-        finalGenome.length >= 6
+        finalGenome.length >= role.MAX_GENOME_LENGTH
       ) {
         search = false;
       }
