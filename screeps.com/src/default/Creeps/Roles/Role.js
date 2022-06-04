@@ -83,7 +83,7 @@ export default class Role {
     const maxPrice = room.energyAvailable;
     const possiblePrice = room.energyCapacityAvailable;
 
-    if (maxPrice === possiblePrice && this.countCreeps() < this.POPULATION) {
+    if (this.countCreeps() < this.POPULATION) {
       return true;
     }
 
@@ -150,7 +150,7 @@ export default class Role {
     for (const SOURCE in SOURCES) {
       const CREEP_COUNT = _.filter(
         Game.creeps,
-        creep => creep.memory.primarySource == SOURCES[SOURCE].id
+        creep => creep.memory.primarySource == SOURCES[SOURCE].id && creep.memory.role === 'harvester'
       );
       creepsInSource.push(CREEP_COUNT.length);
     }
@@ -186,7 +186,13 @@ export default class Role {
       primarySource.energy < creep.carryCapacity ||
       primarySource.ticksToRegeneration > 10
     ) {
-      selectedSource = creep.getClosestActiveSource();
+      const bestSource = sources[0];
+      sources.forEach((source) => {
+        if (source.energy > bestSource.energy) {
+          bestSource = source;
+        }
+      })
+      selectedSource = bestSource;
     }
 
     return selectedSource;
@@ -221,12 +227,18 @@ export default class Role {
       });
 
       if (activeContainers.length) {
-        shouldWait = activeContainers[0].id;
         const notEmptyContainers = _.filter(activeContainers, container => {
           return container.store[RESOURCE_ENERGY] >= creep.carryCapacity;
         });
         if (notEmptyContainers.length) {
-          containers = notEmptyContainers[0];
+          let bestContainer = notEmptyContainers[0];
+          notEmptyContainers.forEach((cnt) => {
+            if (cnt.store[RESOURCE_ENERGY] > bestContainer.store[RESOURCE_ENERGY]) {
+              bestContainer = cnt;
+            }
+          })
+          shouldWait = bestContainer.id;
+          containers = bestContainer;
         }
       }
     }

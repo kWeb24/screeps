@@ -181,6 +181,8 @@ export default class RoomCache {
 
     this.BASE_POSSIBLE_POSITIONS = {};
     this.BASE_POSSIBLE_POLY = {};
+    this.MY_EXTRACTORS = undefined;
+    this.MY_LABS = undefined;
 
     // Not implemented yet
     this.KEEPERLIARS = undefined;
@@ -189,7 +191,6 @@ export default class RoomCache {
 
     this.MY_EXTENSIONS = undefined;
     this.MY_CONTROLLER = undefined;
-    this.MY_EXTRACTOR = undefined;
     this.MY_LINKS = undefined;
     this.MY_NUKERS = undefined;
     this.MY_OBSERVERS = undefined;
@@ -568,6 +569,30 @@ export default class RoomCache {
     }
 
     return this.MY_STORAGE;
+  }
+
+  getMyExtractors() {
+    if (this.MY_EXTRACTORS === undefined) {
+      const structures = this.getStructures();
+      this.MY_EXTRACTORS = _.filter(
+        structures,
+        structure => structure.structureType == STRUCTURE_EXTRACTOR
+      );
+    }
+
+    return this.MY_EXTRACTORS;
+  }
+
+  getMyLabs() {
+    if (this.MY_LABS === undefined) {
+      const structures = this.getStructures();
+      this.MY_LABS = _.filter(
+        structures,
+        structure => structure.structureType == STRUCTURE_LAB
+      );
+    }
+
+    return this.MY_LABS;
   }
 
   /**

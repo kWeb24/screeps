@@ -85,6 +85,8 @@ export default class Upgrader extends Role {
       creep => creep.memory.role == 'upgrader' && creep.memory.room == room.name
     ).length;
 
-    return upgradersCount < this.POPULATION;
+    const toBuild = room.controller.level < 8 ? 2 : 1;
+
+    return upgradersCount < toBuild;
   }
 }

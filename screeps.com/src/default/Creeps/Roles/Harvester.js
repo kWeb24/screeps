@@ -81,8 +81,8 @@ export default class Harvester extends Role {
 
     let targets = [];
 
-    // if (spawnRelated.length && (!haulersCount && storageRelated)) {
-    if (spawnRelated.length) {
+    if (spawnRelated.length && (!haulersCount && storageRelated)) {
+    // if (spawnRelated.length) {
       targets = spawnRelated;
     } else if (storageRelated.length) {
       targets = storageRelated;

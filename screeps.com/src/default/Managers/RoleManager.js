@@ -11,6 +11,7 @@ import Repairer from '../Creeps/Roles/Repairer.js';
 import RoadKeeper from '../Creeps/Roles/RoadKeeper.js';
 import Settler from '../Creeps/Roles/Settler.js';
 import Hauler from '../Creeps/Roles/Hauler.js';
+import Miner from '../Creeps/Roles/Miner.js';
 
 const LOGGER = new Logger({
   enabled: false
@@ -56,9 +57,14 @@ export default class RoleManager {
     this.Settler = new Settler();
 
     /**
-    * @member {Object<Hauler>} RoleManager#hauler
+    * @member {Object<Hauler>} RoleManager#Hauler
     **/
     this.Hauler = new Hauler();
+
+    /**
+    * @member {Object<Miner>} RoleManager#Miner
+    **/
+    this.Miner = new Miner();
 
     /**
     * @member {Array<Role>} RoleManager#Roles
@@ -67,6 +73,7 @@ export default class RoleManager {
       this.Harvester,
       this.Upgrader,
       this.Hauler,
+      this.Miner,
       this.Settler,
       this.Builder,
       this.Repairer,
