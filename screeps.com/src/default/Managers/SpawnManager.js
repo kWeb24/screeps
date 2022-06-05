@@ -27,22 +27,26 @@ export default class SpawnManager {
       if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].getMySpawns().length) {
         const ROOM = CACHE.ROOMS[room].ROOM;
         const SPAWN = CACHE.ROOMS[room].getMySpawns()[0];
-
-        ROLE_MANAGER.ROLES.reverse().forEach(role => {
+        let spawned = false;
+        ROLE_MANAGER.ROLES.forEach(role => {
           var creeps = _.filter(
             Game.creeps,
             creep => creep.memory.role == role.ROLE && creep.memory.room == ROOM.name
           );
-          if (role.shouldSpawn(ROOM)) {
+
+          if (!spawned && role.shouldSpawn(ROOM)) {
             const NAME = role.ROLE + "_" + UTILS.guidGenerator();
             const GENOME = this.createAffordableGenome(role, ROOM);
 
             if (!GENOME) return false;
 
-            SPAWN.createCreep(GENOME, NAME, {
-              role: role.ROLE,
-              primarySource: role.getPrimarySource(ROOM),
-              room: ROOM.name
+            spawned = true;
+            const result = SPAWN.spawnCreep(GENOME, NAME, {
+              memory: {
+                role: role.ROLE,
+                primarySource: role.getPrimarySource(ROOM),
+                room: ROOM.name
+              }
             });
           }
         });
