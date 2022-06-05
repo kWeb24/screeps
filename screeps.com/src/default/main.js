@@ -19,18 +19,3 @@ global.UTILS = new Utilities();
 console.log('Init');
 
 module.exports.loop = () => CORE.loop();
-
-// TODO: Get shit done
-
-// role tier system
-// build builders only if construction site is present
-// priority queues
-
-// energyManagers to distribute energy from link spawn and storage to MY_EXTENSIONS
-
-// Spawn meele and ranged when enemy detected
-
-// prefab layouts droppend near core far exits
-// core with storage spawns MY_TOWERS
-
-// cargo creeps between storages and extensions, harvesters only for storage/
