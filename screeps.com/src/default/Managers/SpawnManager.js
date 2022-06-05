@@ -29,11 +29,6 @@ export default class SpawnManager {
         const SPAWN = CACHE.ROOMS[room].getMySpawns()[0];
         let spawned = false;
         ROLE_MANAGER.ROLES.forEach(role => {
-          var creeps = _.filter(
-            Game.creeps,
-            creep => creep.memory.role == role.ROLE && creep.memory.room == ROOM.name
-          );
-
           if (!spawned && role.shouldSpawn(ROOM)) {
             const NAME = role.ROLE + "_" + UTILS.guidGenerator();
             const GENOME = this.createAffordableGenome(role, ROOM);

@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Planner module...');
-
 import RoomPlanner from './Rooms/RoomPlanner.js';
 
 /**

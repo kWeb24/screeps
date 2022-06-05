@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log(">> Loading Role...");
-
 /**
  * @class Role
  * @classdesc Role basic class
@@ -236,7 +234,7 @@ export default class Role {
             if (cnt.store[RESOURCE_ENERGY] > bestContainer.store[RESOURCE_ENERGY]) {
               bestContainer = cnt;
             }
-          })
+          });
           shouldWait = bestContainer.id;
           containers = bestContainer;
         }
@@ -287,24 +285,35 @@ export default class Role {
       }
 
       if (!selectedSource) {
-        const t = creep.getSources();
+        const t = this.getSourceWithMostEnergy(creep);
 
-        if (creep.harvest(t[1]) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(t[1]);
+        if (creep.harvest(t) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(t);
           creep.status("moving");
         }
-        creep.target(t[1].id);
+        creep.target(t.id);
       } else {
         creep.target(selectedSource.id);
       }
     } else {
-      const t = creep.getSources();
+      const t = this.getSourceWithMostEnergy(creep);
 
-      if (creep.harvest(t[1]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(t[1]);
+      if (creep.harvest(t) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(t);
         creep.status("moving");
       }
-      creep.target(t[1].id);
+      creep.target(t.id);
     }
+  }
+
+  getSourceWithMostEnergy(creep) {
+    const sources = creep.getSources();
+    let selected = sources[0];
+    sources.forEach((source) => {
+      if (source.energy > selected.energy) {
+        selected = source;
+      }
+    });
+    return selected;
   }
 }

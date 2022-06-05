@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log(">> Loading Tower Structure...");
-
 export default class Tower {
   constructor() {}
 
@@ -11,7 +9,7 @@ export default class Tower {
     if (closestHostile) {
       tower.attack(closestHostile);
     } else {
-      if (tower.energy > tower.energyCapacity / 2) {
+      if (tower.store.getUsedCapacity(RESOURCE_ENERGY) > tower.store.getCapacity(RESOURCE_ENERGY) / 2) {
         tower.repair(this.findClosestDamagedStructureNotRoad(tower));
       } else {
         // tower.repair(this.findClosestDamagedStructure(tower));

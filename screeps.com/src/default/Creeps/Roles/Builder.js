@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log(">> Loading Builder Role...");
-
 import Role from "./Role.js";
 
 /**

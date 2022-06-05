@@ -1,6 +1,4 @@
 /*jshint esversion: 6 */
-console.log(">> Loading Harvester Role...");
-
 import Role from "./Role.js";
 
 /**

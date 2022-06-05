@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Creep prototype...');
-
 import {} from './Jobs/Harvester.js';
 
 /**

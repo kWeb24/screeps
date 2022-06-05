@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log(">> Loading Room Cache module...");
-
 /**
  * @class RoomCache
  * @classdesc Room cache object

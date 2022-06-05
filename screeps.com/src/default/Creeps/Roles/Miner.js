@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Miner Role...');
-
 import Role from "./Role.js";
 
 /**
@@ -125,7 +123,7 @@ export default class Miner extends Role {
     }
   }
 
-  haveFullLab(room) { 
+  haveFullLab(room) {
     const type = CACHE.ROOMS[room.name].getMinerals()[0].mineralType;
     const sinks = CACHE.ROOMS[room.name].getMyLabs();
 

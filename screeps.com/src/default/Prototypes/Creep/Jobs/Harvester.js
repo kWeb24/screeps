@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Harvester Creep prototype...');
-
 Object.assign(Creep.prototype, {
   getSources() {
     return CACHE.ROOMS[this.room.name].getSources();
@@ -16,7 +14,7 @@ Object.assign(Creep.prototype, {
 
 Object.assign(Creep.prototype, {
   getClosestActiveSource() {
-    return this.pos.findClosestByRange(FIND_ACTIVE_SOURCES);
+    return this.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
   }
 });
 

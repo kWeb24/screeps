@@ -16,6 +16,8 @@ global.ROLE_MANAGER = new RoleManager();
 global.SPAWN_MANAGER = new SpawnManager();
 global.UTILS = new Utilities();
 
+console.log('Init');
+
 module.exports.loop = () => CORE.loop();
 
 // TODO: Get shit done

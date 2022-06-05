@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Road Keeper...');
-
 import Repairer from './Repairer.js';
 
 /**

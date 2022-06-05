@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Cache module...');
-
 import RoomCache from './RoomCache.js';
 
 /**

@@ -1,8 +1,6 @@
 /*jshint esversion: 6 */
 import layouts from '../../Layouts/Layouts';
 
-console.log(">> Loading RoomPlanner module...");
-
 /**
  * @class RoomPlanner
  * @classdesc RoomPlanner class

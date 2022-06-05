@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Utilities...');
-
 export default class Utilities {
 
   constructor() {

@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 
-console.log('>> Loading Road Keeper...');
-
 import Role from './Role.js';
 
 /**
@@ -64,6 +62,9 @@ export default class Scout extends Role {
         }
       }
     }
+
+    // rewrite it to below method
+    // Game.map.describeExits()
 
     if (creep.memory.room !== creep.room.name) {
       if (creep.memory.lastExit === 'top') {

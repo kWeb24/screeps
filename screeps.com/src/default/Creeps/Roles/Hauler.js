@@ -1,8 +1,6 @@
 /*jshint esversion: 6 */
 import Role from "./Role.js";
 
-console.log('>> Loading Hauler Role...');
-
 /**
  * @class Hauler
  * @classdesc Hauler role class
