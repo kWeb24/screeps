@@ -35,7 +35,7 @@ export default class Settler extends Role {
         creep.moveTo(creep.room.controller);
       }
     } else {
-      creep.moveTo(new RoomPosition(36, 25, 'W8N2'));
+      creep.moveTo(new RoomPosition(36, 26, 'W8N2'));
     }
   }
 
@@ -52,7 +52,7 @@ export default class Settler extends Role {
         myRooms++;
       }
     }
-    return false;
+    return false;  
     return !settlersCount && myRooms < level;
   }
 }

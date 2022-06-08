@@ -15,7 +15,7 @@ export default class Upgrader extends Role {
     this.ROLE = "upgrader";
     this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 15;
+    this.MAX_GENOME_LENGTH = 30;
     this.CAPABLE_OF = ["harvester", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;

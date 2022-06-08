@@ -10,7 +10,7 @@ export default class Tower {
       tower.attack(closestHostile);
     } else {
       if (tower.store.getUsedCapacity(RESOURCE_ENERGY) > tower.store.getCapacity(RESOURCE_ENERGY) / 2) {
-        tower.repair(this.findClosestDamagedStructureNotRoad(tower));
+        // tower.repair(this.findClosestDamagedStructureNotRoad(tower));
       } else {
         // tower.repair(this.findClosestDamagedStructure(tower));
       }

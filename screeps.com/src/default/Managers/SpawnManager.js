@@ -17,36 +17,72 @@ export default class SpawnManager {
     this.MAX_BODY_PARTS = 50;
   }
 
+  getSpawnQueue() {
+    let queue = {};
+    for (const room in Game.rooms) {
+      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].getMySpawns().length) {
+        queue[room] = [];
+        ROLE_MANAGER.ROLES.forEach(role => {
+          if (role.shouldSpawn(Game.rooms[room])) {
+            queue[room].push(role);
+          }
+        });
+      }
+    }
+
+    return queue;
+  }
+
   /**
    * @memberof SpawnManager
    * @desc Spawn {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    * @public
    **/
   spawn() {
-    for (const room in Game.rooms) {
-      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].getMySpawns().length) {
-        const ROOM = CACHE.ROOMS[room].ROOM;
-        const SPAWN = CACHE.ROOMS[room].getMySpawns()[0];
-        let spawned = false;
-        ROLE_MANAGER.ROLES.forEach(role => {
-          if (!spawned && role.shouldSpawn(ROOM)) {
-            const NAME = role.ROLE + "_" + UTILS.guidGenerator();
-            const GENOME = this.createAffordableGenome(role, ROOM);
+    const queue = this.getSpawnQueue();
 
-            if (!GENOME) return false;
-
-            spawned = true;
-            const result = SPAWN.spawnCreep(GENOME, NAME, {
-              memory: {
-                role: role.ROLE,
-                primarySource: role.getPrimarySource(ROOM),
-                room: ROOM.name
-              }
-            });
-          }
-        });
+    for (const [room, roles] of Object.entries(queue)) {
+      const ROOM = CACHE.ROOMS[room].ROOM;
+      const SPAWN = CACHE.ROOMS[room].getMySpawns()[0];
+       // console.log(SPAWN.spawning);
+      if (SPAWN.spawning === null && roles.length) {
+        const NAME = roles[0].ROLE + "_" + UTILS.guidGenerator();
+        const GENOME = this.createAffordableGenome(roles[0], ROOM);
+        if (GENOME) {
+          SPAWN.spawnCreep(GENOME, NAME, {
+            memory: {
+              role: roles[0].ROLE,
+              primarySource: roles[0].getPrimarySource(ROOM),
+              room: ROOM.name
+            }
+          });
+        }
       }
-    }
+    };
+    // for (const room in Game.rooms) {
+    //   if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].getMySpawns().length) {
+    //     const ROOM = CACHE.ROOMS[room].ROOM;
+    //     const SPAWN = CACHE.ROOMS[room].getMySpawns()[0];
+    //     let spawned = false;
+    //     ROLE_MANAGER.ROLES.forEach(role => {
+    //       if (!spawned /*&& SPAWN.spawning === null*/ && role.shouldSpawn(ROOM)) {
+    //         const NAME = role.ROLE + "_" + UTILS.guidGenerator();
+    //         const GENOME = this.createAffordableGenome(role, ROOM);
+    //
+    //         if (!GENOME) return false;
+    //
+    //         spawned = true;
+    //         const result = SPAWN.spawnCreep(GENOME, NAME, {
+    //           memory: {
+    //             role: role.ROLE,
+    //             primarySource: role.getPrimarySource(ROOM),
+    //             room: ROOM.name
+    //           }
+    //         });
+    //       }
+    //     });
+    //   }
+    // }
   }
 
   /**

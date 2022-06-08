@@ -239,9 +239,9 @@ export default class RoomCache {
    * @returns {Array<Creep>} Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    **/
   getCreeps() {
-    if (this.CREEPS === undefined) {
+    // if (this.CREEPS === undefined) {
       this.CREEPS = this.ROOM.find(FIND_CREEPS);
-    }
+    // }
 
     return this.CREEPS;
   }
@@ -255,9 +255,9 @@ export default class RoomCache {
    * @returns {Array<Creep>} Array of {@link https://docs.screeps.com/api/#Creep|Screeps Creep}
    **/
   getMyCreeps() {
-    if (this.MY_CREEPS === undefined) {
+    // if (this.MY_CREEPS === undefined) {
       this.MY_CREEPS = this.ROOM.find(FIND_MY_CREEPS);
-    }
+    // }
 
     return this.MY_CREEPS;
   }
@@ -319,9 +319,9 @@ export default class RoomCache {
    * @returns {Array<Flag>} Array of {@link https://docs.screeps.com/api/#Flag|Screeps Flag}
    **/
   getFlags() {
-    // if (this.FLAGS === undefined) {
-    this.FLAGS = this.ROOM.find(FIND_FLAGS);
-    // }
+    if (this.FLAGS === undefined) {
+      this.FLAGS = this.ROOM.find(FIND_FLAGS);
+    }
 
     return this.FLAGS;
   }
@@ -335,9 +335,9 @@ export default class RoomCache {
    * @returns {Array<ConstructionSite>} Array of {@link https://docs.screeps.com/api/#ConstructionSite|Screeps ConstructionSite}
    **/
   getConstructionSites() {
-    if (this.CONSTRUCTION_SITES === undefined) {
+    // if (this.CONSTRUCTION_SITES === undefined) {
       this.CONSTRUCTION_SITES = this.ROOM.find(FIND_CONSTRUCTION_SITES);
-    }
+    // }
 
     return this.CONSTRUCTION_SITES;
   }
@@ -385,9 +385,9 @@ export default class RoomCache {
    * @returns {Array<StructureSpawn>} Array of {@link https://docs.screeps.com/api/#StructureSpawn|Screeps StructureSpawn}
    **/
   getMySpawns() {
-    if (this.MY_SPAWNS === undefined) {
+    // if (this.MY_SPAWNS === undefined) {
       this.MY_SPAWNS = this.ROOM.find(FIND_MY_SPAWNS);
-    }
+    // }
 
     return this.MY_SPAWNS;
   }
@@ -417,9 +417,9 @@ export default class RoomCache {
    * @returns {Array<Mineral>} Array of {@link https://docs.screeps.com/api/#Mineral|Screeps Mineral}
    **/
   getMinerals() {
-    if (this.MINERALS === undefined) {
+    // if (this.MINERALS === undefined) {
       this.MINERALS = this.ROOM.find(FIND_MINERALS);
-    }
+    // }
 
     return this.MINERALS;
   }
@@ -558,37 +558,37 @@ export default class RoomCache {
    * @returns {Array<StructureStorage>} object of {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage} type
    **/
   getMyStorage() {
-    if (this.MY_STORAGE === undefined) {
+    // if (this.MY_STORAGE === undefined) {
       const structures = this.getStructures();
       this.MY_STORAGE = _.filter(
         structures,
         structure => structure.structureType == STRUCTURE_STORAGE
       );
-    }
+    // }
 
     return this.MY_STORAGE;
   }
 
   getMyExtractors() {
-    if (this.MY_EXTRACTORS === undefined) {
+    // if (this.MY_EXTRACTORS === undefined) {
       const structures = this.getStructures();
       this.MY_EXTRACTORS = _.filter(
         structures,
         structure => structure.structureType == STRUCTURE_EXTRACTOR
       );
-    }
+    // }
 
     return this.MY_EXTRACTORS;
   }
 
   getMyLabs() {
-    if (this.MY_LABS === undefined) {
+    // if (this.MY_LABS === undefined) {
       const structures = this.getStructures();
       this.MY_LABS = _.filter(
         structures,
         structure => structure.structureType == STRUCTURE_LAB
       );
-    }
+    // }
 
     return this.MY_LABS;
   }

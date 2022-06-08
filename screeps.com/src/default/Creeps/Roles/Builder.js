@@ -67,13 +67,14 @@ export default class Builder extends Role {
     let sites = null;
     for (const room in Game.rooms) {
       if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
-        sites = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+        const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
           filter: obj => {
             return (
               obj.structureType == STRUCTURE_SPAWN
             );
           }
         });
+        if (found) sites = found;
       }
     }
 

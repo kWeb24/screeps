@@ -32,8 +32,6 @@ export default class Core {
 
     console.log("-- -- CORE_LOGGER_ENABLED: " + LOGGER.ENABLED);
     console.log("-- -- PARAM_ADAPTIVE_ROLES:" + this.PARAM_ADAPTIVE_ROLES);
-
-    this.Tower = new Tower();
   }
 
   /**
@@ -46,7 +44,7 @@ export default class Core {
     this.spawnCreeps();
     this.runStructures();
     this.runCreeps();
-    this.LOOP++;
+    // this.LOOP++;
     // PLANNER.ROOMS['E4N27'].selectExtensions(); // when visuals on
     // PLANNER.ROOMS['E4N27'].selectContainers(); // when visuals on
     // PLANNER.ROOMS['W7N3'].drawVisuals();
@@ -101,6 +99,8 @@ export default class Core {
    * @private
    **/
   runStructures() {
+    this.Tower = new Tower();
+    
     for (const room in Game.rooms) {
       if (CACHE.ROOMS[room] !== undefined) {
         if (CACHE.ROOMS[room].getMyTowers().length) {

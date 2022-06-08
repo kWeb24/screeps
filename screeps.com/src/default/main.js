@@ -17,5 +17,5 @@ global.SPAWN_MANAGER = new SpawnManager();
 global.UTILS = new Utilities();
 
 console.log('Init');
-
+  
 module.exports.loop = () => CORE.loop();
