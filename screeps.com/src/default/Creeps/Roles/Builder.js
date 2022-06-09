@@ -97,8 +97,12 @@ export default class Builder extends Role {
     } else {
       const wallToBuild = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: structure =>
-          structure.hits < structure.hitsMax / 1.3 &&
-          structure.structureType == STRUCTURE_WALL
+          structure.structureType == STRUCTURE_WALL &&
+          (
+            structure.hits < structure.hitsMax &&
+            creep.room.storage !== undefined &&
+            creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 50000
+          ) || structure.hits < 100000 
       });
 
       if (wallToBuild) {

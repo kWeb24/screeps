@@ -226,13 +226,13 @@ export default class Role {
 
       if (activeContainers.length) {
         const notEmptyContainers = _.filter(activeContainers, container => {
-          return container.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getCapacity(RESOURCE_ENERGY);
+          return container.store.getUsedCapacity(RESOURCE_ENERGY) >= creep.store.getCapacity(RESOURCE_ENERGY);
         });
         if (notEmptyContainers.length) {
           let bestContainer = notEmptyContainers[0];
           notEmptyContainers.forEach((cnt) => {
-            if (cnt.store.getFreeCapacity(RESOURCE_ENERGY) > bestContainer.store.getFreeCapacity(RESOURCE_ENERGY)) {
-              bestContainer = cnt;
+            if (cnt.store.getUsedCapacity(RESOURCE_ENERGY) > bestContainer.store.getFreeCapacity(RESOURCE_ENERGY)) {
+              bestContainer = cnt; 
             }
           });
           shouldWait = bestContainer.id;
@@ -279,7 +279,7 @@ export default class Role {
       creep.target(selectedSource.id);
     } else if (typeof selectedSource != "string" || !this.USE_ENERGY_DEPOSITS) {
       selectedSource = this.selectSource(creep);
- 
+
       if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
         creep.status("moving");
