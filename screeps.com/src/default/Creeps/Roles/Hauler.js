@@ -15,7 +15,7 @@ export default class Hauler extends Role {
 		this.ROLE = "hauler";
     this.POPULATION = 2;
     this.GENOME = [CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 12;
+    this.MAX_GENOME_LENGTH = 20;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;

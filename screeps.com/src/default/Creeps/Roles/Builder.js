@@ -86,6 +86,17 @@ export default class Builder extends Role {
       targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
     }
 
+    if (!targets) {
+      for (const room in Game.rooms) {
+        if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+          const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+          if (found) sites = found;
+        }
+      }
+
+      targets = sites;
+    }
+
     creep.status("building");
 
     if (targets) {
@@ -102,7 +113,7 @@ export default class Builder extends Role {
             structure.hits < structure.hitsMax &&
             creep.room.storage !== undefined &&
             creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 50000
-          ) || structure.hits < 100000 
+          ) || structure.hits < 100000
       });
 
       if (wallToBuild) {
