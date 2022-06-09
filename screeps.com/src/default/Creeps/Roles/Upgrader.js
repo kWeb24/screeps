@@ -31,16 +31,16 @@ export default class Upgrader extends Role {
    **/
   run(creep) {
     if (
-      (creep.status() != "harvesting" && creep.carry.energy == 0) ||
-      (creep.status() == "harvesting" && !creep.isEnergyCapFull())
+      (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
+      (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
     ) {
       this.harvest(creep);
     }
 
     if (
-      (creep.status() != "upgrading" && creep.isEnergyCapFull()) ||
-      (creep.status() == "upgrading" && creep.carry.energy > 0) ||
-      (creep.status() == "moving" && creep.carry.energy > 0)
+      (creep.status() != "upgrading" && creep.store.getFreeCapacity() === 0) ||
+      (creep.status() == "upgrading" && creep.store.getUsedCapacity() > 0) ||
+      (creep.status() == "moving" && creep.store.getUsedCapacity() > 0)
     ) {
       this.upgrade(creep);
     }
@@ -74,7 +74,7 @@ export default class Upgrader extends Role {
    * @see Role
    **/
   needsHelp(fromCreep) {
-    return fromCreep.carry.energy == fromCreep.carryCapacity;
+    return false;
   }
 
   shouldSpawn(room) {

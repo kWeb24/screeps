@@ -33,14 +33,14 @@ export default class Miner extends Role {
 	run(creep) {
     if (this.haveFullLab(creep.room)) return false;
     if (
-      (creep.status() != "harvesting" && creep.store.getUsedCapacity() == 0) ||
+      (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
     ) {
       this.harvestMineral(creep);
     }
 
     if (
-      (creep.status() != "transfering" && creep.store.getFreeCapacity() == 0) ||
+      (creep.status() != "transfering" && creep.store.getFreeCapacity() === 0) ||
       (creep.status() == "transfering" && creep.store.getUsedCapacity() > 0) ||
       (creep.status() == "moving" && creep.store.getUsedCapacity() > 0)
     ) {
@@ -99,6 +99,8 @@ export default class Miner extends Role {
   transferMineral(creep) {
     const sinks = CACHE.ROOMS[creep.room.name].getMyLabs();
     const type = CACHE.ROOMS[creep.room.name].getMinerals()[0].mineralType;
+    const terminal = CACHE.ROOMS[creep.room.name].getMyTerminals()[0];
+    const factory = CACHE.ROOMS[creep.room.name].getMyFactories()[0];
 
     const hasCapacity = _.filter(sinks, sink => {
       return (
@@ -107,8 +109,11 @@ export default class Miner extends Role {
     });
 
     let targets = [];
-
-    if (hasCapacity.length) {
+    if (factory && factory.store.getFreeCapacity(type) > 0) {
+      targets.push(factory);
+    } else if (terminal && terminal.store.getFreeCapacity(type) > 0) {
+      targets.push(terminal);
+    } else if (hasCapacity.length) {
       targets = hasCapacity;
     }
 
@@ -126,12 +131,23 @@ export default class Miner extends Role {
   haveFullLab(room) {
     const type = CACHE.ROOMS[room.name].getMinerals()[0].mineralType;
     const sinks = CACHE.ROOMS[room.name].getMyLabs();
+    const terminal = CACHE.ROOMS[room.name].getMyTerminals()[0];
+    const factory = CACHE.ROOMS[room.name].getMyFactories()[0];
 
     const haveFullLab = _.filter(sinks, sink => {
       return (
         sink.store.getFreeCapacity(type) == 0
       );
     });
-    return haveFullLab;
+
+    if (factory && terminal) {
+      return haveFullLab && factory.store.getFreeCapacity(type) === 0 && terminal.store.getFreeCapacity(type) === 0;
+    } else if (factory) {
+      return haveFullLab && factory.store.getFreeCapacity(type) === 0;
+    } else if (terminal) {
+      return haveFullLab && terminal.store.getFreeCapacity(type) === 0;
+    } else {
+      return haveFullLab;
+    }
   }
 }

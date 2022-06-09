@@ -28,7 +28,7 @@ export default class Core {
      * @member {Integer} Core#LOOP
      * @desc Current Loop of Core instance
      **/
-    this.LOOP = 1;
+    this.LOOP = true;
 
     console.log("-- -- CORE_LOGGER_ENABLED: " + LOGGER.ENABLED);
     console.log("-- -- PARAM_ADAPTIVE_ROLES:" + this.PARAM_ADAPTIVE_ROLES);
@@ -44,6 +44,7 @@ export default class Core {
     this.spawnCreeps();
     this.runStructures();
     this.runCreeps();
+    this.LOOP = !this.LOOP;
     // this.LOOP++;
     // PLANNER.ROOMS['E4N27'].selectExtensions(); // when visuals on
     // PLANNER.ROOMS['E4N27'].selectContainers(); // when visuals on
@@ -100,7 +101,7 @@ export default class Core {
    **/
   runStructures() {
     this.Tower = new Tower();
-    
+
     for (const room in Game.rooms) {
       if (CACHE.ROOMS[room] !== undefined) {
         if (CACHE.ROOMS[room].getMyTowers().length) {

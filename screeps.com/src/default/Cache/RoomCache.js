@@ -181,6 +181,8 @@ export default class RoomCache {
     this.BASE_POSSIBLE_POLY = {};
     this.MY_EXTRACTORS = undefined;
     this.MY_LABS = undefined;
+    this.MY_TERMINALS = undefined;
+    this.MY_FACTORIES = undefined;
 
     // Not implemented yet
     this.KEEPERLIARS = undefined;
@@ -194,7 +196,6 @@ export default class RoomCache {
     this.MY_OBSERVERS = undefined;
     this.MY_POWERSPAWNS = undefined;
     this.MY_RAMPARTS = undefined;
-    this.MY_TERMINALS = undefined;
     this.MY_WALLS = undefined;
   }
 
@@ -465,9 +466,9 @@ export default class RoomCache {
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
   getStructures() {
-    if (this.STRUCTURES === undefined) {
+    // if (this.STRUCTURES === undefined) {
       this.STRUCTURES = this.ROOM.find(FIND_STRUCTURES);
-    }
+    // }
 
     return this.STRUCTURES;
   }
@@ -481,9 +482,9 @@ export default class RoomCache {
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
   getMyStructures() {
-    if (this.MY_STRUCTURES === undefined) {
+    // if (this.MY_STRUCTURES === undefined) {
       this.MY_STRUCTURES = this.ROOM.find(FIND_MY_STRUCTURES);
-    }
+    // }
 
     return this.MY_STRUCTURES;
   }
@@ -587,6 +588,30 @@ export default class RoomCache {
       this.MY_LABS = _.filter(
         structures,
         structure => structure.structureType == STRUCTURE_LAB
+      );
+    // }
+
+    return this.MY_LABS;
+  }
+
+  getMyTerminals() {
+    // if (this.MY_LABS === undefined) {
+      const structures = this.getStructures();
+      this.MY_TERMINALS = _.filter(
+        structures,
+        structure => structure.structureType == STRUCTURE_TERMINAL
+      );
+    // }
+
+    return this.MY_LABS;
+  }
+
+  getMyFactories() {
+    // if (this.MY_LABS === undefined) {
+      const structures = this.getStructures();
+      this.MY_FACTORIES = _.filter(
+        structures,
+        structure => structure.structureType == STRUCTURE_FACTORY
       );
     // }
 

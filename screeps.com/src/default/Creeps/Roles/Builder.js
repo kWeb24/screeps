@@ -31,17 +31,17 @@ export default class Builder extends Role {
    **/
   run(creep) {
     if (
-      (creep.status() != "harvesting" && creep.carry.energy == 0) ||
-      (creep.status() == "harvesting" && !creep.isEnergyCapFull())
+      (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
+      (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
     ) {
       this.harvest(creep);
     }
 
     if (
-      (creep.status() != "building" && creep.isEnergyCapFull()) ||
-      (creep.status() == "building" && creep.carry.energy > 0) ||
-      (creep.status() == "bored" && creep.carry.energy > 0) ||
-      (creep.status() == "moving" && creep.carry.energy > 0)
+      (creep.status() != "building" && creep.store.getFreeCapacity() === 0) ||
+      (creep.status() == "building" && creep.store.getUsedCapacity() > 0) ||
+      (creep.status() == "bored" && creep.store.getUsedCapacity() > 0) ||
+      (creep.status() == "moving" && creep.store.getUsedCapacity() > 0)
     ) {
       this.build(creep);
     }
@@ -146,6 +146,10 @@ export default class Builder extends Role {
       Game.creeps,
       creep => creep.memory.role == 'builder' && creep.memory.room == room.name
     ).length;
+
+    if (sitesCount > 5) {
+      return buildersCount < 2 && sitesCount;
+    }
 
     return !buildersCount && sitesCount;
   }

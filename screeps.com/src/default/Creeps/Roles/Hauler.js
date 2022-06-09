@@ -31,16 +31,16 @@ export default class Hauler extends Role {
    **/
 	 run(creep) {
      if (
-       (creep.status() != "harvesting" && creep.carry.energy == 0) ||
-       (creep.status() == "harvesting" && !creep.isEnergyCapFull())
+       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
+       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
      ) {
        this.harvest(creep);
      }
 
      if (
-       (creep.status() != "transfering" && creep.isEnergyCapFull()) ||
-       (creep.status() == "transfering" && creep.carry.energy > 0) ||
-       (creep.status() == "moving" && creep.carry.energy > 0)
+       (creep.status() != "transfering" && creep.store.getFreeCapacity() === 0) ||
+       (creep.status() == "transfering" && creep.store.getUsedCapacity() > 0) ||
+       (creep.status() == "moving" && creep.store.getUsedCapacity() > 0)
      ) {
        this.transfer(creep);
      }
@@ -85,14 +85,14 @@ export default class Hauler extends Role {
       return (
         (sink.structureType == STRUCTURE_EXTENSION ||
           sink.structureType == STRUCTURE_SPAWN) &&
-        sink.energy < sink.energyCapacity
+        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
       );
     });
 
     const storageRelated = _.filter(sinks, sink => {
       return (
         (sink.structureType == STRUCTURE_STORAGE) &&
-        _.sum(sink.store) < sink.storeCapacity
+        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
       );
     });
 

@@ -181,7 +181,7 @@ export default class Role {
     let selectedSource = primarySource[0];
 
     if (
-      primarySource.energy < creep.carryCapacity ||
+      primarySource.energy < creep.store.getCapacity(RESOURCE_ENERGY) ||
       primarySource.ticksToRegeneration > 10
     ) {
       const bestSource = sources[0];
@@ -213,7 +213,7 @@ export default class Role {
     if (roomStorage !== undefined) {
       if (roomStorage.isActive()) {
         shouldWait = roomStorage.id;
-        if (roomStorage.store[RESOURCE_ENERGY] >= creep.carryCapacity) {
+        if (roomStorage.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getCapacity(RESOURCE_ENERGY)) {
           storage = roomStorage;
         }
       }
@@ -226,12 +226,12 @@ export default class Role {
 
       if (activeContainers.length) {
         const notEmptyContainers = _.filter(activeContainers, container => {
-          return container.store[RESOURCE_ENERGY] >= creep.carryCapacity;
+          return container.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getCapacity(RESOURCE_ENERGY);
         });
         if (notEmptyContainers.length) {
           let bestContainer = notEmptyContainers[0];
           notEmptyContainers.forEach((cnt) => {
-            if (cnt.store[RESOURCE_ENERGY] > bestContainer.store[RESOURCE_ENERGY]) {
+            if (cnt.store.getFreeCapacity(RESOURCE_ENERGY) > bestContainer.store.getFreeCapacity(RESOURCE_ENERGY)) {
               bestContainer = cnt;
             }
           });
@@ -269,7 +269,8 @@ export default class Role {
       selectedSource !== false &&
       typeof selectedSource != "string" &&
       selectedSource !== undefined &&
-      this.USE_ENERGY_DEPOSITS
+      this.USE_ENERGY_DEPOSITS &&
+      selectedSource.store.getUsedCapacity(RESOURCE_ENERGY) > 0
     ) {
       if (creep.withdraw(selectedSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
@@ -278,7 +279,7 @@ export default class Role {
       creep.target(selectedSource.id);
     } else if (typeof selectedSource != "string" || !this.USE_ENERGY_DEPOSITS) {
       selectedSource = this.selectSource(creep);
-
+ 
       if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
         creep.status("moving");

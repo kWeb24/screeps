@@ -31,15 +31,17 @@ export default class Repairer extends Role {
 	 * @see Role
    **/
 	run(creep) {
-    if ((creep.status() != 'harvesting' && creep.carry.energy == 0) ||
-        (creep.status() == 'harvesting' && !creep.isEnergyCapFull())) {
+    if (
+      (creep.status() != 'harvesting' && creep.store.getUsedCapacity() === 0) ||
+      (creep.status() == 'harvesting' && creep.store.getFreeCapacity() > 0)
+    ) {
 			this.harvest(creep);
     }
 
-    if ((creep.status() != 'repairing' && creep.isEnergyCapFull()) ||
-        (creep.status() == 'repairing' && creep.carry.energy > 0) ||
-        (creep.status() == 'bored' && creep.carry.energy > 0) ||
-        (creep.status() == 'moving' && creep.carry.energy > 0)) {
+    if ((creep.status() != 'repairing' && creep.store.getFreeCapacity() === 0) ||
+        (creep.status() == 'repairing' && creep.store.getUsedCapacity() > 0) ||
+        (creep.status() == 'bored' && creep.store.getUsedCapacity() > 0) ||
+        (creep.status() == 'moving' && creep.store.getUsedCapacity() > 0)) {
 			this.repair(creep);
 		}
 	}
@@ -98,7 +100,7 @@ export default class Repairer extends Role {
    **/
 	findClosestRepairableStructure(creep) {
     const towers = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-				filter: (structure) => (structure.energy < structure.energyCapacity) && structure.structureType == STRUCTURE_TOWER
+				filter: (structure) => structure.structureType == STRUCTURE_TOWER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
 		});
 
     if (towers) {

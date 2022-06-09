@@ -39,8 +39,8 @@ module.exports = smp.wrap({
       new WebpackBuildNotifierPlugin({
         title: "Screeps",
         logo: path.resolve("./img/favicon.png"),
-        suppressSuccess: false,
-        suppressCompileStart: false
+        suppressSuccess: true,
+        suppressCompileStart: true
       })
     ],
     stats: {
