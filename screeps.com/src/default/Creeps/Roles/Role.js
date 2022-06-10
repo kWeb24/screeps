@@ -186,7 +186,7 @@ export default class Role {
     ) {
       const bestSource = sources[0];
       sources.forEach((source) => {
-        if (source.energy > bestSource.energy) {
+        if (source.energy > creep.store.getFreeCapacity()) {
           bestSource = source;
         }
       })
@@ -231,8 +231,8 @@ export default class Role {
         if (notEmptyContainers.length) {
           let bestContainer = notEmptyContainers[0];
           notEmptyContainers.forEach((cnt) => {
-            if (cnt.store.getUsedCapacity(RESOURCE_ENERGY) > bestContainer.store.getFreeCapacity(RESOURCE_ENERGY)) {
-              bestContainer = cnt; 
+            if (cnt.store.getUsedCapacity(RESOURCE_ENERGY) > creep.store.getFreeCapacity()) {
+              bestContainer = cnt;
             }
           });
           shouldWait = bestContainer.id;
@@ -311,7 +311,7 @@ export default class Role {
     const sources = creep.getSources();
     let selected = sources[0];
     sources.forEach((source) => {
-      if (source.energy > selected.energy) {
+      if (source.energy > creep.store.getFreeCapacity()) {
         selected = source;
       }
     });

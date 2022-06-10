@@ -35,7 +35,10 @@ export default class Settler extends Role {
         creep.moveTo(creep.room.controller);
       }
     } else {
-      creep.moveTo(new RoomPosition(13, 37, 'W26S18'));
+      const claimFlag = Game.flags['Claim1'];
+      if (claimFlag) {
+        creep.moveTo(new RoomPosition(claimFlag.pos.x - 1, claimFlag.pos.y - 1, claimFlag.room.name));
+      }
     }
   }
 
@@ -52,7 +55,9 @@ export default class Settler extends Role {
         myRooms++;
       }
     }
-    return false; 
-    return !settlersCount && myRooms < level;
+
+    const claimFlag = Game.flags['Claim1'];
+
+    return claimFlag && !settlersCount && myRooms < level;
   }
 }
