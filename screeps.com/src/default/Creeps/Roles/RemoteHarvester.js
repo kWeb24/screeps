@@ -13,7 +13,7 @@ export default class RemoteHarvester extends Role {
     super();
 
     this.ROLE = "remoteHarvester";
-    this.POPULATION = 2;
+    this.POPULATION = 4;
     this.GENOME = [WORK, CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = [];

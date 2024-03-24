@@ -203,7 +203,7 @@ export default class Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    * @returns {Structure} matched {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
-  selectEnergyDeposit(creep, storageOnly = true, reverse = false) {
+  selectEnergyDeposit(creep, storageOnly = false, reverse = false) {
     const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();
     const roomStorage = CACHE.ROOMS[creep.room.name].getMyStorage()[0];
     let shouldWait = false;
@@ -265,6 +265,7 @@ export default class Role {
     creep.status("harvesting");
 
     let selectedSource = this.selectEnergyDeposit(creep);
+
     if (
       selectedSource !== false &&
       typeof selectedSource != "string" &&

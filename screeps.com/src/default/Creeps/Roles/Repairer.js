@@ -119,13 +119,14 @@ export default class Repairer extends Role {
           structure.hits < structure.hitsMax &&
           creep.room.storage !== undefined &&
           creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 50000
-        ) || structure.hits < 100000) ||  
-        ((structure.hits < structure.hitsMax * 0.3) && structure.structureType != STRUCTURE_ROAD)
+        ) /*|| structure.hits < 100000*/) 
+        ||  
+        ((structure.hits < structure.hitsMax * 1) && structure.hits < 100000 && structure.structureType != STRUCTURE_ROAD)
 		});
 
 		if (!closest || closest === null) {
 			closest = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-					filter: (structure) => (structure.hits < structure.hitsMax / 1.3)
+					filter: (structure) => (structure.hits < structure.hitsMax * 1)
 			});
 			return closest;
 		} else {

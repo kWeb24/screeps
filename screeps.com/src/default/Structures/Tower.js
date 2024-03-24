@@ -6,6 +6,12 @@ export default class Tower {
   run(tower) {
     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 
+    // tower.room.visual.rect(
+    //   tower.pos.x - 5, tower.pos.y - 5, 
+    //   11, 11,
+    //   {fill: 'transparent', stroke: '#ff0000'}
+    // );
+
     if (closestHostile) {
       tower.attack(closestHostile);
     } else {
