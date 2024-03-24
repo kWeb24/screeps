@@ -69,11 +69,17 @@ export default class Repairer extends Role {
         }
       }
 		} else {
-      const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
-      const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(spawn.pos.x - 4, spawn.pos.y + 5);
-      creep.moveTo(pos);
-			creep.status('bored');
-      creep.target('none');
+      // const [spawn] = CACHE.ROOMS[creep.room.name].getMySpawns();
+      // const pos = CACHE.ROOMS[creep.room.name].ROOM.getPositionAt(spawn.pos.x - 4, spawn.pos.y + 5);
+      // creep.moveTo(pos);
+			// creep.status('bored');
+      // creep.target('none');
+      creep.target(creep.room.controller.name);
+
+      if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.controller);
+        creep.status("moving");
+      }
 		}
 	}
 

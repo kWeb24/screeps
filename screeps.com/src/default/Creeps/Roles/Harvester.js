@@ -88,10 +88,31 @@ export default class Harvester extends Role {
 
     creep.status("transfering");
 
+    let extensions = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+      filter: obj => {
+        return (
+          obj.structureType == STRUCTURE_EXTENSION
+        );
+      }
+    });
+
     if (targets.length > 0) {
       creep.target(targets[0].id);
       if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(targets[0]);
+        creep.status("moving");
+      }
+    } else if (extensions !== null) {
+      if (creep.build(extensions) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(extensions);
+        creep.status("moving");
+        creep.target(extensions.id);
+      }
+    } else {
+      creep.target(creep.room.controller.name);
+
+      if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.controller);
         creep.status("moving");
       }
     }

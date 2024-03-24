@@ -279,7 +279,7 @@ export default class Role {
       creep.target(selectedSource.id);
     } else if (typeof selectedSource != "string" || !this.USE_ENERGY_DEPOSITS) {
       selectedSource = this.selectSource(creep);
-
+  
       if (creep.harvest(selectedSource) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
         creep.status("moving");

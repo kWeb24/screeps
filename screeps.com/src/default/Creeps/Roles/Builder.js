@@ -13,7 +13,7 @@ export default class Builder extends Role {
     super();
 
     this.ROLE = "builder";
-    this.POPULATION = 1;
+    this.POPULATION = 3;
     this.GENOME = [WORK, CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 6;
     this.CAPABLE_OF = ["upgrader"];
@@ -163,7 +163,7 @@ export default class Builder extends Role {
     ).length;
 
     if (sitesCount > 5) {
-      return buildersCount < 2 && sitesCount;
+      return buildersCount < 3 && sitesCount;
     }
 
     return !buildersCount && sitesCount;

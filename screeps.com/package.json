@@ -7,7 +7,8 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "jsdoc": "jsdoc src -p -r -d ./docs -t ./jsdoc_template"
+    "jsdoc": "jsdoc src -p -r -d ./docs -t ./jsdoc_template",
+    "localBuild": "webpack && rm ../127_0_0_1___21025/default/main.js && cp default/main.js ../127_0_0_1___21025/default/main.js"
   },
   "repository": {
     "type": "git",
