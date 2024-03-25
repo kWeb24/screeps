@@ -49,8 +49,8 @@ export default class Scout extends Role {
         sources: sourcesArr,
         controller: {
           pos: {
-            x: creep.room.controller.pos.x,
-            y: creep.room.controller.pos.y,
+            x: creep.room.controller ? creep.room.controller.pos.x : 0,
+            y: creep.room.controller ? ccreep.room.controller.pos.y : 0,
           }
         },
         minerals: mineralsArr,

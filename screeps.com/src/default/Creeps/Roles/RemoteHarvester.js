@@ -185,7 +185,7 @@ export default class RemoteHarvester extends Role {
   isMyRoom(name) {
     let isMy = false;
     for (const room in Game.rooms) {
-      if (name === room && Game.rooms[room].controller.my) {
+      if (name === room && Game.rooms[room].controller !== undefined && Game.rooms[room].controller.my) {
         isMy = true;
       }
     }

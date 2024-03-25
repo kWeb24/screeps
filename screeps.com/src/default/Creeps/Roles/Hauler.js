@@ -118,7 +118,7 @@ export default class Hauler extends Role {
   harvest(creep) {
     creep.status("harvesting");
 
-    let selectedSource = this.selectEnergyDeposit(creep, false, true);
+    let selectedSource = this.selectEnergyDeposit(creep, false, true, true);
     if (
       selectedSource !== false &&
       typeof selectedSource != "string" &&

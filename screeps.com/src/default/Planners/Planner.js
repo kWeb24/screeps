@@ -25,7 +25,7 @@ export default class Planner {
    **/
   initRoomPlanning() {
     for (const room in Game.rooms) {
-      if (this.ROOMS[room] === undefined && Game.rooms[room].controller.my) {
+      if (this.ROOMS[room] === undefined && Game.rooms[room].controller !== undefined && Game.rooms[room].controller.my) {
         this.ROOMS[room] = new RoomPlanner(Game.rooms[room]);
       }
     }

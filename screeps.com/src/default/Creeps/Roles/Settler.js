@@ -30,7 +30,7 @@ export default class Settler extends Role {
    * @see Role
    **/
   run(creep) {
-    if (!creep.room.controller.my) {
+    if (creep.room.controller !== undefined && !creep.room.controller.my) {
       if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
       }
@@ -51,7 +51,7 @@ export default class Settler extends Role {
     const level = Game.gcl.level;
     let myRooms = 0;
     for (const room in Game.rooms) {
-      if (Game.rooms[room].controller.my) {
+      if (Game.rooms[room].controller !== undefined && Game.rooms[room].controller.my) {
         myRooms++;
       }
     }

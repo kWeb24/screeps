@@ -66,7 +66,7 @@ export default class Builder extends Role {
 
     let sites = null;
     for (const room in Game.rooms) {
-      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
         const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
           filter: obj => {
             return (
@@ -88,7 +88,7 @@ export default class Builder extends Role {
 
     if (!targets) {
       for (const room in Game.rooms) {
-        if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+        if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
           const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
           if (found) sites = found;
         }
@@ -152,7 +152,7 @@ export default class Builder extends Role {
     let sitesCount = 0;
 
     for (const room in Game.rooms) {
-      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
         sitesCount += CACHE.ROOMS[room].getConstructionSites().length;
       }
     }
