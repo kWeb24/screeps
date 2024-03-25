@@ -169,7 +169,8 @@ export default class RemoteHarvester extends Role {
       for (const [key, value] of Object.entries(room.memory.scouted.exits)) {
         if (value !== null && value !== false) {
           const newRoom = Memory.rooms[value].scouted;
-          if (newRoom.sources.length) {
+          const hasController = newRoom.hasController === undefined || newRoom.hasController === true;
+          if (hasController && newRoom.sources.length) {
             if (CACHE.ROOMS[value] !== undefined && !this.isMyRoom(value)) {
               targetRoom = { name: value, value: newRoom };
             } else if (CACHE.ROOMS[value] === undefined) {
