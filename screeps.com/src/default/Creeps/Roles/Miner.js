@@ -86,7 +86,6 @@ export default class Miner extends Role {
     creep.status("harvesting");
 
     const t = CACHE.ROOMS[creep.room.name].getMinerals();
-
     if (t.length && t) {
       if (creep.harvest(t[0]) == ERR_NOT_IN_RANGE) {
         creep.moveTo(t[0]);
@@ -99,7 +98,7 @@ export default class Miner extends Role {
   transferMineral(creep) {
     const sinks = CACHE.ROOMS[creep.room.name].getMyLabs();
     const type = CACHE.ROOMS[creep.room.name].getMinerals()[0].mineralType;
-    const terminal = CACHE.ROOMS[creep.room.name].getMyTerminals()[0];
+    const terminal = creep.room.terminal;
     const factory = CACHE.ROOMS[creep.room.name].getMyFactories()[0];
 
     const hasCapacity = _.filter(sinks, sink => {
@@ -109,10 +108,10 @@ export default class Miner extends Role {
     });
 
     let targets = [];
-    if (factory && factory.store.getFreeCapacity(type) > 0) {
-      targets.push(factory);
-    } else if (terminal && terminal.store.getFreeCapacity(type) > 0) {
+    if (terminal !== undefined && terminal.store.getFreeCapacity(type) > 0) {
       targets.push(terminal);
+    } else if (factory && factory.store.getFreeCapacity(type) > 0) {
+      targets.push(factory);
     } else if (hasCapacity.length) {
       targets = hasCapacity;
     }
@@ -131,7 +130,7 @@ export default class Miner extends Role {
   haveFullLab(room) {
     const type = CACHE.ROOMS[room.name].getMinerals()[0].mineralType;
     const sinks = CACHE.ROOMS[room.name].getMyLabs();
-    const terminal = CACHE.ROOMS[room.name].getMyTerminals()[0];
+    const terminal = room.terminal;
     const factory = CACHE.ROOMS[room.name].getMyFactories()[0];
 
     const haveFullLab = _.filter(sinks, sink => {
@@ -144,7 +143,7 @@ export default class Miner extends Role {
       return haveFullLab && factory.store.getFreeCapacity(type) === 0 && terminal.store.getFreeCapacity(type) === 0;
     } else if (factory) {
       return haveFullLab && factory.store.getFreeCapacity(type) === 0;
-    } else if (terminal) {
+    } else if (terminal !== undefined) {
       return haveFullLab && terminal.store.getFreeCapacity(type) === 0;
     } else {
       return haveFullLab;

@@ -8,14 +8,14 @@ import Role from "./Role.js";
  * @global
  * @augments Role
  */
-export default class Hauler extends Role {
+export default class Manufacturer extends Role {
 
   constructor() {
     super();
-		this.ROLE = "hauler";
-    this.POPULATION = 2;
+		this.ROLE = "manufacturer";
+    this.POPULATION = 1;
     this.GENOME = [CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 8;
+    this.MAX_GENOME_LENGTH = 2;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -62,14 +62,15 @@ export default class Hauler extends Role {
 	}
 
 	shouldSpawn(room) {
-    const hasStorage = room.storage !== undefined;
+    return false;
+    const hasTerminal = CACHE.ROOMS[room.name].getMyTerminals().length;
 
-    const haulersCount = _.filter(
+    const count = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'hauler' && creep.memory.room == room.name
+      creep => creep.memory.role == 'manufacturer' && creep.memory.room == room.name
     ).length;
 
-    return haulersCount < this.POPULATION && hasStorage;
+    return count < this.POPULATION && hasTerminal;
   }
 
   /**
@@ -79,48 +80,19 @@ export default class Hauler extends Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   transfer(creep) {
-    const sinks = creep.getEnergySinks();
-    const terminal = creep.room.terminal;
-    const labs = CACHE.ROOMS[creep.room.name].getMyLabs();
-    let labsWithoutEnergy = [];
-    if (labs.length) {
-      labsWithoutEnergy = _.filter(labs, lab => {
-        return (lab.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
-      });
-    }
-
-    const spawnRelated = _.filter(sinks, sink => {
-      return (
-        (sink.structureType == STRUCTURE_EXTENSION ||
-          sink.structureType == STRUCTURE_SPAWN) &&
-        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-      );
-    });
-
-    const storageRelated = _.filter(sinks, sink => {
-      return (
-        (sink.structureType == STRUCTURE_STORAGE) &&
-        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-      );
-    });
+    const terminals = CACHE.ROOMS[creep.room.name].getMyTerminals();
 
     let targets = [];
 
-    if (spawnRelated.length) {
-      targets = spawnRelated;
-    } else if (terminal !== undefined && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 5000) {
-      targets = [terminal];
-    } else if (labsWithoutEnergy.length) {
-      targets = labsWithoutEnergy;
-    } else if (storageRelated.length) {
-      targets = storageRelated;
+    if (terminals.length && terminals[0].store.getFreeCapacity() > 100) {
+      targets = terminals;
     }
 
     creep.status("transfering");
 
     if (targets.length > 0) {
       creep.target(targets[0].id);
-      if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      if (creep.transfer(targets[0], RESOURCE_LEMERGIUM) == ERR_NOT_IN_RANGE) {
         creep.moveTo(targets[0]);
         creep.status("moving");
       }
@@ -130,15 +102,19 @@ export default class Hauler extends Role {
   harvest(creep) {
     creep.status("harvesting");
 
-    // Handle Tombstone withdraw and dropped resources pickup
+    const labs = CACHE.ROOMS[creep.room.name].getMyLabs();
 
-    let selectedSource = this.selectEnergyDeposit(creep, false, true, true);
+    let selectedSource = false;
+    labs.forEach((lab) => {
+      if (lab.store.getUsedCapacity(RESOURCE_LEMERGIUM) > 0) {
+        selectedSource = lab;
+      }
+    });
+
     if (
-      selectedSource !== false &&
-      typeof selectedSource != "string" &&
-      selectedSource !== undefined
+      selectedSource !== false && selectedSource !== undefined
     ) {
-      if (creep.withdraw(selectedSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      if (creep.withdraw(selectedSource, RESOURCE_LEMERGIUM) == ERR_NOT_IN_RANGE) {
         creep.moveTo(selectedSource);
         creep.status("moving");
       }

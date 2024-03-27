@@ -139,11 +139,21 @@ export default class Core {
 
     for (const room in Game.rooms) {
       if (CACHE.ROOMS[room] !== undefined) {
+        CACHE.ROOMS[room].getStructures(true);
         if (CACHE.ROOMS[room].getMyTowers().length) {
           const towers = CACHE.ROOMS[room].getMyTowers();
           towers.forEach((tower, index) => {
             this.Tower.run(tower);
           });
+        }
+
+        const terminals = CACHE.ROOMS[room].getMyTerminals();
+        if (terminals.length) {
+          const orders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: RESOURCE_LEMERGIUM});
+          if (orders.length && terminals[0].store.getUsedCapacity(RESOURCE_LEMERGIUM) > 0) {
+            const result = Game.market.deal(orders[0].id, terminals[0].store.getUsedCapacity(RESOURCE_LEMERGIUM), room);
+            console.log(`Trade result: ${result}`);
+          }
         }
       }
     }

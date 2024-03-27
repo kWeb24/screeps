@@ -15,7 +15,7 @@ export default class Upgrader extends Role {
     this.ROLE = "upgrader";
     this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 30;
+    this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = ["harvester", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -83,7 +83,17 @@ export default class Upgrader extends Role {
       creep => creep.memory.role == 'upgrader' && creep.memory.room == room.name
     ).length;
 
-    const toBuild = room.controller.level < 8 ? 2 : 1;
+    const storage = room.storage;
+    let storageEnergy = 0;
+    let limit = 2;
+    if (storage !== undefined) {
+      storageEnergy = storage.store.getUsedCapacity(RESOURCE_ENERGY);
+      if (storageEnergy > 5000) {
+        limit = 6;
+      }
+    }
+
+    const toBuild = room.controller.level < 8 ? limit : 1;
 
     return upgradersCount < toBuild;
   }

@@ -14,6 +14,7 @@ import Hauler from '../Creeps/Roles/Hauler.js';
 import Miner from '../Creeps/Roles/Miner.js';
 import Scout from '../Creeps/Roles/Scout.js';
 import RemoteHarvester from '../Creeps/Roles/RemoteHarvester.js';
+import Manufacturer from '../Creeps/Roles/Manufacturer.js';
 
 const LOGGER = new Logger({
   enabled: false
@@ -78,6 +79,9 @@ export default class RoleManager {
     **/
     this.RemoteHarvester = new RemoteHarvester();
 
+    this.Manufacturer = new Manufacturer();
+
+
     /**
     * @member {Array<Role>} RoleManager#Roles
     **/
@@ -92,6 +96,7 @@ export default class RoleManager {
       this.Repairer,
       this.RoadKeeper,
       this.Scout,
+      this.Manufacturer
     ];
   }
 

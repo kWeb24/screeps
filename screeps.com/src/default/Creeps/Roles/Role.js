@@ -205,7 +205,7 @@ export default class Role {
    **/
   selectEnergyDeposit(creep, storageOnly = false, reverse = false, ignoreStorage = false) {
     const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();
-    const roomStorage = CACHE.ROOMS[creep.room.name].getMyStorage()[0];
+    const roomStorage = creep.room.storage;
     let shouldWait = false;
     let storage = false;
     let containers = false;

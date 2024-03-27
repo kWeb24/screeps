@@ -465,10 +465,10 @@ export default class RoomCache {
    * @public
    * @returns {Array<Structure>} Array of {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
    **/
-  getStructures() {
-    // if (this.STRUCTURES === undefined) {
+  getStructures(force = false) {
+    if (this.STRUCTURES === undefined || force) {
       this.STRUCTURES = this.ROOM.find(FIND_STRUCTURES);
-    // }
+    }
 
     return this.STRUCTURES;
   }
@@ -559,6 +559,12 @@ export default class RoomCache {
    * @returns {Array<StructureStorage>} object of {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage} type
    **/
   getMyStorage() {
+    if (this.ROOM.storage !== undefined) {
+      return [this.ROOM.storage];
+    } else {
+      return [];
+    }
+
     // if (this.MY_STORAGE === undefined) {
       const structures = this.getStructures();
       this.MY_STORAGE = _.filter(
@@ -595,6 +601,11 @@ export default class RoomCache {
   }
 
   getMyTerminals() {
+    if (this.ROOM.terminal !== undefined) {
+      return [this.ROOM.terminal];
+    } else {
+      return [];
+    }
     // if (this.MY_LABS === undefined) {
       const structures = this.getStructures();
       this.MY_TERMINALS = _.filter(
@@ -603,7 +614,7 @@ export default class RoomCache {
       );
     // }
 
-    return this.MY_LABS;
+    return this.MY_TERMINALS;
   }
 
   getMyFactories() {

@@ -30,6 +30,11 @@ export default class RemoteHarvester extends Role {
    * @see Role
    **/
   run(creep) {
+    if (creep.memory.roomToHarvest === undefined) {
+      creep.memory.roomToHarvest = this.getRoomToHarvest(CACHE.ROOMS[creep.memory.room].ROOM);
+    }
+    // this.getRoomToHarvestByCreepCount(CACHE.ROOMS[creep.memory.room].ROOM)
+    // console.log(this.getRoomToHarvestByCreepCount(CACHE.ROOMS[creep.memory.room].ROOM).name);
     if (
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
@@ -90,7 +95,8 @@ export default class RemoteHarvester extends Role {
 
     const storageRelated = _.filter(sinks, sink => {
       return (
-        (sink.structureType == STRUCTURE_STORAGE) &&
+        (sink.structureType == STRUCTURE_CONTAINER ||
+          sink.structureType == STRUCTURE_STORAGE) &&
         sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
       );
     });
@@ -181,6 +187,33 @@ export default class RemoteHarvester extends Role {
       }
     }
     return targetRoom;
+  }
+
+  getRoomToHarvestByCreepCount(room) {
+    let targetRoom = false;
+    if (room.memory.scouted) {
+      for (const [key, value] of Object.entries(room.memory.scouted.exits)) {
+        if (value !== null && value !== false) {
+          const newRoom = Memory.rooms[value].scouted;
+          const hasController = newRoom.hasController === undefined || newRoom.hasController === true;
+          if (hasController && newRoom.sources.length && this.getCreepCountInRoom(value) < this.POPULATION) {
+            if (CACHE.ROOMS[value] !== undefined && !this.isMyRoom(value)) {
+              targetRoom = { name: value, value: newRoom };
+            } else if (CACHE.ROOMS[value] === undefined) {
+              targetRoom = { name: value, value: newRoom };
+            }
+          }
+        }
+      }
+    }
+    return targetRoom;
+  }
+
+  getCreepCountInRoom(roomName) {
+    return _.filter(
+      Game.creeps,
+      creep => creep.memory.role == 'remoteHarvester' && creep.memory.roomToHarvest.name == roomName
+    ).length;
   }
 
   isMyRoom(name) {

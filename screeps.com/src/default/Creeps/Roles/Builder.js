@@ -83,6 +83,16 @@ export default class Builder extends Role {
     }
 
     if (!targets) {
+      targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+        filter: obj => {
+          return (
+            obj.structureType == STRUCTURE_EXTRACTOR
+          );
+        }
+      });
+    }
+
+    if (!targets) {
       targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
     }
 
