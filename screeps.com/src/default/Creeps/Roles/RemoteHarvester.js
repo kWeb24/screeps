@@ -33,8 +33,6 @@ export default class RemoteHarvester extends Role {
     if (creep.memory.roomToHarvest === undefined) {
       creep.memory.roomToHarvest = this.getRoomToHarvest(CACHE.ROOMS[creep.memory.room].ROOM);
     }
-    // this.getRoomToHarvestByCreepCount(CACHE.ROOMS[creep.memory.room].ROOM)
-    // console.log(this.getRoomToHarvestByCreepCount(CACHE.ROOMS[creep.memory.room].ROOM).name);
     if (
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
@@ -171,58 +169,27 @@ export default class RemoteHarvester extends Role {
 
   getRoomToHarvest(room) {
     let targetRoom = false;
-    if (room.memory.scouted) {
-      for (const [key, value] of Object.entries(room.memory.scouted.exits)) {
-        if (value !== null && value !== false) {
-          const newRoom = Memory.rooms[value].scouted;
-          const hasController = newRoom.hasController === undefined || newRoom.hasController === true;
-          if (hasController && newRoom.sources.length) {
-            if (CACHE.ROOMS[value] !== undefined && !this.isMyRoom(value)) {
-              targetRoom = { name: value, value: newRoom };
-            } else if (CACHE.ROOMS[value] === undefined) {
-              targetRoom = { name: value, value: newRoom };
-            }
-          }
+    if (room.memory.scouted === true) {
+      for (const [dir, exit] of Object.entries(room.memory.exits)) {
+        // console.log(Game.rooms[exit]);
+        // console.log(Game.rooms[exit]);
+        if (
+          Memory.rooms[exit].scouted === true && 
+          Memory.rooms[exit].controller !== false &&
+          Memory.rooms[exit].sources.length &&
+          !Memory.rooms[exit].controller.my
+        ) {
+          targetRoom = { name: exit, value: Memory.rooms[exit] }
         }
-      }
+      };
     }
     return targetRoom;
   }
 
-  getRoomToHarvestByCreepCount(room) {
-    let targetRoom = false;
-    if (room.memory.scouted) {
-      for (const [key, value] of Object.entries(room.memory.scouted.exits)) {
-        if (value !== null && value !== false) {
-          const newRoom = Memory.rooms[value].scouted;
-          const hasController = newRoom.hasController === undefined || newRoom.hasController === true;
-          if (hasController && newRoom.sources.length && this.getCreepCountInRoom(value) < this.POPULATION) {
-            if (CACHE.ROOMS[value] !== undefined && !this.isMyRoom(value)) {
-              targetRoom = { name: value, value: newRoom };
-            } else if (CACHE.ROOMS[value] === undefined) {
-              targetRoom = { name: value, value: newRoom };
-            }
-          }
-        }
-      }
-    }
-    return targetRoom;
-  }
-
-  getCreepCountInRoom(roomName) {
-    return _.filter(
-      Game.creeps,
-      creep => creep.memory.role == 'remoteHarvester' && creep.memory.roomToHarvest.name == roomName
-    ).length;
-  }
-
-  isMyRoom(name) {
-    let isMy = false;
-    for (const room in Game.rooms) {
-      if (name === room && Game.rooms[room].controller !== undefined && Game.rooms[room].controller.my) {
-        isMy = true;
-      }
-    }
-    return isMy;
-  }
+  // getCreepCountInRoom(roomName) {
+  //   return _.filter(
+  //     Game.creeps,
+  //     creep => creep.memory.role == 'remoteHarvester' && creep.memory.roomToHarvest.name == roomName
+  //   ).length;
+  // }
 }

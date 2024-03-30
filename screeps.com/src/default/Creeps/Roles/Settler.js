@@ -30,13 +30,13 @@ export default class Settler extends Role {
    * @see Role
    **/
   run(creep) {
-    if (creep.room.controller !== undefined && !creep.room.controller.my) {
+    const claimFlag = Game.flags['Claim1'];
+    if (creep.room.controller !== undefined && !creep.room.controller.my && claimFlag.room.name === creep.room.name) {
       console.log('claiming');
       if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
       }
     } else {
-      const claimFlag = Game.flags['Claim1'];
       if (claimFlag) {
         if (claimFlag.room !== undefined) {
           creep.moveTo(new RoomPosition(claimFlag.pos.x - 1, claimFlag.pos.y - 1, claimFlag.room.name));

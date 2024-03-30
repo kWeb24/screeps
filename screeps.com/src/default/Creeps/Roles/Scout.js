@@ -31,107 +31,15 @@ export default class Scout extends Role {
 	 * @see Role
    **/
 	run(creep) {
-    if (!creep.room.memory.scouted) {
-      const sources = creep.room.find(FIND_SOURCES);
-      const minerals = creep.room.find(FIND_MINERALS);
-      let sourcesArr = [];
-      sources.forEach((source) => {
-        sourcesArr.push({ pos: { x: source.pos.x, y: source.pos.y } });
-      });
-      let mineralsArr = [];
-      minerals.forEach((mineral) => {
-        mineralsArr.push({
-          pos: { x: mineral.pos.x, y: mineral.pos.y },
-          type: mineral.mineralType,
-        });
-      });
-      creep.room.memory.scouted = {
-        sources: sourcesArr,
-        controller: {
-          haveController: creep.room.controller !== undefined,
-          pos: {
-            x: creep.room.controller ? creep.room.controller.pos.x : 0,
-            y: creep.room.controller ? creep.room.controller.pos.y : 0,
-          }
-        },
-        minerals: mineralsArr,
-        exits: {
-          top: null,
-          right: null,
-          bottom: null,
-          left: null,
-        }
-      }
-    }
-
-    // rewrite it to below method
-    // Game.map.describeExits()
-
     if (creep.memory.room !== creep.room.name) {
-      if (creep.memory.lastExit === 'top') {
-        if (creep.room.memory.scouted.exits.bottom === null) {
-          creep.room.memory.scouted.exits.bottom = creep.memory.room;
-        }
-        if (Memory.rooms[creep.memory.room].scouted.exits.top === null) {
-          Memory.rooms[creep.memory.room].scouted.exits.top = creep.room.name;
-        }
-      } else if (creep.memory.lastExit === 'right') {
-        if (creep.room.memory.scouted.exits.left === null) {
-          creep.room.memory.scouted.exits.left = creep.memory.room;
-        }
-        if (Memory.rooms[creep.memory.room].scouted.exits.right === null) {
-          Memory.rooms[creep.memory.room].scouted.exits.right = creep.room.name;
-        }
-      } else if (creep.memory.lastExit === 'bottom') {
-        if (creep.room.memory.scouted.exits.top === null) {
-          creep.room.memory.scouted.exits.top = creep.memory.room;
-        }
-        if (Memory.rooms[creep.memory.room].scouted.exits.bottom === null) {
-          Memory.rooms[creep.memory.room].scouted.exits.bottom = creep.room.name;
-        }
-      } else if (creep.memory.lastExit === 'left') {
-        if (creep.room.memory.scouted.exits.right === null) {
-          creep.room.memory.scouted.exits.right = creep.memory.room;
-        }
-        if (Memory.rooms[creep.memory.room].scouted.exits.left === null) {
-          Memory.rooms[creep.memory.room].scouted.exits.left = creep.room.name;
-        }
-      }
       creep.moveTo(CACHE.ROOMS[creep.memory.room].ROOM.controller.pos);
     } else {
-      if (creep.room.memory.scouted.exits.top === null) {
-        const exit = creep.pos.findClosestByRange(FIND_EXIT_TOP);
-        if (exit === null) {
-          creep.room.memory.scouted.exits.top = false;
-        } else {
-          creep.moveTo(exit);
-          creep.memory.lastExit = 'top';
+      for (const [dir, exit] of Object.entries(creep.room.memory.exits)) {
+        if (!Game.memory.rooms[exit].scouted) {
+          creep.moveTo(dir);
+          break;
         }
-      } else if (creep.room.memory.scouted.exits.right === null) {
-        const exit = creep.pos.findClosestByRange(FIND_EXIT_RIGHT);
-        if (exit === null) {
-          creep.room.memory.scouted.exits.right = false;
-        } else {
-          creep.moveTo(exit);
-          creep.memory.lastExit = 'right';
-        }
-      } else if (creep.room.memory.scouted.exits.bottom === null) {
-        const exit = creep.pos.findClosestByRange(FIND_EXIT_BOTTOM);
-        if (exit === null) {
-          creep.room.memory.scouted.exits.bottom = false;
-        } else {
-          creep.moveTo(exit);
-          creep.memory.lastExit = 'bottom';
-        }
-      } else if (creep.room.memory.scouted.exits.left === null) {
-        const exit = creep.pos.findClosestByRange(FIND_EXIT_LEFT);
-        if (exit === null) {
-          creep.room.memory.scouted.exits.left === false
-        } else {
-          creep.moveTo(exit);
-          creep.memory.lastExit = 'left';
-        }
-      }
+      };
     }
   }
 
@@ -143,12 +51,13 @@ export default class Scout extends Role {
 
     if (!room.memory.scouted && scoutsCount < this.POPULATION) return true;
 
-    const needsScouting = (
-      room.memory.scouted.exits.top === null ||
-      room.memory.scouted.exits.right === null ||
-      room.memory.scouted.exits.bottom === null ||
-      room.memory.scouted.exits.left === null
-    );
+    let needsScouting = false;
+
+    for (const [dir, exit] of Object.entries(room.memory.exits)) {
+      if (!Memory.rooms[exit].scouted) {
+        needsScouting = true;
+      }
+    }
 
     return needsScouting && scoutsCount < this.POPULATION;
   }
