@@ -88,8 +88,8 @@ export default class Upgrader extends Role {
     let limit = 2;
     if (storage !== undefined) {
       storageEnergy = storage.store.getUsedCapacity(RESOURCE_ENERGY);
-      if (storageEnergy > 5000) {
-        limit = 6;
+      if (storageEnergy > 15000) {
+        limit = 3;
       }
     }
 
