@@ -49,6 +49,19 @@ export default class Governor {
     if (room.controller !== undefined) {
         room.memory.controller.my = room.controller.my;
     }
+
+    const invaderCore = room.find(FIND_HOSTILE_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_INVADER_CORE});
+    if (invaderCore.length) {
+        room.memory.invaderCore = {
+            pos: {
+                x: invaderCore[0].pos.x,
+                y: invaderCore[0].pos.y,
+                level: invaderCore[0].level,
+            }
+        }
+    } else {
+        room.memory.invaderCore = false;
+    }
   }
 
   initRoom(room) {
@@ -74,7 +87,7 @@ export default class Governor {
         controller: false,
         minerals: mineralsArr,
         exits: Game.map.describeExits(room.name),
-        // hostility: 0,
+        invaderCore: false,
     };
 
     if (room.controller !== undefined) {
@@ -85,6 +98,17 @@ export default class Governor {
             },
             my: room.controller.my
         };
+    }
+
+    const invaderCore = room.find(FIND_HOSTILE_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_INVADER_CORE});
+    if (invaderCore.length) {
+        memory.invaderCore = {
+            pos: {
+                x: invaderCore[0].pos.x,
+                y: invaderCore[0].pos.y,
+                level: invaderCore[0].level,
+            }
+        }
     }
 
     room.memory = memory;
