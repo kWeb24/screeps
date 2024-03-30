@@ -174,6 +174,7 @@ export default class RemoteHarvester extends Role {
         // console.log(Game.rooms[exit]);
         // console.log(Game.rooms[exit]);
         if (
+          Memory.rooms[exit] !== undefined &&
           Memory.rooms[exit].scouted === true && 
           Memory.rooms[exit].controller !== false &&
           Memory.rooms[exit].sources.length &&

@@ -50,12 +50,12 @@ export default class Scout extends Role {
       creep => creep.memory.role == 'scout' && creep.memory.room == room.name
     ).length;
 
-    if (room.memory.scouted !== true && scoutsCount < this.POPULATION) return true;
+    if (room.memory !== undefined && room.memory.scouted !== true && scoutsCount < this.POPULATION) return true;
 
     let needsScouting = false;
 
     for (const [dir, exit] of Object.entries(room.memory.exits)) {
-      if (Memory.rooms[exit].scouted !== true) {
+      if (Memory.rooms[exit] !== undefined && Memory.rooms[exit].scouted !== true) {
         needsScouting = true;
       }
     }
