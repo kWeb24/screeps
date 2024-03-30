@@ -35,8 +35,9 @@ export default class Scout extends Role {
       creep.moveTo(CACHE.ROOMS[creep.memory.room].ROOM.controller.pos);
     } else {
       for (const [dir, exit] of Object.entries(creep.room.memory.exits)) {
-        if (!Game.memory.rooms[exit].scouted) {
-          creep.moveTo(dir);
+        if (Memory.rooms[exit].scouted !== true) {
+          const exitPos = creep.pos.findClosestByRange(creep.room.findExitTo(exit));
+          creep.moveTo(exitPos)
           break;
         }
       };
@@ -49,12 +50,12 @@ export default class Scout extends Role {
       creep => creep.memory.role == 'scout' && creep.memory.room == room.name
     ).length;
 
-    if (!room.memory.scouted && scoutsCount < this.POPULATION) return true;
+    if (room.memory.scouted !== true && scoutsCount < this.POPULATION) return true;
 
     let needsScouting = false;
 
     for (const [dir, exit] of Object.entries(room.memory.exits)) {
-      if (!Memory.rooms[exit].scouted) {
+      if (Memory.rooms[exit].scouted !== true) {
         needsScouting = true;
       }
     }

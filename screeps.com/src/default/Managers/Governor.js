@@ -82,7 +82,8 @@ export default class Governor {
             pos: {
                 x: room.controller.pos.x,
                 y: room.controller.pos.y,
-            }
+            },
+            my: room.controller.my
         };
     }
 
