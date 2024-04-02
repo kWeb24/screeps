@@ -15,7 +15,7 @@ export default class Hauler extends Role {
 		this.ROLE = "hauler";
     this.POPULATION = 2;
     this.GENOME = [CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 26;
+    this.MAX_GENOME_LENGTH = 10;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -158,11 +158,20 @@ export default class Hauler extends Role {
       }
     }
 
+    // const tombstones = creep.room.find(FIND_TOMBSTONES);
+
+    // creep.withdraw(creep.room.storage, _.findKey(creep.room.storage.store));
+
+    const terminal = creep.room.terminal;
+
     let selectedSource = false;
+    
     if (container) {
       selectedSource = container;
     } else if (storage) {
       selectedSource = storage;
+    } else if (terminal && terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 5000) {
+      selectedSource = terminal;
     }
 
     if (

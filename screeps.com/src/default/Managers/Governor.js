@@ -1,3 +1,5 @@
+import Tower from "../Structures/Tower.js";
+
 /**
  * @class Governor
  * @classdesc Governor class, manages rooms
@@ -10,10 +12,11 @@ export default class Governor {
     
   }
 
-  run(roomName) {
+  run(roomName, orders) {
     const room = Game.rooms[roomName];
     this.initRoom(room);
     this.refreshRoomStatus(room);
+    this.runStructures(roomName, orders);
     // console.log(room.memory);
     const status = {};
     // if (room.controller.my && room.controller.level > 0) {
@@ -52,7 +55,19 @@ export default class Governor {
 
     const invaderCore = room.find(FIND_HOSTILE_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_INVADER_CORE});
     if (invaderCore.length) {
+        let unreachable = false;
+
+        if (
+            room.memory.invaderCore !== undefined &&
+            room.memory.invaderCore !== false &&
+            room.memory.invaderCore.unreachable === true &&
+            room.memory.invaderCore.id === invaderCore[0].id
+        ) {
+            unreachable = true;
+        }
         room.memory.invaderCore = {
+            id: invaderCore[0].id,
+            unreachable: unreachable,
             pos: {
                 x: invaderCore[0].pos.x,
                 y: invaderCore[0].pos.y,
@@ -71,11 +86,15 @@ export default class Governor {
     const minerals = room.find(FIND_MINERALS);
     let sourcesArr = [];
     sources.forEach((source) => {
-        sourcesArr.push({ pos: { x: source.pos.x, y: source.pos.y } });
+        sourcesArr.push({ 
+            id: source.id,
+            pos: { x: source.pos.x, y: source.pos.y } 
+        });
     });
     let mineralsArr = [];
     minerals.forEach((mineral) => {
         mineralsArr.push({
+            id: mineral.id,
             pos: { x: mineral.pos.x, y: mineral.pos.y },
             type: mineral.mineralType,
             density: mineral.density
@@ -92,6 +111,7 @@ export default class Governor {
 
     if (room.controller !== undefined) {
         memory.controller = {
+            id: room.controller.id,
             pos: {
                 x: room.controller.pos.x,
                 y: room.controller.pos.y,
@@ -103,6 +123,8 @@ export default class Governor {
     const invaderCore = room.find(FIND_HOSTILE_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_INVADER_CORE});
     if (invaderCore.length) {
         memory.invaderCore = {
+            id: invaderCore[0].id,
+            unreachable: false,
             pos: {
                 x: invaderCore[0].pos.x,
                 y: invaderCore[0].pos.y,
@@ -116,7 +138,7 @@ export default class Governor {
 
   getStaticContainers(room) {
       const spawns = CACHE.ROOMS[room].getMySpawns();
-      const sources = CACHE.ROOMS[room].getSources();
+      const sources = room.find(FIND_SOURCES);
       const minerals = CACHE.ROOMS[room].getMinerals();
       if (!spawns.length) return [];
       const points = [];
@@ -145,4 +167,31 @@ export default class Governor {
       return points;
   }
 
+  /**
+   * @memberof Governor
+   * @desc Running structures like towers, labs etc
+   * @private
+   **/
+  runStructures(room, orders) {
+    this.Tower = new Tower();
+
+    if (CACHE.ROOMS[room] !== undefined) {
+      CACHE.ROOMS[room].getStructures(true);
+      if (CACHE.ROOMS[room].getMyTowers().length) {
+        const towers = CACHE.ROOMS[room].getMyTowers();
+        towers.forEach((tower, index) => {
+          this.Tower.run(tower);
+        });
+      }
+
+      const terminal = Game.rooms[room].terminal;
+      if (terminal) {
+        orders.forEach((order) => {
+          if (terminal.store.getUsedCapacity(order.resourceType) > 1000) {
+            Game.market.deal(order.id, terminal.store.getUsedCapacity(order.resourceType) - 1000, room);
+          }
+        })
+      }
+    }
+  }
 }

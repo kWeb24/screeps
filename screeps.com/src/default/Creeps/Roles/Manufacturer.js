@@ -63,7 +63,7 @@ export default class Manufacturer extends Role {
 
 	shouldSpawn(room) {
     return false;
-    const hasTerminal = CACHE.ROOMS[room.name].getMyTerminals().length;
+    const hasTerminal = room.terminal !== undefined;
 
     const count = _.filter(
       Game.creeps,
@@ -80,12 +80,12 @@ export default class Manufacturer extends Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   transfer(creep) {
-    const terminals = CACHE.ROOMS[creep.room.name].getMyTerminals();
+    const terminal = creep.room.terminal;
 
     let targets = [];
 
-    if (terminals.length && terminals[0].store.getFreeCapacity() > 100) {
-      targets = terminals;
+    if (terminal && terminal.store.getFreeCapacity() > 100) {
+      targets.push(terminal);
     }
 
     creep.status("transfering");

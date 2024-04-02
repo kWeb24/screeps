@@ -39,7 +39,7 @@ export default class RoomPlanner {
   planRoads() {
     this.findPath(
       this.ROOM.controller.pos,
-      CACHE.ROOMS[this.ROOM.name].getSources()
+      this.ROOM.find(FIND_SOURCES)
     );
 
     this.findPath(

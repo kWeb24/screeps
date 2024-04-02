@@ -142,7 +142,7 @@ export default class Role {
    * @returns {string} ID of {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
   getPrimarySource(room) {
-    const SOURCES = CACHE.ROOMS[room.name].getSources();
+    const SOURCES = room.find(FIND_SOURCES);
     let creepsInSource = [];
 
     for (const SOURCE in SOURCES) {
@@ -173,7 +173,7 @@ export default class Role {
    * @returns {Source} matched {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
   selectSource(creep) {
-    let sources = creep.getSources();
+    let sources = creep.room.find(FIND_SOURCES);
     const primarySource = _.filter(
       sources,
       source => source.id == creep.memory.primarySource
@@ -313,7 +313,7 @@ export default class Role {
   }
 
   getSourceWithMostEnergy(creep) {
-    const sources = creep.getSources();
+    const sources = creep.room.find(FIND_SOURCES);
     let selected = sources[0];
     sources.forEach((source) => {
       if (source.energy > creep.store.getFreeCapacity()) {

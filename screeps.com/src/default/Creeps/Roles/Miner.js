@@ -47,7 +47,7 @@ export default class Miner extends Role {
       this.transferMineral(creep);
     }
 
-    this.dropRoad(creep);
+    // this.dropRoad(creep);
 	}
 
 	/**

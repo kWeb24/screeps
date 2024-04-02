@@ -41,20 +41,30 @@ export default class Destroyer extends Role {
             }
          }
       } 
-      // if (creep.memory.invaderTargetRoom === 'recycle') {
-      //    creep.moveTo(creep.memory.room.controller);
-      //    creep.room.controller.recycle(creep);
-      // } else 
-      if (creep.memory.invaderTargetRoom !== undefined && creep.room.name !== creep.memory.invaderTargetRoom) {
+      if (creep.memory.toRecycle) {
+         if (creep.memory.room === creep.room.name) {
+            const spawn = creep.room.find(FIND_MY_SPAWNS);
+            if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+               creep.moveTo(spawn[0]);
+            }
+         } else {
+            creep.moveTo(Game.rooms[creep.memory.room].controller);
+         }
+         // Game.rooms[creep.memory.room].controller.recycle(creep);
+      } else if (creep.memory.invaderTargetRoom !== undefined && creep.room.name !== creep.memory.invaderTargetRoom) {
          const exitPos = creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.invaderTargetRoom));
          creep.moveTo(exitPos);
       } else if (creep.room.name === creep.memory.invaderTargetRoom) {
          const invaderCore = creep.room.find(FIND_HOSTILE_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_INVADER_CORE});
          if (invaderCore.length) {
-            creep.moveTo(invaderCore[0]);
-            creep.attack(invaderCore[0]);
+            if (creep.attack(invaderCore[0]) === ERR_NOT_IN_RANGE) {
+               if (creep.moveTo(invaderCore[0]) === ERR_NO_PATH) {
+                  creep.memory.toRecycle = true;
+                  creep.room.memory.invaderCore.unreachable = true;
+               }
+            }
          } else {
-            // creep.memory.invaderTargetRoom = 'recycle';
+            creep.memory.toRecycle = true;
          }
       }
 	}
@@ -87,7 +97,8 @@ export default class Destroyer extends Role {
             Memory.rooms[exit] !== undefined && 
             Memory.rooms[exit].scouted === true &&
             Memory.rooms[exit].invaderCore !== false && 
-            Memory.rooms[exit].invaderCore !== undefined
+            Memory.rooms[exit].invaderCore !== undefined &&
+            Memory.rooms[exit].invaderCore.unreachable !== true
             ) {
             needsDestroyer = true;
          }

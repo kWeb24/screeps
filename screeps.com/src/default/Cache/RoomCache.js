@@ -207,13 +207,13 @@ export default class RoomCache {
    * @public
    * @returns {Array<Source>} Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
-  getSources() {
-    // if (this.SOURCES === undefined) {
-      this.SOURCES = this.ROOM.find(FIND_SOURCES);
-    // }
+  // getSources() {
+  //   // if (this.SOURCES === undefined) {
+  //     this.SOURCES = this.ROOM.find(FIND_SOURCES);
+  //   // }
 
-    return this.SOURCES;
-  }
+  //   return this.SOURCES;
+  // }
 
   /**
    * @memberof RoomCache
@@ -223,13 +223,13 @@ export default class RoomCache {
    * @public
    * @returns {Array<Source>} Array of {@link https://docs.screeps.com/api/#Source|Screeps Source}
    **/
-  getActiveSources() {
-    // if (this.SOURCES_ACTIVE === undefined) {
-      this.SOURCES_ACTIVE = this.ROOM.find(FIND_SOURCES_ACTIVE);
-    // }
+  // getActiveSources() {
+  //   // if (this.SOURCES_ACTIVE === undefined) {
+  //     this.SOURCES_ACTIVE = this.ROOM.find(FIND_SOURCES_ACTIVE);
+  //   // }
 
-    return this.SOURCES_ACTIVE;
-  }
+  //   return this.SOURCES_ACTIVE;
+  // }
 
   /**
    * @memberof RoomCache
@@ -558,23 +558,23 @@ export default class RoomCache {
    * @public
    * @returns {Array<StructureStorage>} object of {@link https://docs.screeps.com/api/#StructureStorage|Screeps StructureStorage} type
    **/
-  getMyStorage() {
-    if (this.ROOM.storage !== undefined) {
-      return [this.ROOM.storage];
-    } else {
-      return [];
-    }
+  // getMyStorage() {
+  //   if (this.ROOM.storage !== undefined) {
+  //     return [this.ROOM.storage];
+  //   } else {
+  //     return [];
+  //   }
 
-    // if (this.MY_STORAGE === undefined) {
-      const structures = this.getStructures();
-      this.MY_STORAGE = _.filter(
-        structures,
-        structure => structure.structureType == STRUCTURE_STORAGE
-      );
-    // }
+  //   // if (this.MY_STORAGE === undefined) {
+  //     const structures = this.getStructures();
+  //     this.MY_STORAGE = _.filter(
+  //       structures,
+  //       structure => structure.structureType == STRUCTURE_STORAGE
+  //     );
+  //   // }
 
-    return this.MY_STORAGE;
-  }
+  //   return this.MY_STORAGE;
+  // }
 
   getMyExtractors() {
     // if (this.MY_EXTRACTORS === undefined) {
@@ -600,22 +600,22 @@ export default class RoomCache {
     return this.MY_LABS;
   }
 
-  getMyTerminals() {
-    if (this.ROOM.terminal !== undefined) {
-      return [this.ROOM.terminal];
-    } else {
-      return [];
-    }
-    // if (this.MY_LABS === undefined) {
-      const structures = this.getStructures();
-      this.MY_TERMINALS = _.filter(
-        structures,
-        structure => structure.structureType == STRUCTURE_TERMINAL
-      );
-    // }
+  // getMyTerminals() {
+  //   if (this.ROOM.terminal !== undefined) {
+  //     return [this.ROOM.terminal];
+  //   } else {
+  //     return [];
+  //   }
+  //   // if (this.MY_LABS === undefined) {
+  //     const structures = this.getStructures();
+  //     this.MY_TERMINALS = _.filter(
+  //       structures,
+  //       structure => structure.structureType == STRUCTURE_TERMINAL
+  //     );
+  //   // }
 
-    return this.MY_TERMINALS;
-  }
+  //   return this.MY_TERMINALS;
+  // }
 
   getMyFactories() {
     // if (this.MY_LABS === undefined) {

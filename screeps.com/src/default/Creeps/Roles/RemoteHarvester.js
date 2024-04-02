@@ -47,6 +47,8 @@ export default class RemoteHarvester extends Role {
     ) {
       this.transfer(creep);
     }
+
+    // this.dropRoad(creep);
   }
 
   harvest(creep) {
@@ -56,16 +58,16 @@ export default class RemoteHarvester extends Role {
     if (roomToHarvest) {
       const pos = new RoomPosition(roomToHarvest.value.sources[0].pos.x, roomToHarvest.value.sources[0].pos.y, roomToHarvest.name);
       if (creep.room.name !== roomToHarvest.name) {
-        creep.moveTo(pos);
+        creep.moveTo(pos, { reusePath: 100 });
         creep.status("moving");
-      } else if (creep.pos.x > 48 && creep.pos.x < 2 && creep.pos.y > 48 && creep.pos.y < 2) {
-        creep.moveTo(pos);
-        creep.status("moving");
+      // } else if (creep.pos.x > 45 || creep.pos.x < 5 || creep.pos.y > 45 || creep.pos.y < 5) {
+      //   creep.moveTo(pos);
+      //   creep.status("moving");
       } else {
-        let sources = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+        let sources = Game.getObjectById(roomToHarvest.value.sources[0].id);
         if (sources) {
           if (creep.harvest(sources) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources);
+            creep.moveTo(sources, { reusePath: 100 });
             creep.status("moving");
           }
           creep.target(sources.id);
@@ -109,13 +111,13 @@ export default class RemoteHarvester extends Role {
 
     creep.status("transfering");
 
-    let extensions = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
-      filter: obj => {
-        return (
-          obj.structureType == STRUCTURE_EXTENSION
-        );
-      }
-    });
+    // let extensions = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+    //   filter: obj => {
+    //     return (
+    //       obj.structureType == STRUCTURE_EXTENSION
+    //     );
+    //   }
+    // });
 
     if (targets.length > 0) {
       creep.target(targets[0].id);
@@ -123,12 +125,12 @@ export default class RemoteHarvester extends Role {
         creep.moveTo(targets[0]);
         creep.status("moving");
       }
-    } else if (extensions !== null) {
-      if (creep.build(extensions) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(extensions);
-        creep.status("moving");
-        creep.target(extensions.id);
-      }
+    // } else if (extensions !== null) {
+    //   if (creep.build(extensions) == ERR_NOT_IN_RANGE) {
+    //     creep.moveTo(extensions);
+    //     creep.status("moving");
+    //     creep.target(extensions.id);
+    //   }
     } else {
       creep.target(creep.room.controller.name);
 

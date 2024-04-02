@@ -45,7 +45,7 @@ export default class Upgrader extends Role {
       this.upgrade(creep);
     }
 
-    this.dropRoad(creep);
+    // this.dropRoad(creep);
   }
 
   /**

@@ -13,7 +13,7 @@ export default class Builder extends Role {
     super();
 
     this.ROLE = "builder";
-    this.POPULATION = 3;
+    this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 6;
     this.CAPABLE_OF = ["upgrader"];
@@ -161,21 +161,23 @@ export default class Builder extends Role {
   shouldSpawn(room) {
     let sitesCount = 0;
 
+    const buildersCount = _.filter(
+      Game.creeps,
+      creep => creep.memory.role == 'builder' && creep.memory.room == room.name
+    ).length;
+
+    if (buildersCount >= this.POPULATION) return false;
+
     for (const room in Game.rooms) {
       if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
         sitesCount += CACHE.ROOMS[room].getConstructionSites().length;
       }
     }
 
-    const buildersCount = _.filter(
-      Game.creeps,
-      creep => creep.memory.role == 'builder' && creep.memory.room == room.name
-    ).length;
+    // if (sitesCount > 5) {
+    //   return buildersCount < 3 && sitesCount;
+    // }
 
-    if (sitesCount > 5) {
-      return buildersCount < 3 && sitesCount;
-    }
-
-    return !buildersCount && sitesCount;
+    return buildersCount < this.POPULATION && sitesCount;
   }
 }
