@@ -113,7 +113,7 @@ export default class Repairer extends Role {
       return towers;
     }
 
-		let closest = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+		let closest = creep.pos.findClosestByRange(FIND_STRUCTURES, {
 				filter: (structure) =>
         ((
           structure.hits < structure.hitsMax &&
@@ -125,7 +125,7 @@ export default class Repairer extends Role {
 		});
 
 		if (!closest || closest === null) {
-			closest = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+			closest = creep.pos.findClosestByRange(FIND_STRUCTURES, {
 					filter: (structure) => (structure.hits < structure.hitsMax * 1)
 			});
 			return closest;

@@ -30,8 +30,8 @@ export default class RoadKeeper extends Repairer {
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
 	findClosestRepairableStructure(creep) {
-		return creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
-				filter: (structure) => (structure.hits < structure.hitsMax / 1.3) && structure.structureType == STRUCTURE_ROAD
+		return creep.pos.findClosestByRange(FIND_STRUCTURES, {
+				filter: (structure) => (structure.hits < structure.hitsMax * 0.5) && structure.structureType == STRUCTURE_ROAD
 		});
 	}
 

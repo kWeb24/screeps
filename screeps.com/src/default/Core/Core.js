@@ -65,7 +65,7 @@ export default class Core {
       var creep = Game.creeps[names];
       ROLE_MANAGER.ROLES.forEach(role => {
         if (!cost[role.ROLE]) {
-          cost[role.ROLE] = 0;
+          cost[role.ROLE] = { total: 0, count: 0, max: 0};
         }
         if (creep.memory.role == role.ROLE) {
           if (this.PARAM_ADAPTIVE_ROLES) {
@@ -74,18 +74,21 @@ export default class Core {
             const start = Game.cpu.getUsed();
             role.run(creep);
             const end = Game.cpu.getUsed() - start;
-            if (cost[role.ROLE] < end) {
-              cost[role.ROLE] = end;
+            if (cost[role.ROLE].max < end) {
+              cost[role.ROLE].max = end;
             }
+            cost[role.ROLE].total += end;
+            cost[role.ROLE].count++;
           }
         }
       });
     }
     let str = '';
     for (const [r, c] of Object.entries(cost)) {
-      str += `/ ${r}: ${c.toFixed(2)} /`;
+      const avg = c.count > 0 ? c.total / c.count : 0;
+      str += `${r.substring(0, 3)}: ${avg.toFixed(2)} (${c.max.toFixed(2)}) | `;
     }
-    console.log(str);
+    // console.log(str);
   }
 
 }
