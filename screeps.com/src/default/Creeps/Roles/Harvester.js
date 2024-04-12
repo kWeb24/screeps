@@ -12,7 +12,7 @@ export default class Harvester extends Role {
     super();
 
     this.ROLE = "harvester";
-    this.POPULATION = 5;
+    this.POPULATION = 4;
     this.GENOME = [WORK, CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = ["upgrader", "builder"];
@@ -36,6 +36,7 @@ export default class Harvester extends Role {
       this.harvest(creep);
     }
 
+    // if standing on container drop
     if (
       (creep.status() != "transfering" && creep.store.getFreeCapacity() === 0) ||
       (creep.status() == "transfering" && creep.store.getUsedCapacity() > 0) ||
@@ -54,6 +55,19 @@ export default class Harvester extends Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   transfer(creep) {
+    const atMyPos = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
+    const containerAtMyPos = _.filter(atMyPos, structure => {
+      return (
+        structure.structureType == STRUCTURE_CONTAINER
+      )
+    })
+    if (containerAtMyPos.length) {
+      if (containerAtMyPos[0].store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
+        creep.drop(RESOURCE_ENERGY);
+        return false;
+      }
+    }
+
     const sinks = creep.getEnergySinks();
 
     const spawnRelated = _.filter(sinks, sink => {
@@ -136,17 +150,9 @@ export default class Harvester extends Role {
 
     const harvestersCount = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'harvester' && creep.memory.room == room.name
+      creep => creep.memory.role == 'harvester' && creep.memory.room == room.name && creep.ticksToLive > 20
     ).length;
 
-    const dyingHarvestersCount = _.filter(
-      Game.creeps,
-      creep => creep.memory.role == 'harvester' && creep.memory.room == room.name && creep.ticksToLive < 100
-    ).length;
-
-    const maxPrice = room.energyAvailable;
-    const possiblePrice = room.energyCapacityAvailable;
-
-    return harvestersCount < sourcesCount || (dyingHarvestersCount && harvestersCount - 1 < sourcesCount);
+    return harvestersCount < sourcesCount;
   }
 }

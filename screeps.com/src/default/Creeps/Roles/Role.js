@@ -269,7 +269,6 @@ export default class Role {
     creep.status("harvesting");
 
     let selectedSource = this.selectEnergyDeposit(creep);
-
     if (
       selectedSource !== false &&
       typeof selectedSource != "string" &&

@@ -33,16 +33,16 @@ export default class Governor {
         //     // console.log(staticContainers.length);
         //     // room.memory.staticContainers = staticContainers;
         // } else {
-            const points = this.getStaticContainers(roomName, room);
-            points.forEach((point) => {
-            if (point) {
-              room.visual.circle(point, {
-                fill: '#ff0026',
-                radius: 0.30,
-                opacity: 1,
-              });
-            }
-          });
+          //   const points = this.getStaticContainers(roomName, room);
+          //   points.forEach((point) => {
+          //   if (point) {
+          //     room.visual.circle(point, {
+          //       fill: '#ff0026',
+          //       radius: 0.30,
+          //       opacity: 1,
+          //     });
+          //   }
+          // });
         // }
 
     }
@@ -138,7 +138,9 @@ export default class Governor {
   }
 
   getStaticContainers(room, roomObj) {
-      const spawns = CACHE.ROOMS[room].getMySpawns();
+    //   const spawns = CACHE.ROOMS[room].getMySpawns();
+      const spawns = [];
+      spawns.push(roomObj.controller);
       const sources = roomObj.find(FIND_SOURCES);
       const minerals = CACHE.ROOMS[room].getMinerals();
       if (!spawns.length) return [];

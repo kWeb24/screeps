@@ -69,7 +69,7 @@ export default class Hauler extends Role {
       creep => creep.memory.role == 'hauler' && creep.memory.room == room.name
     ).length;
 
-    return haulersCount < this.POPULATION && hasStorage;
+    return haulersCount < this.POPULATION && room.controller.level > 2;
   }
 
   /**

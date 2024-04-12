@@ -126,7 +126,7 @@ export default class Repairer extends Role {
 
 		if (!closest || closest === null) {
 			closest = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-					filter: (structure) => (structure.hits < structure.hitsMax * 1)
+					filter: (structure) => (structure.hits < structure.hitsMax * 1 && structure.hits < 100000)
 			});
 			return closest;
 		} else {

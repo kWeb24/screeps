@@ -24,11 +24,16 @@ export default class Core {
    * @public
    **/
   loop() {
+    if (Game.cpu.bucket === 10000) {
+      Game.cpu.generatePixel();
+    }
     this.clearDeadCreeps();
-    this.spawnCreeps();
-    // this.runStructures();
+    
     this.runCreeps();
+    this.spawnCreeps();
+    // const t = Game.cpu.getUsed(); //0.6
     this.Emperor.run();
+    // console.log(Game.cpu.getUsed() - t);
   }
 
   /**
@@ -39,6 +44,7 @@ export default class Core {
   clearDeadCreeps() {
     for (var name in Memory.creeps) {
       if (!Game.creeps[name]) {
+        // const { role, room, primarySource } = Memory.creeps[name];
         delete Memory.creeps[name];
       }
     }

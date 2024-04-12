@@ -26,7 +26,8 @@ export default class Emperor {
   }
 
   runGovernors() {
-    const orders = Game.market.getAllOrders({type: ORDER_BUY});
+    const orders = [];
+    // const orders = Game.market.getAllOrders({type: ORDER_BUY}); //pricy
     for (const room in Game.rooms) {
         const status = this.Governor.run(room, orders);
     }
