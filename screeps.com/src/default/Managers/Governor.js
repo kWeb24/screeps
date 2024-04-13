@@ -190,8 +190,9 @@ export default class Governor {
       const terminal = Game.rooms[room].terminal;
       if (terminal) {
         orders.forEach((order) => {
-          if (terminal.store.getUsedCapacity(order.resourceType) > 1000) {
-            Game.market.deal(order.id, terminal.store.getUsedCapacity(order.resourceType) - 1000, room);
+          if (order.resourceType !== RESOURCE_ENERGY && terminal.store.getUsedCapacity(order.resourceType) > 1000) {
+            const result = Game.market.deal(order.id, terminal.store.getUsedCapacity(order.resourceType) - 1000, room);
+            console.log(`sell ${order.resourceType} result: ${result}`);
           }
         })
       }

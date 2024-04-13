@@ -85,3 +85,9 @@ Object.assign(Creep.prototype, {
     }
   }
 });
+
+Object.assign(Creep.prototype, {
+  withdrawAny(target) {
+    this.withdraw(target, _.findKey(target.storage.store));
+  }
+});
