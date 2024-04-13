@@ -85,11 +85,13 @@ export default class Upgrader extends Role {
 
     const storage = room.storage;
     let storageEnergy = 0;
-    let limit = 2;
+    let limit = 1;
     if (storage !== undefined) {
       storageEnergy = storage.store.getUsedCapacity(RESOURCE_ENERGY);
       if (storageEnergy > 15000) {
         limit = 3;
+      } else if (storageEnergy > 5000) {
+        limit = 2;
       }
     }
 

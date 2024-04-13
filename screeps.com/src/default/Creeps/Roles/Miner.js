@@ -15,8 +15,8 @@ export default class Miner extends Role {
 
     this.ROLE = "miner";
     this.POPULATION = 5;
-    this.GENOME = [WORK, CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 15;
+    this.GENOME = [WORK, WORK, MOVE];
+    this.MAX_GENOME_LENGTH = 21;
     this.CAPABLE_OF = ["upgrader", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = false;
@@ -31,21 +31,21 @@ export default class Miner extends Role {
 	 * @see Role
    **/
 	run(creep) {
-    if (this.haveFullLab(creep.room)) return false;
-    if (
-      (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
-      (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
-    ) {
+    // if (this.haveFullLab(creep.room)) return false;
+    // if (
+    //   (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
+    //   (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
+    // ) {
       this.harvestMineral(creep);
-    }
+    // }
 
-    if (
-      (creep.status() != "transfering" && creep.store.getFreeCapacity() === 0) ||
-      (creep.status() == "transfering" && creep.store.getUsedCapacity() > 0) ||
-      (creep.status() == "moving" && creep.store.getUsedCapacity() > 0)
-    ) {
-      this.transferMineral(creep);
-    }
+    // if (
+    //   (creep.status() != "transfering" && creep.store.getFreeCapacity() === 0) ||
+    //   (creep.status() == "transfering" && creep.store.getUsedCapacity() > 0) ||
+    //   (creep.status() == "moving" && creep.store.getUsedCapacity() > 0)
+    // ) {
+    //   this.transferMineral(creep);
+    // }
 
     // this.dropRoad(creep);
 	}
@@ -75,7 +75,7 @@ export default class Miner extends Role {
 
     const dyingMinersCount = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'miner' && creep.memory.room == room.name && creep.ticksToLive < 100
+      creep => creep.memory.role == 'miner' && creep.memory.room == room.name && creep.ticksToLive < 10
     ).length;
 
 

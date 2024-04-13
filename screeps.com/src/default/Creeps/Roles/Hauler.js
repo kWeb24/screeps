@@ -146,12 +146,21 @@ export default class Hauler extends Role {
     let selectedSource = false;
     if (creep.memory.target !== undefined && creep.memory.target !== 'none') {
       const targetObj = Game.getObjectById(creep.memory.target);
-      if (targetObj && targetObj.store.getUsedCapacity() >= creep.store.getFreeCapacity()) {
+      if (targetObj && targetObj.store.getUsedCapacity() >= 0) {
         selectedSource = targetObj;
       }
     }
 
-    // Handle Tombstone withdraw and dropped resources pickup
+    if (!selectedSource) {
+      const tombstones = creep.room.find(FIND_TOMBSTONES);
+      if (tombstones.length) {
+        tombstones.forEach((tomb) => {
+          if (tomb.store.getUsedCapacity() > 0 && creep.store.getFreeCapacity() >= tomb.store.getUsedCapacity()) {
+            selectedSource = tomb;
+          }
+        });
+      }
+    }    
 
     if (!selectedSource) {
       const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();
