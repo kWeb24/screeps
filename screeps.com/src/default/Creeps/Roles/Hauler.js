@@ -15,7 +15,7 @@ export default class Hauler extends Role {
 		this.ROLE = "hauler";
     this.POPULATION = 2;
     this.GENOME = [CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 10;
+    this.MAX_GENOME_LENGTH = 14;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -89,14 +89,6 @@ export default class Hauler extends Role {
       });
     }
 
-    // const spawnRelated = _.filter(sinks, sink => {
-    //   return (
-    //     (sink.structureType == STRUCTURE_EXTENSION ||
-    //       sink.structureType == STRUCTURE_SPAWN) &&
-    //     sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-    //   );
-    // });
-
     const spawnRelated = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
       filter: obj => {
         return (obj.structureType == STRUCTURE_EXTENSION || obj.structureType == STRUCTURE_SPAWN) &&
@@ -113,11 +105,17 @@ export default class Hauler extends Role {
       
       let targets = [];
       
-    if (spawnRelated) {
+    if (spawnRelated && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
       targets.push(spawnRelated);
-    } else if (terminal !== undefined && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 5000) {
+    } else if (
+      terminal !== undefined && 
+      (
+        (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 3000) ||
+        (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0 && creep.store.getUsedCapacity() > 0 && terminal.store.getFreeCapacity() > creep.store.getUsedCapacity())
+      )
+    ) {
       targets = [terminal];
-    } else if (labsWithoutEnergy.length) {
+    } else if (labsWithoutEnergy.length && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
       targets = labsWithoutEnergy;
     } else if (storageRelated.length) {
       targets = storageRelated;
@@ -125,8 +123,8 @@ export default class Hauler extends Role {
 
     creep.status("transfering");
     if (targets.length > 0) {
-      creep.target(targets[0].id);
-      if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      creep.target('none');
+      if (creep.transferAny(targets[0]) == ERR_NOT_IN_RANGE) {
         creep.moveTo(targets[0]);
         creep.status("moving");
       }
@@ -136,50 +134,74 @@ export default class Hauler extends Role {
   harvest(creep) {
     creep.status("harvesting");
 
-    // Handle Tombstone withdraw and dropped resources pickup
-
-    const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();
-    const roomStorage = creep.room.storage;
-    let storage = false;
-    let container = false;
-
-    if (roomStorage !== undefined) {
-      if (roomStorage.store.getUsedCapacity(RESOURCE_ENERGY) >= creep.store.getFreeCapacity(RESOURCE_ENERGY)) {
-        storage = roomStorage;
-      }
-    }
-
-    if (roomContainers !== undefined) {
-      const notEmptyContainers = _.filter(roomContainers, cnt => {
-        return cnt.store.getUsedCapacity(RESOURCE_ENERGY) >= creep.store.getFreeCapacity(RESOURCE_ENERGY);
-      });
-      if (notEmptyContainers.length) {
-        container = notEmptyContainers[0];
-      }
-    }
-
-    // const tombstones = creep.room.find(FIND_TOMBSTONES);
-
-    // creep.withdraw(creep.room.storage, _.findKey(creep.room.storage.store));
-
-    const terminal = creep.room.terminal;
+    // if (creep.room.terminal !== undefined) {
+    //   if (creep.withdraw(creep.room.storage, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
+    //     creep.moveTo(creep.room.storage);
+    //     creep.status("moving");
+    //   }
+    //   creep.target(selectedSource.id);
+    // }
+    // return false;
 
     let selectedSource = false;
-    
-    if (container) {
-      selectedSource = container;
-    } else if (storage) {
-      selectedSource = storage;
-    } else if (terminal && terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 5000) {
-      selectedSource = terminal;
+    if (creep.memory.target !== undefined && creep.memory.target !== 'none') {
+      const targetObj = Game.getObjectById(creep.memory.target);
+      if (targetObj && targetObj.store.getUsedCapacity() >= creep.store.getFreeCapacity()) {
+        selectedSource = targetObj;
+      }
     }
 
+    // Handle Tombstone withdraw and dropped resources pickup
+
+    if (!selectedSource) {
+      const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();
+      const roomStorage = creep.room.storage;
+      let storage = false;
+      let container = false;
+
+      if (roomStorage !== undefined) {
+        if (roomStorage.store.getUsedCapacity(RESOURCE_ENERGY) >= creep.store.getFreeCapacity(RESOURCE_ENERGY)) {
+          storage = roomStorage;
+        }
+      }
+
+      if (roomContainers !== undefined) {
+        const notEmptyContainers = _.filter(roomContainers, cnt => {
+          return cnt.store.getUsedCapacity() >= creep.store.getFreeCapacity();
+        });
+        if (notEmptyContainers.length) {
+          const mostUsed = notEmptyContainers.reduce((a, b) => {
+            return (a.store.getUsedCapacity() > b.store.getUsedCapacity()) ? a : b;
+          });
+          container = mostUsed;
+        }
+      }
+      
+      // const tombstones = creep.room.find(FIND_TOMBSTONES);
+
+      const terminal = creep.room.terminal;
+
+      if (container) {
+        selectedSource = container;
+      } else if (terminal && terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 3000) {
+        selectedSource = terminal;
+      } else if (storage) {
+        selectedSource = storage;
+      }
+    }
     if (
       selectedSource !== false
     ) {
-      if (creep.withdraw(selectedSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(selectedSource);
-        creep.status("moving");
+      if (selectedSource.structureType == STRUCTURE_STORAGE) {
+        if (creep.withdraw(selectedSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(selectedSource);
+          creep.status("moving");
+        }
+      } else {
+        if (creep.withdrawAny(selectedSource) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(selectedSource);
+          creep.status("moving");
+        }
       }
       creep.target(selectedSource.id);
     }

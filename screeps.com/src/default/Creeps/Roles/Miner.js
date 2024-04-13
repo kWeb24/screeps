@@ -96,6 +96,19 @@ export default class Miner extends Role {
   }
 
   transferMineral(creep) {
+    const atMyPos = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
+    const containerAtMyPos = _.filter(atMyPos, structure => {
+      return (
+        structure.structureType == STRUCTURE_CONTAINER
+      )
+    })
+    if (containerAtMyPos.length) {
+      if (containerAtMyPos[0].store.getFreeCapacity() >= creep.store.getUsedCapacity()) {
+        creep.dropAll();
+        return false;
+      }
+    }
+
     const sinks = CACHE.ROOMS[creep.room.name].getMyLabs();
     const type = CACHE.ROOMS[creep.room.name].getMinerals()[0].mineralType;
     const terminal = creep.room.terminal;

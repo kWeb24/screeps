@@ -88,6 +88,18 @@ Object.assign(Creep.prototype, {
 
 Object.assign(Creep.prototype, {
   withdrawAny(target) {
-    this.withdraw(target, _.findKey(target.storage.store));
+    return this.withdraw(target, _.findKey(target.store));
+  }
+});
+
+Object.assign(Creep.prototype, {
+  transferAny(target) {
+    return this.transfer(target, _.findKey(this.store));
+  }
+});
+
+Object.assign(Creep.prototype, {
+  dropAll() {
+    return this.drop(_.findKey(this.store));
   }
 });
