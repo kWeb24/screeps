@@ -115,7 +115,7 @@ export default class Hauler extends Role {
       
     if (spawnRelated && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
       targets.push(spawnRelated);
-    } else if (towers.length) {
+    } else if (towers.length && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
       targets = towers;
     } else if (
       terminal !== undefined && 
