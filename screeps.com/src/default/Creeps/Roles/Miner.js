@@ -16,7 +16,7 @@ export default class Miner extends Role {
     this.ROLE = "miner";
     this.POPULATION = 5;
     this.GENOME = [WORK, WORK, MOVE];
-    this.MAX_GENOME_LENGTH = 21;
+    this.MAX_GENOME_LENGTH = 33;
     this.CAPABLE_OF = ["upgrader", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = false;
@@ -31,6 +31,18 @@ export default class Miner extends Role {
 	 * @see Role
    **/
 	run(creep) {
+    const mineral = CACHE.ROOMS[creep.room.name].getMinerals();
+
+    if (mineral[0].mineralAmount === 0) {
+      if (creep.store.getUsedCapacity() > 0) {
+        creep.dropAll();
+      }
+      const spawn = creep.room.find(FIND_MY_SPAWNS);
+      if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+          creep.moveTo(spawn[0]);
+      }
+      return false;
+    }
     // if (this.haveFullLab(creep.room)) return false;
     // if (
     //   (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
@@ -65,6 +77,16 @@ export default class Miner extends Role {
 
 	shouldSpawn(room) {
     const sourcesCount = CACHE.ROOMS[room.name].getMyExtractors().length;
+
+    if (!sourcesCount) {
+      return false;
+    }
+
+    const mineral = CACHE.ROOMS[room.name].getMinerals();
+
+    if (mineral[0].mineralAmount === 0) {
+      return false;
+    }
 
     if (this.haveFullLab(room)) return false;
 

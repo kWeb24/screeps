@@ -3,41 +3,35 @@
 export default class Tower {
   constructor() {}
 
-  run(tower) {
+  run(tower, repairQueue, index) {
     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 
-    // tower.room.visual.rect(
-    //   tower.pos.x - 5, tower.pos.y - 5, 
-    //   11, 11,
-    //   {fill: 'transparent', stroke: '#ff0000'}
-    // );
+    tower.room.visual.circle(
+      tower.pos,
+      {fill: 'transparent', radius: 5, opacity: 0.5, stroke: '#ff0000', lineStyle: 'dashed'}
+    );
+
+    tower.room.visual.circle(
+      tower.pos,
+      {fill: 'transparent', radius: 20, opacity: 0.5, stroke: '#ff0000', lineStyle: 'dashed'}
+    );
 
     if (closestHostile) {
       tower.attack(closestHostile);
     } else {
       if (tower.store.getUsedCapacity(RESOURCE_ENERGY) > tower.store.getCapacity(RESOURCE_ENERGY) / 2) {
-        // tower.repair(this.findClosestDamagedStructureNotRoad(tower));
-      } else {
-        // tower.repair(this.findClosestDamagedStructure(tower));
+        if (repairQueue.length) {
+          let target = repairQueue[0];
+
+          if (repairQueue.length >= index) {
+            target = repairQueue[index];
+          }
+
+          const targetStructure = Game.getObjectById(target);
+
+          tower.repair(targetStructure);
+        }
       }
     }
-  }
-
-  findClosestDamagedStructure(tower) {
-    var structure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: building => building.hits < building.hitsMax
-    });
-
-    return structure;
-  }
-
-  findClosestDamagedStructureNotRoad(tower) {
-    var structure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: building =>
-        building.hits < building.hitsMax &&
-        building.structureType != STRUCTURE_ROAD
-    });
-
-    return structure;
   }
 }

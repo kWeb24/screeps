@@ -89,11 +89,11 @@ export default class Core {
         }
       });
     }
-    let str = '';
-    for (const [r, c] of Object.entries(cost)) {
-      const avg = c.count > 0 ? c.total / c.count : 0;
-      str += `${r.substring(0, 3)}: ${avg.toFixed(2)} (${c.max.toFixed(2)}) | `;
-    }
+    // let str = '';
+    // for (const [r, c] of Object.entries(cost)) {
+    //   const avg = c.count > 0 ? c.total / c.count : 0;
+    //   str += `${r.substring(0, 3)}: ${avg.toFixed(2)} (${c.max.toFixed(2)}) | `;
+    // }
     // console.log(str);
   }
 

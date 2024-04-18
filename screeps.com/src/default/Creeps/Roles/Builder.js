@@ -161,6 +161,8 @@ export default class Builder extends Role {
   shouldSpawn(room) {
     let sitesCount = 0;
 
+    // if (room.name === 'W28N14') return true;
+
     const buildersCount = _.filter(
       Game.creeps,
       creep => creep.memory.role == 'builder' && creep.memory.room == room.name
@@ -173,7 +175,6 @@ export default class Builder extends Role {
         sitesCount += CACHE.ROOMS[room].getConstructionSites().length;
       }
     }
-
 
     // if (sitesCount > 5) {
     //   return buildersCount < 3 && sitesCount;

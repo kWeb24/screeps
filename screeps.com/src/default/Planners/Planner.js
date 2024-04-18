@@ -15,7 +15,7 @@ export default class Planner {
     * @desc array of {@link https://docs.screeps.com/api/#Room|Screeps Room} objects
     **/
     this.ROOMS = [];
-    this.initRoomPlanning();
+    // this.initRoomPlanning();
   }
 
   /**

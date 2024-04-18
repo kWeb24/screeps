@@ -135,6 +135,7 @@ export default class Repairer extends Role {
 	}
 
   shouldSpawn(room) {
+    if (room.controller.level >= 3) return false;
     const upgradersCount = _.filter(
       Game.creeps,
       creep => creep.memory.role == 'repairer' && creep.memory.room == room.name

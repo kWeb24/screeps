@@ -17,6 +17,7 @@ import RemoteHarvester from '../Creeps/Roles/RemoteHarvester.js';
 import Manufacturer from '../Creeps/Roles/Manufacturer.js';
 
 import Destroyer from '../Creeps/Roles/Military/Destroyer.js';
+import Thief from '../Creeps/Roles/Military/Thief.js';
 
 const LOGGER = new Logger({
   enabled: false
@@ -85,6 +86,8 @@ export default class RoleManager {
 
     this.Destroyer = new Destroyer();
 
+    this.Thief = new Thief();
+
     /**
     * @member {Array<Role>} RoleManager#Roles
     **/
@@ -100,7 +103,8 @@ export default class RoleManager {
       this.RoadKeeper,
       this.Scout,
       this.Manufacturer,
-      this.Destroyer
+      this.Destroyer,
+      this.Thief
     ];
   }
 

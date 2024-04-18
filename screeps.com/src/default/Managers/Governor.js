@@ -9,17 +9,23 @@ import Tower from "../Structures/Tower.js";
 export default class Governor {
 
   constructor() {
-    
+    this.repairQueue = [];
+
+    this.maxRepairValue = 100000;
+    this.repailThreshold = 0.9;
+    this.repairSortOrder = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_WALL];
   }
 
   run(roomName, orders) {
+    this.repairQueue = [];
     const room = Game.rooms[roomName];
     this.initRoom(room);
     this.refreshRoomStatus(room);
+    this.runOwnedRoom(room);
     this.runStructures(roomName, orders);
     // console.log(room.memory);
     const status = {};
-    if (room.controller.my && room.controller.level > 0) {
+    // if (room.controller.my && room.controller.level > 0) {
         // if (!room.memory.staticContainers) {
         //     const points = this.getStaticContainers(roomName, room);
         //     const staticContainers = [];
@@ -45,13 +51,52 @@ export default class Governor {
           // });
         // }
 
-    }
+    // }
     return status;
+  }
+
+  runOwnedRoom(room) {
+    if (room.controller === undefined || !room.controller.my) return false;
+
+    const structures = room.find(FIND_STRUCTURES, {
+      filter: structure => (
+        structure.my || 
+        structure.structureType === STRUCTURE_CONTAINER ||
+        structure.structureType === STRUCTURE_ROAD ||
+        structure.structureType === STRUCTURE_WALL
+      )
+    });
+
+    this.repairQueue = this.getRepairQueue(room, structures);
+  }
+
+  getRepairQueue(room, structures) {
+    // const t = Game.cpu.getUsed()
+    const toRepair = _.filter(structures, structure => (
+      structure.hits < structure.hitsMax * this.repailThreshold && 
+      structure.hits < this.maxRepairValue
+    )).sort((a, b) => {
+      return this.repairSortOrder.indexOf(a.structureType) - this.repairSortOrder.indexOf(b.structureType)
+    }).map((structure) => structure.id);
+    // console.log(Game.cpu.getUsed() - t);
+    // console.log(toRepair);
+    // console.log(toRepair.length);
+    return toRepair;
   }
 
   refreshRoomStatus(room) {
     if (room.controller !== undefined) {
         room.memory.controller.my = room.controller.my;
+        room.memory.controller.otherPlayer = room.controller.owner && room.controller.owner.username !== 'kWeb24' ? true : false;
+    }
+
+    // update
+    if (room.memory.queue === undefined) {
+      room.memory.queue = {
+        repair: [],
+        haul: [],
+        build: [],
+      };
     }
 
     const invaderCore = room.find(FIND_HOSTILE_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_INVADER_CORE});
@@ -108,6 +153,11 @@ export default class Governor {
         minerals: mineralsArr,
         exits: Game.map.describeExits(room.name),
         invaderCore: false,
+        queue: {
+          repair: [],
+          haul: [],
+          build: [],
+        }
     };
 
     if (room.controller !== undefined) {
@@ -117,7 +167,8 @@ export default class Governor {
                 x: room.controller.pos.x,
                 y: room.controller.pos.y,
             },
-            my: room.controller.my
+            my: room.controller.my,
+            otherPlayer: room.controller.owner && room.controller.owner.username !== 'kWeb24' ? true : false
         };
     }
 
@@ -183,19 +234,23 @@ export default class Governor {
       if (CACHE.ROOMS[room].getMyTowers().length) {
         const towers = CACHE.ROOMS[room].getMyTowers();
         towers.forEach((tower, index) => {
-          this.Tower.run(tower);
+          this.Tower.run(tower, this.repairQueue, index);
         });
       }
 
-      const terminal = Game.rooms[room].terminal;
-      if (terminal) {
-        orders.forEach((order) => {
-          if (order.resourceType !== RESOURCE_ENERGY && terminal.store.getUsedCapacity(order.resourceType) > 1000) {
-            const result = Game.market.deal(order.id, terminal.store.getUsedCapacity(order.resourceType) - 1000, room);
-            console.log(`sell ${order.resourceType} result: ${result}`);
-          }
-        })
-      }
+      // const terminal = Game.rooms[room].terminal;
+      // if (terminal) {
+      //   orders.forEach((order) => {
+      //     if (order.resourceType !== RESOURCE_ENERGY && terminal.store.getUsedCapacity(order.resourceType) > 1000) {
+      //       const result = Game.market.deal(order.id, terminal.store.getUsedCapacity(order.resourceType) - 1000, room);
+      //       console.log(`sell ${order.resourceType} result: ${result}`);
+      //     }
+      //   })
+      //   // if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 10000) {
+      //   //   const r = Game.market.deal(orders[0].id, 2000, room);
+      //   //   console.log(r);
+      //   // }
+      // }
     }
   }
 }

@@ -60,11 +60,23 @@ export default class Harvester extends Role {
       return (
         structure.structureType == STRUCTURE_CONTAINER
       )
-    })
+    });
     if (containerAtMyPos.length) {
       if (containerAtMyPos[0].store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
         creep.drop(RESOURCE_ENERGY);
         return false;
+      }
+    } else {
+      const primarySource = Game.getObjectById(creep.memory.primarySource);
+      const area = creep.room.lookForAtArea(LOOK_STRUCTURES, primarySource.pos.y - 1, primarySource.pos.x - 1, primarySource.pos.y + 1, primarySource.pos.x + 1, true);
+      const containers = [];
+      area.forEach((structure) => {
+        if (structure.structure.structureType == STRUCTURE_CONTAINER) {
+          containers.push(structure);
+        }
+      });
+      if (containers.length) {
+        creep.moveTo(containers[0].structure.pos);
       }
     }
 

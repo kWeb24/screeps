@@ -79,6 +79,7 @@ export default class Hauler extends Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   transfer(creep) {
+    // TODO stop handling spawns if room have manager
     const sinks = creep.getEnergySinks();
     const terminal = creep.room.terminal;
     const labs = CACHE.ROOMS[creep.room.name].getMyLabs();
@@ -102,11 +103,20 @@ export default class Hauler extends Role {
         sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
         );
       });
+    
+    const towers = _.filter(sinks, sink => {
+      return (
+        (sink.structureType == STRUCTURE_TOWER) &&
+        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+        );
+      });
       
       let targets = [];
       
     if (spawnRelated && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
       targets.push(spawnRelated);
+    } else if (towers.length) {
+      targets = towers;
     } else if (
       terminal !== undefined && 
       (
@@ -120,7 +130,6 @@ export default class Hauler extends Role {
     } else if (storageRelated.length) {
       targets = storageRelated;
     }
-
     creep.status("transfering");
     if (targets.length > 0) {
       creep.target('none');
@@ -146,7 +155,7 @@ export default class Hauler extends Role {
     let selectedSource = false;
     if (creep.memory.target !== undefined && creep.memory.target !== 'none') {
       const targetObj = Game.getObjectById(creep.memory.target);
-      if (targetObj && targetObj.store.getUsedCapacity() >= 0) {
+      if (targetObj && targetObj.store.getUsedCapacity() > 0) {
         selectedSource = targetObj;
       }
     }
@@ -155,12 +164,23 @@ export default class Hauler extends Role {
       const tombstones = creep.room.find(FIND_TOMBSTONES);
       if (tombstones.length) {
         tombstones.forEach((tomb) => {
-          if (tomb.store.getUsedCapacity() > 0 && creep.store.getFreeCapacity() >= tomb.store.getUsedCapacity()) {
+          if (tomb.store.getUsedCapacity() > 0 && creep.store.getFreeCapacity() > 0) {
             selectedSource = tomb;
           }
         });
       }
-    }    
+    } 
+    
+    if (!selectedSource) {
+      const ruins = creep.room.find(FIND_RUINS);
+      if (ruins.length) {
+        ruins.forEach((tomb) => {
+          if (tomb.store.getUsedCapacity() > 0 && creep.store.getFreeCapacity() > 0) {
+            selectedSource = tomb;
+          }
+        });
+      }
+    } 
 
     if (!selectedSource) {
       const roomContainers = CACHE.ROOMS[creep.room.name].getContainers();

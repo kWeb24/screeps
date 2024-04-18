@@ -36,6 +36,7 @@ export default class RoadKeeper extends Repairer {
 	}
 
   shouldSpawn(room) {
+    if (room.controller.level >= 3) return false;
     const upgradersCount = _.filter(
       Game.creeps,
       creep => creep.memory.role == 'roadKeeper' && creep.memory.room == room.name
