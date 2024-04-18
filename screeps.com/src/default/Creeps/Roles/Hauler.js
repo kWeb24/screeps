@@ -107,7 +107,7 @@ export default class Hauler extends Role {
     const towers = _.filter(sinks, sink => {
       return (
         (sink.structureType == STRUCTURE_TOWER) &&
-        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 200
         );
       });
       
