@@ -245,10 +245,17 @@ export default class Governor {
         });
       }
 
-      if (room === 'W28N14') {
+      if (Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_UTRIUM) < 1000) {
         const terminal = Game.rooms[room].terminal;
-        if (terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM) > 1000) {
-          terminal.send(RESOURCE_LEMERGIUM, terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM), 'W28N13');
+        if (terminal && terminal.store.getUsedCapacity(RESOURCE_UTRIUM) > 1000) {
+          terminal.send(RESOURCE_UTRIUM, 1000, 'W28N14');
+        }
+      }
+
+      if (Game.rooms['W28N13'].terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM) < 1000) {
+        const terminal = Game.rooms[room].terminal;
+        if (terminal && terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM) > 1000) {
+          terminal.send(RESOURCE_LEMERGIUM, 1000, 'W28N13');
         }
       }
       // if (terminal) {
@@ -288,6 +295,10 @@ export default class Governor {
                 lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x, Game.flags[flag].pos.y + 1).filter((structure) => {
                   return structure.structureType === STRUCTURE_LAB
                 });
+              } else if (dir1 == RIGHT) {
+                lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x + 1, Game.flags[flag].pos.y).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
               }
 
               let lab2;
@@ -297,6 +308,10 @@ export default class Governor {
                 });
               } else if (dir2 == BOTTOM) {
                 lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x, Game.flags[flag].pos.y + 1).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
+              } else if (dir2 == RIGHT) {
+                lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x + 1, Game.flags[flag].pos.y).filter((structure) => {
                   return structure.structureType === STRUCTURE_LAB
                 });
               }
