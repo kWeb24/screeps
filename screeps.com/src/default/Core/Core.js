@@ -44,7 +44,9 @@ export default class Core {
   clearDeadCreeps() {
     for (var name in Memory.creeps) {
       if (!Game.creeps[name]) {
-        // const { role, room, primarySource } = Memory.creeps[name];
+        const { role, room, primarySource } = Memory.creeps[name];
+        // console.log(room);
+        
         delete Memory.creeps[name];
       }
     }

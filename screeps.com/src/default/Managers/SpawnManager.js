@@ -56,6 +56,16 @@ export default class SpawnManager {
               room: ROOM.name
             }
           });
+
+          // if (result === OK) {
+          //   if (ROOM.memory.population === undefined) {
+          //     ROOM.memory.population = {};
+          //   }
+          //   if (ROOM.memory.population[roles[0].ROLE] === undefined) {
+          //     ROOM.memory.population[roles[0].ROLE] = 0;
+          //   }
+          //   ROOM.memory.population[roles[0].ROLE] = ROOM.memory.population[roles[0].ROLE] + 1;
+          // }
         }
       }
     };

@@ -15,7 +15,7 @@ export default class Upgrader extends Role {
     this.ROLE = "upgrader";
     this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 15;
+    this.MAX_GENOME_LENGTH = 30;
     this.CAPABLE_OF = ["harvester", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -86,14 +86,14 @@ export default class Upgrader extends Role {
     const storage = room.storage;
     let storageEnergy = 0;
     let limit = 1;
-    if (storage !== undefined) {
-      storageEnergy = storage.store.getUsedCapacity(RESOURCE_ENERGY);
-      if (storageEnergy > 15000) {
-        limit = 3;
-      } else if (storageEnergy > 5000) {
-        limit = 2;
-      }
-    }
+    // if (storage !== undefined) {
+    //   storageEnergy = storage.store.getUsedCapacity(RESOURCE_ENERGY);
+    //   if (storageEnergy > 15000) {
+    //     limit = 3;
+    //   } else if (storageEnergy > 5000) {
+    //     limit = 2;
+    //   }
+    // }
 
     const toBuild = room.controller.level < 8 ? limit : 1;
 

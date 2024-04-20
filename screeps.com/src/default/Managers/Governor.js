@@ -99,6 +99,12 @@ export default class Governor {
       };
     }
 
+    if (room.memory.population === undefined) {
+      room.memory.population = {};
+    }
+
+    // end of update
+
     const invaderCore = room.find(FIND_HOSTILE_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_INVADER_CORE});
     if (invaderCore.length) {
         let unreachable = false;
@@ -157,7 +163,8 @@ export default class Governor {
           repair: [],
           haul: [],
           build: [],
-        }
+        },
+        population: {}
     };
 
     if (room.controller !== undefined) {
@@ -238,7 +245,12 @@ export default class Governor {
         });
       }
 
-      // const terminal = Game.rooms[room].terminal;
+      if (room === 'W28N14') {
+        const terminal = Game.rooms[room].terminal;
+        if (terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM) > 1000) {
+          terminal.send(RESOURCE_LEMERGIUM, terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM), 'W28N13');
+        }
+      }
       // if (terminal) {
       //   orders.forEach((order) => {
       //     if (order.resourceType !== RESOURCE_ENERGY && terminal.store.getUsedCapacity(order.resourceType) > 1000) {
@@ -251,6 +263,57 @@ export default class Governor {
       //   //   console.log(r);
       //   // }
       // }
+
+      for (const flag in Game.flags) {
+        if (flag.charAt(0) === '$') {
+          const parts = flag.split(';');
+          const roomName = parts[1];
+          const action = parts[2];
+          const resource = parts[3];
+          const dir1 = parts[4];
+          const dir2 = parts[5];
+  
+          if (roomName === room) {
+            if (action === 'R') {
+              const atPos = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
+                return structure.structureType === STRUCTURE_LAB
+              });
+
+              let lab1;
+              if (dir1 == LEFT) {
+                lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x - 1, Game.flags[flag].pos.y).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
+              } else if (dir1 == BOTTOM) {
+                lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x, Game.flags[flag].pos.y + 1).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
+              }
+
+              let lab2;
+              if (dir2 == LEFT) {
+                lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x - 1, Game.flags[flag].pos.y).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
+              } else if (dir2 == BOTTOM) {
+                lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x, Game.flags[flag].pos.y + 1).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
+              }
+              // console.log(atPos[0].store.getFreeCapacity(resource));
+              if (
+                atPos.length && atPos[0].store.getFreeCapacity(resource) > 0 &&
+                lab1.length && //lab1[0].store.getUsedCapacity(resource) > 0 &&
+                lab2.length //&& lab2[0].store.getUsedCapacity(resource) > 0
+              ) {
+                if (atPos[0].cooldown === 0) {
+                  const r = atPos[0].runReaction(lab1[0], lab2[0]);
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

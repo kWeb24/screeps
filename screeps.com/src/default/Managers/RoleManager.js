@@ -18,6 +18,7 @@ import Manufacturer from '../Creeps/Roles/Manufacturer.js';
 
 import Destroyer from '../Creeps/Roles/Military/Destroyer.js';
 import Thief from '../Creeps/Roles/Military/Thief.js';
+import Drainer from '../Creeps/Roles/Military/Drainer.js';
 
 const LOGGER = new Logger({
   enabled: false
@@ -88,6 +89,8 @@ export default class RoleManager {
 
     this.Thief = new Thief();
 
+    this.Drainer = new Drainer();
+
     /**
     * @member {Array<Role>} RoleManager#Roles
     **/
@@ -104,7 +107,8 @@ export default class RoleManager {
       this.Scout,
       this.Manufacturer,
       this.Destroyer,
-      this.Thief
+      this.Thief,
+      this.Drainer
     ];
   }
 

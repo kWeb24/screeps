@@ -109,11 +109,23 @@ export default class Miner extends Role {
 
     const t = CACHE.ROOMS[creep.room.name].getMinerals();
     if (t.length && t) {
-      if (creep.harvest(t[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(t[0]);
-        creep.status("moving");
+      const atMyPos = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
+      const containerAtMyPos = _.filter(atMyPos, structure => {
+        return (
+          structure.structureType == STRUCTURE_CONTAINER
+        )
+      });
+
+      if (
+        (containerAtMyPos.length && containerAtMyPos[0].store.getFreeCapacity() > 0) ||
+        !containerAtMyPos.length
+      ) {
+        if (creep.harvest(t[0]) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(t[0]);
+          creep.status("moving");
+        }
+        creep.target(t[0].id);
       }
-      creep.target(t[0].id);
     }
   }
 

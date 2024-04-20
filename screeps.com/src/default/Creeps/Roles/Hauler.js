@@ -15,7 +15,7 @@ export default class Hauler extends Role {
 		this.ROLE = "hauler";
     this.POPULATION = 2;
     this.GENOME = [CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 14;
+    this.MAX_GENOME_LENGTH = 20;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -102,10 +102,10 @@ export default class Hauler extends Role {
             const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
               return structure.structureType === STRUCTURE_LAB
             });
-            if (atPos.length && atPos[0].store.getFreeCapacity(resource) > 0) {
+            if (atPos.length && atPos[0].store.getFreeCapacity(resource) >= creep.store.getUsedCapacity(resource)) {
               if (creep.store.getUsedCapacity(resource) > 0) {
                 if (creep.transfer(atPos[0], resource) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(atPos[0]);
+                  creep.moveTo(atPos[0], { reusePath: 10 });
                   creep.status("moving");
                   return false;
                 }
@@ -160,7 +160,7 @@ export default class Hauler extends Role {
     if (targets.length > 0) {
       creep.target('none');
       if (creep.transferAny(targets[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(targets[0]);
+        creep.moveTo(targets[0], { reusePath: 10 });
         creep.status("moving");
       }
     }
@@ -177,6 +177,22 @@ export default class Hauler extends Role {
     //   creep.target(selectedSource.id);
     // }
     // return false;
+
+    // if (creep.room.name === 'W28N14') {
+    //   const res = creep.room.find(FIND_DROPPED_RESOURCES);
+    //   if (res.length) {
+    //     res.forEach((r) => {
+    //       if (creep.store.getFreeCapacity() > 0) {
+    //         if (creep.pickup(r) == ERR_NOT_IN_RANGE) {
+    //           creep.memory.target = undefined;
+    //           creep.moveTo(r, { reusePath: 10 });
+    //           creep.status("moving");
+    //         }
+    //       }
+    //     });
+    //     return false;
+    //   }
+    // }
 
     let selectedSource = false;
     if (creep.memory.target !== undefined && creep.memory.target !== 'none') {
@@ -220,23 +236,40 @@ export default class Hauler extends Role {
             const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
               return structure.structureType === STRUCTURE_LAB
             });
-            if (atPos.length && atPos[0].store.getFreeCapacity(resource) > 0) {
+            if (atPos.length && atPos[0].store.getUsedCapacity(resource) < 2000) {
               if (creep.room.storage.store.getUsedCapacity(resource) > 0) {
                 if (creep.withdraw(creep.room.storage, resource) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(creep.room.storage);
+                  creep.moveTo(creep.room.storage, { reusePath: 10 });
                   creep.status("moving");
                   return false;
                 }
               } else if (creep.room.terminal.store.getUsedCapacity(resource) > 0) {
                 if (creep.withdraw(creep.room.terminal, resource) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(creep.room.terminal);
+                  creep.moveTo(creep.room.terminal, { reusePath: 10 });
                   creep.status("moving");
                   return false;
                 }
               }
             }
+          } else if (action === 'R') {
+            const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
+              return structure.structureType === STRUCTURE_LAB
+            });
+            if (atPos.length && atPos[0].store.getUsedCapacity(resource) > 500) {
+              if (creep.withdraw(atPos[0], resource) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(atPos[0], { reusePath: 10 });
+                creep.status("moving");
+                return false;
+              }
+            }
           }
         }
+      }
+    }
+
+    if (creep.room.storage && creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+      if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > creep.store.getFreeCapacity()) {
+        selectedSource = creep.room.storage;
       }
     }
 
@@ -281,12 +314,12 @@ export default class Hauler extends Role {
     ) {
       if (selectedSource.structureType == STRUCTURE_STORAGE) {
         if (creep.withdraw(selectedSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(selectedSource);
+          creep.moveTo(selectedSource, { reusePath: 10 });
           creep.status("moving");
         }
       } else {
         if (creep.withdrawAny(selectedSource) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(selectedSource);
+          creep.moveTo(selectedSource, { reusePath: 10 });
           creep.status("moving");
         }
       }
