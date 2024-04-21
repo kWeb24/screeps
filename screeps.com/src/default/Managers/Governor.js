@@ -234,6 +234,42 @@ export default class Governor {
    * @private
    **/
   runStructures(room, orders) {
+    let masterLink = null;
+    const slaveLinks = [];
+
+    if (Game.rooms[room].storage) {
+      const links = Game.rooms[room].find(FIND_STRUCTURES, {
+        filter: structure => (
+          structure.structureType === STRUCTURE_LINK
+        )
+      });
+
+      if (links.length) {
+        links.forEach((link) => {
+          const storagePos = Game.rooms[room].storage.pos;
+          const distX = Math.abs(storagePos.x - link.pos.x);
+          const distY = Math.abs(storagePos.y - link.pos.y);
+          if (distX <= 2 && distY <= 2) {
+            masterLink = link;
+          } else {
+            slaveLinks.push(link);
+          }
+        });
+      }
+
+      if (masterLink && slaveLinks.length) {
+        slaveLinks.forEach((link) => {
+          if (
+            masterLink.store.getUsedCapacity(RESOURCE_ENERGY) < 200 && 
+            link.cooldown === 0 && 
+            link.store.getUsedCapacity(RESOURCE_ENERGY) > 700
+          ) {
+            link.transferEnergy(masterLink);
+          }
+        });
+      }
+    }
+
     this.Tower = new Tower();
 
     if (CACHE.ROOMS[room] !== undefined) {

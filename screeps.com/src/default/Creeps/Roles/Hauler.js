@@ -224,6 +224,31 @@ export default class Hauler extends Role {
       }
     }
 
+    let masterLink = null;
+
+    if (creep.room.storage) {
+      const links = creep.room.find(FIND_STRUCTURES, {
+        filter: structure => (
+          structure.structureType === STRUCTURE_LINK
+        )
+      });
+
+      if (links.length) {
+        links.forEach((link) => {
+          const storagePos = creep.room.storage.pos;
+          const distX = Math.abs(storagePos.x - link.pos.x);
+          const distY = Math.abs(storagePos.y - link.pos.y);
+          if (distX <= 2 && distY <= 2) {
+            masterLink = link;
+          }
+        });
+      }
+
+      if (masterLink && masterLink.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
+        selectedSource = masterLink;
+      }
+    }
+
     for (const flag in Game.flags) {
       if (flag.charAt(0) === '$') {
         const parts = flag.split(';');

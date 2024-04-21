@@ -73,7 +73,7 @@ export default class Thief extends Role {
   shouldSpawn(room) {
     // return false;
     if (room.name === 'W28N14' || room.name === 'W28N13') {
-
+      // return true;
       const count = _.filter(
         Game.creeps,
         creep => creep.memory.role == 'thief' && creep.memory.room == room.name

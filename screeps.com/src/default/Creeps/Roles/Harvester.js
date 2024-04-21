@@ -55,6 +55,20 @@ export default class Harvester extends Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   transfer(creep) {
+    const areaLink = creep.room.lookForAtArea(LOOK_STRUCTURES, creep.pos.y - 1, creep.pos.x - 1, creep.pos.y + 1, creep.pos.x + 1, true);
+    const links = [];
+    areaLink.forEach((structure) => {
+      if (structure.structure.structureType == STRUCTURE_LINK) {
+        links.push(structure);
+      }
+    });
+    if (links.length) {
+      if (links[0].structure.store.getFreeCapacity(RESOURCE_ENERGY) >= 0) {
+        creep.transfer(links[0].structure, RESOURCE_ENERGY);
+        return false;
+      }
+    }
+
     const atMyPos = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
     const containerAtMyPos = _.filter(atMyPos, structure => {
       return (
