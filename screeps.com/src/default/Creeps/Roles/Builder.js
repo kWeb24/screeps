@@ -116,16 +116,18 @@ export default class Builder extends Role {
         creep.target(targets.id);
       }
     } else {
-      const wallToBuild = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-        filter: structure =>
-          structure.structureType == STRUCTURE_WALL &&
-          (
-            structure.hits < structure.hitsMax &&
-            creep.room.storage !== undefined &&
-            creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 50000
-          ) || structure.hits < 100000
-      });
+      const wallToBuild = null;
+      // const wallToBuild = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+      //   filter: structure =>
+      //     structure.structureType == STRUCTURE_WALL &&
+      //     (
+      //       structure.hits < structure.hitsMax &&
+      //       creep.room.storage !== undefined &&
+      //       creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 50000
+      //     ) || (structure.hits < 100000 && structure.hits < structure.hitsMax)
+      // });
 
+      
       if (wallToBuild) {
         if (creep.repair(wallToBuild) == ERR_NOT_IN_RANGE) {
           creep.moveTo(wallToBuild);
@@ -137,8 +139,12 @@ export default class Builder extends Role {
         //   spawn.pos.x - 4,
         //   spawn.pos.y - 5
         // );
-        creep.moveTo(CACHE.ROOMS[creep.room.name].ROOM.controller.pos);
-        creep.status("bored");
+        if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(creep.room.controller, { range: 3 });
+          creep.status("moving");
+        }
+        // creep.moveTo(CACHE.ROOMS[creep.room.name].ROOM.controller.pos);
+        // creep.status("bored");
         // creep.target("BuildersGatherPoint");
       }
     }
