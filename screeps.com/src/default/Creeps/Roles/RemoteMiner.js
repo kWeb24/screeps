@@ -15,8 +15,8 @@ export default class RemoteMiner extends Role {
 
     this.ROLE = "remoteMiner";
     this.POPULATION = 1;
-    this.GENOME = [WORK, CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 30;
+    this.GENOME = [WORK, WORK, CARRY, MOVE, MOVE];
+    this.MAX_GENOME_LENGTH = 50;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = false;
@@ -31,6 +31,25 @@ export default class RemoteMiner extends Role {
 	 * @see Role
    **/
 	run(creep) {
+    const flag = Game.flags['RemoteMine1'];
+    if (!flag || creep.ticksToLive < 450) {
+      if ((!creep.room.controller || !creep.room.controller.my) || !creep.room.storage) {
+        creep.moveTo(Game.rooms[creep.memory.room].storage);
+      } else {
+        if (creep.store.getUsedCapacity() > 0) {
+          if (creep.transferAny(creep.room.storage) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(creep.room.storage);
+            creep.status("moving");
+          }
+        } else {
+          const spawn = creep.room.find(FIND_MY_SPAWNS);
+          if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+             creep.moveTo(spawn[0], { reusePath: 10 });
+          }
+        }
+      }
+      return false;
+   }
     if (
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
@@ -61,13 +80,13 @@ export default class RemoteMiner extends Role {
 	}
 
 	shouldSpawn(room) {
-    return false; // cannot mine hostile extractors :(
+    // return false;
     const flag = Game.flags['RemoteMine1'];
     if (!flag || room.name !== 'W28N14') return false;
 
     const minersCount = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'remoteMiner' && creep.memory.room == room.name
+      creep => creep.memory.role == 'remoteMiner' && creep.memory.room == room.name && creep.ticksToLive > 450
     ).length;
 
     return minersCount < this.POPULATION;
@@ -88,7 +107,7 @@ export default class RemoteMiner extends Role {
       creep.moveTo(flag);
       creep.status("moving");
     } else {
-      const extractor = flag.room.find(FIND_MINERALS);
+      const extractor = flag.room.find(FIND_DEPOSITS);
       if (extractor.length) {
         if (creep.harvest(extractor[0]) == ERR_NOT_IN_RANGE) {
           creep.moveTo(extractor[0]);
@@ -100,7 +119,7 @@ export default class RemoteMiner extends Role {
   }
 
   transferMineral(creep) {
-    if (creep.room.name != creep.memory.room.name) {
+    if ((!creep.room.controller || !creep.room.controller.my) || !creep.room.storage) {
       creep.moveTo(Game.rooms[creep.memory.room].storage);
     } else {
       if (creep.transferAny(creep.room.storage) == ERR_NOT_IN_RANGE) {
