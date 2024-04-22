@@ -22,6 +22,7 @@ import Thief from '../Creeps/Roles/Military/Thief.js';
 import Drainer from '../Creeps/Roles/Military/Drainer.js';
 import Janitor from '../Creeps/Roles/Military/Janitor.js';
 import Degrader from '../Creeps/Roles/Military/Degrader.js';
+import Transporter from '../Creeps/Roles/Transporter.js';
 
 const LOGGER = new Logger({
   enabled: false
@@ -96,6 +97,7 @@ export default class RoleManager {
     this.RemoteMiner = new RemoteMiner();
     this.Janitor = new Janitor();
     this.Degrader = new Degrader();
+    this.Transporter = new Transporter();
 
     /**
     * @member {Array<Role>} RoleManager#Roles
@@ -117,7 +119,8 @@ export default class RoleManager {
       this.Drainer,
       this.RemoteMiner,
       this.Janitor,
-      this.Degrader
+      this.Degrader,
+      this.Transporter
     ];
   }
 
