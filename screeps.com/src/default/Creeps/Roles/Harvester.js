@@ -29,6 +29,30 @@ export default class Harvester extends Role {
    * @see Role
    **/
   run(creep) {
+    const areaLink = creep.room.lookForAtArea(LOOK_STRUCTURES, creep.pos.y - 1, creep.pos.x - 1, creep.pos.y + 1, creep.pos.x + 1, true);
+    const links = [];
+    areaLink.forEach((structure) => {
+      if (structure.structure.structureType == STRUCTURE_LINK) {
+        links.push(structure);
+      }
+    });
+
+    const atMyPos = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
+    const containerAtMyPos = _.filter(atMyPos, structure => {
+      return (
+        structure.structureType == STRUCTURE_CONTAINER
+      )
+    });
+
+    if (links.length && containerAtMyPos.length) {
+      if (
+        links[0].structure.store.getFreeCapacity(RESOURCE_ENERGY) >= 0 &&
+        containerAtMyPos[0].store.getUsedCapacity(RESOURCE_ENERGY) >= 0
+      ) {
+        creep.withdraw(containerAtMyPos[0], RESOURCE_ENERGY);
+      }
+    }
+
     if (
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
@@ -42,7 +66,7 @@ export default class Harvester extends Role {
       (creep.status() == "transfering" && creep.store.getUsedCapacity() > 0) ||
       (creep.status() == "moving" && creep.store.getUsedCapacity() > 0)
     ) {
-      this.transfer(creep);
+      this.transfer(creep, links, containerAtMyPos);
     }
 
     // this.dropRoad(creep);
@@ -54,14 +78,7 @@ export default class Harvester extends Role {
    * @private
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
-  transfer(creep) {
-    const areaLink = creep.room.lookForAtArea(LOOK_STRUCTURES, creep.pos.y - 1, creep.pos.x - 1, creep.pos.y + 1, creep.pos.x + 1, true);
-    const links = [];
-    areaLink.forEach((structure) => {
-      if (structure.structure.structureType == STRUCTURE_LINK) {
-        links.push(structure);
-      }
-    });
+  transfer(creep, links, containerAtMyPos) {
     if (links.length) {
       if (links[0].structure.store.getFreeCapacity(RESOURCE_ENERGY) >= 0) {
         creep.transfer(links[0].structure, RESOURCE_ENERGY);
@@ -69,12 +86,6 @@ export default class Harvester extends Role {
       }
     }
 
-    const atMyPos = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
-    const containerAtMyPos = _.filter(atMyPos, structure => {
-      return (
-        structure.structureType == STRUCTURE_CONTAINER
-      )
-    });
     if (containerAtMyPos.length) {
       if (containerAtMyPos[0].store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
         creep.drop(RESOURCE_ENERGY);

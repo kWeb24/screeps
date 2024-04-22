@@ -31,8 +31,9 @@ export default class RemoteMiner extends Role {
 	 * @see Role
    **/
 	run(creep) {
+    // Todo make it static and add hauler
     const flag = Game.flags['RemoteMine1'];
-    if (!flag || creep.ticksToLive < 450) {
+    if (!flag || creep.ticksToLive < 300) {
       if ((!creep.room.controller || !creep.room.controller.my) || !creep.room.storage) {
         creep.moveTo(Game.rooms[creep.memory.room].storage);
       } else {
