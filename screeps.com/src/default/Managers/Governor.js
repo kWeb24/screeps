@@ -56,6 +56,7 @@ export default class Governor {
   }
 
   runOwnedRoom(room) {
+    // const t = Game.cpu.getUsed();
     if (room.controller === undefined || !room.controller.my) return false;
 
     const structures = room.find(FIND_STRUCTURES, {
@@ -68,6 +69,7 @@ export default class Governor {
     });
 
     this.repairQueue = this.getRepairQueue(room, structures);
+    // console.log(Game.cpu.getUsed() - t)
   }
 
   getRepairQueue(room, structures) {

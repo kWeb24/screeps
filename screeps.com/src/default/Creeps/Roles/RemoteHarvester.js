@@ -155,6 +155,7 @@ export default class RemoteHarvester extends Role {
   }
 
   shouldSpawn(room) {
+    return false;
     let targetRoom = this.getRoomToHarvest(room);
 
     if (targetRoom) {

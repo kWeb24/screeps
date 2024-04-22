@@ -72,6 +72,15 @@ export default class Harvester extends Role {
     // this.dropRoad(creep);
   }
 
+  harvest(creep) {
+    const t = Game.getObjectById(creep.memory.primarySource);
+    if (creep.harvest(t) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(t);
+      creep.status("moving");
+    }
+    creep.target(t.id);
+  }
+
   /**
    * @memberof Harvester
    * @desc Transfering energy to given container

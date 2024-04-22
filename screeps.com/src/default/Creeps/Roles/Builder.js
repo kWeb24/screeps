@@ -54,64 +54,65 @@ export default class Builder extends Role {
    * @param {Creep} fromCreep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   build(creep) {
-    let targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
-      filter: obj => {
-        return (
-          obj.structureType == STRUCTURE_EXTENSION ||
-          obj.structureType == STRUCTURE_TOWER ||
-          obj.structureType == STRUCTURE_CONTAINER
-        );
-      }
-    });
+    let targets;
+    // let targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+    //   filter: obj => {
+    //     return (
+    //       obj.structureType == STRUCTURE_EXTENSION ||
+    //       obj.structureType == STRUCTURE_TOWER ||
+    //       obj.structureType == STRUCTURE_CONTAINER
+    //     );
+    //   }
+    // });
 
-    let sites = null;
-    for (const room in Game.rooms) {
-      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
-        const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
-          filter: obj => {
-            return (
-              obj.structureType == STRUCTURE_SPAWN
-            );
-          }
-        });
-        if (found) sites = found;
-      }
-    }
+    // let sites = null;
+    // for (const room in Game.rooms) {
+    //   if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+    //     const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+    //       filter: obj => {
+    //         return (
+    //           obj.structureType == STRUCTURE_SPAWN
+    //         );
+    //       }
+    //     });
+    //     if (found) sites = found;
+    //   }
+    // }
 
-    if (sites) {
-      targets = sites;
-    }
+    // if (sites) {
+    //   targets = sites;
+    // }
 
-    if (!targets) {
-      targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
-        filter: obj => {
-          return (
-            obj.structureType == STRUCTURE_EXTRACTOR
-          );
-        }
-      });
-    }
+    // if (!targets) {
+    //   targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+    //     filter: obj => {
+    //       return (
+    //         obj.structureType == STRUCTURE_EXTRACTOR
+    //       );
+    //     }
+    //   });
+    // }
 
     if (!targets) {
       targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
     }
 
-    if (!targets) {
-      for (const room in Game.rooms) {
-        if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
-          const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-          if (found) sites = found;
-        }
-      }
+    // if (!targets) {
+    //   for (const room in Game.rooms) {
+    //     if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+    //       const found = CACHE.ROOMS[room].ROOM.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+    //       if (found) sites = found;
+    //     }
+    //   }
 
-      targets = sites;
-    }
+    //   targets = sites;
+    // }
 
     creep.status("building");
 
     if (targets) {
       if (creep.build(targets) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(targets);
+        creep.moveTo(targets, { reusePath: 50 });
         creep.status("moving");
         creep.target(targets.id);
       }
@@ -130,7 +131,7 @@ export default class Builder extends Role {
       
       if (wallToBuild) {
         if (creep.repair(wallToBuild) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(wallToBuild);
+          creep.moveTo(wallToBuild, { reusePath: 50 });
           creep.status("moving");
         }
       } else {
@@ -140,7 +141,7 @@ export default class Builder extends Role {
         //   spawn.pos.y - 5
         // );
         if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(creep.room.controller, { range: 3 });
+          creep.moveTo(creep.room.controller, { range: 3, reusePath: 50 });
           creep.status("moving");
         }
         // creep.moveTo(CACHE.ROOMS[creep.room.name].ROOM.controller.pos);
@@ -176,16 +177,17 @@ export default class Builder extends Role {
 
     if (buildersCount >= this.POPULATION) return false;
 
-    for (const room in Game.rooms) {
-      if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
-        sitesCount += CACHE.ROOMS[room].getConstructionSites().length;
-      }
-    }
+    // todo fix too many builders spawning
+    // for (const room in Game.rooms) {
+    //   if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].ROOM.controller !== undefined && CACHE.ROOMS[room].ROOM.controller.my) {
+    //     sitesCount += CACHE.ROOMS[room].getConstructionSites().length;
+    //   }
+    // }
 
     // if (sitesCount > 5) {
     //   return buildersCount < 3 && sitesCount;
     // }
 
-    return buildersCount < this.POPULATION && sitesCount;
+    return buildersCount < this.POPULATION;// && sitesCount;
   }
 }

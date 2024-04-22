@@ -81,7 +81,6 @@ export default class RemoteMiner extends Role {
 	}
 
 	shouldSpawn(room) {
-    // return false;
     const flag = Game.flags['RemoteMine1'];
     if (!flag || room.name !== 'W28N14') return false;
 

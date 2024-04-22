@@ -13,7 +13,7 @@ export default class Transporter extends Role {
   constructor() {
     super();
 		this.ROLE = "transporter";
-    this.POPULATION = 4;
+    this.POPULATION = 2;
     this.GENOME = [CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 40;
     this.CAPABLE_OF = [];
@@ -30,9 +30,18 @@ export default class Transporter extends Role {
 	 * @see Role
    **/
 	 run(creep) {
+      if (creep.ticksToLive < 150) {
+        const spawns = creep.room.find(FIND_MY_SPAWNS);
+        if (spawns) {
+          if (spawns[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+            creep.moveTo(spawns[0], { reusePath: 100 });
+            return false;
+          }
+        }
+      }
       if (creep.store.getFreeCapacity() > 0) {
         if (creep.room.name != creep.memory.room) {
-          creep.moveTo(Game.rooms[creep.memory.room].storage, { reusePath: 50 });
+          creep.moveTo(Game.rooms[creep.memory.room].storage, { reusePath: 100 });
         } else {
           if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             creep.moveTo(creep.room.storage, { reusePath: 10 });
@@ -40,7 +49,7 @@ export default class Transporter extends Role {
         }
       } else {
         if (creep.room.name != 'W29N13') {
-          creep.moveTo(new RoomPosition(35, 10, 'W29N13', { reusePath: 50 }));
+          creep.moveTo(new RoomPosition(35, 10, 'W29N13', { reusePath: 100 }));
         } else {
           let target = false;
           if (creep.room.storage) {
@@ -52,8 +61,15 @@ export default class Transporter extends Role {
           if (containers.length && !target) {
             target = containers[0];
           }
-          if (creep.transferAny(target) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(target, { reusePath: 10 });
+          if (target) {
+            if (creep.transferAny(target) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(target, { reusePath: 50 });
+            }
+          } else {
+            const spawns = creep.room.find(FIND_MY_SPAWNS);
+            if (spawns) {
+              creep.moveTo(spawns[0], { reusePath: 50 })
+            }
           }
         }
       }
@@ -73,6 +89,7 @@ export default class Transporter extends Role {
 	}
 
 	shouldSpawn(room) {
+    return false;
     const hasStorage = room.storage !== undefined;
 
     const haulersCount = _.filter(
