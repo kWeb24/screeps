@@ -79,6 +79,7 @@ export default class Harvester extends Role {
       creep.status("moving");
     }
     creep.target(t.id);
+    creep.status("harvesting");
   }
 
   /**

@@ -166,7 +166,7 @@ export default class Builder extends Role {
   }
 
   shouldSpawn(room) {
-    let sitesCount = 0;
+    // let sitesCount = 0;
 
     // if (room.name === 'W28N14') return true;
 
@@ -183,11 +183,12 @@ export default class Builder extends Role {
     //     sitesCount += CACHE.ROOMS[room].getConstructionSites().length;
     //   }
     // }
+    const sitesCount = CACHE.ROOMS[room.name].getConstructionSites().length
 
     // if (sitesCount > 5) {
     //   return buildersCount < 3 && sitesCount;
     // }
 
-    return buildersCount < this.POPULATION;// && sitesCount;
+    return buildersCount < this.POPULATION && sitesCount;
   }
 }

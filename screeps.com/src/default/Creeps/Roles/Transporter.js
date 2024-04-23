@@ -32,7 +32,7 @@ export default class Transporter extends Role {
 	 run(creep) {
       if (creep.ticksToLive < 150) {
         const spawns = creep.room.find(FIND_MY_SPAWNS);
-        if (spawns) {
+        if (spawns.length) {
           if (spawns[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
             creep.moveTo(spawns[0], { reusePath: 100 });
             return false;
@@ -48,19 +48,19 @@ export default class Transporter extends Role {
           }
         }
       } else {
-        if (creep.room.name != 'W29N13') {
-          creep.moveTo(new RoomPosition(35, 10, 'W29N13', { reusePath: 100 }));
+        if (creep.room.name != 'W27N13') {
+          creep.moveTo(new RoomPosition(35, 10, 'W27N13', { reusePath: 100 }));
         } else {
           let target = false;
           if (creep.room.storage) {
             target = creep.room.storage;
           }
-          const containers = creep.room.find(FIND_STRUCTURES, {
-            filter: structure => structure.structureType === STRUCTURE_CONTAINER && structure.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity()
-          });
-          if (containers.length && !target) {
-            target = containers[0];
-          }
+          // const containers = creep.room.find(FIND_STRUCTURES, {
+          //   filter: structure => structure.structureType === STRUCTURE_CONTAINER && structure.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity()
+          // });
+          // if (containers.length && !target) {
+          //   target = containers[0];
+          // }
           if (target) {
             if (creep.transferAny(target) == ERR_NOT_IN_RANGE) {
               creep.moveTo(target, { reusePath: 50 });
@@ -97,6 +97,6 @@ export default class Transporter extends Role {
       creep => creep.memory.role == 'transporter' && creep.memory.room == room.name
     ).length;
 
-    return haulersCount < this.POPULATION && room.name === 'W29N14';
+    return haulersCount < this.POPULATION && room.name === 'W28N14';
   }
 }

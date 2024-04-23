@@ -46,15 +46,22 @@ export default class Reserver extends Role {
     }
 
     if (Game.flags[targetFlag].room !== undefined && Game.flags[targetFlag].room.name === creep.room.name) {
+      if (creep.room.controller.sign == undefined) {
+        if (creep.signController(creep.room.controller, '☢️ Code wasteland - Robots detected ☢️') == ERR_NOT_IN_RANGE) {
+          creep.moveTo(creep.room.controller, { range: 1 });
+          return false;
+        }
+      }
+
       if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(creep.room.controller);
+        creep.moveTo(creep.room.controller, { reusePath: 100 });
       }
     } else {
       if (targetFlag) {
         if (targetFlag.room !== undefined) {
-          creep.moveTo(Game.flags[targetFlag]);
+          creep.moveTo(Game.flags[targetFlag], { reusePath: 100 });
         } else {
-          creep.moveTo(Game.flags[targetFlag]);
+          creep.moveTo(Game.flags[targetFlag], { reusePath: 100 });
         }
       }
     }
@@ -63,7 +70,7 @@ export default class Reserver extends Role {
   shouldSpawn(room) {
     const count = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'reserver' && creep.memory.room == room.name && creep.ticksToLive > 200
+      creep => creep.memory.role == 'reserver' && creep.memory.room == room.name && creep.ticksToLive > 10
     ).length;
 
     let shouldSpawn = false;

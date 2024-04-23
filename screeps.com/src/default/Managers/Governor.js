@@ -96,8 +96,11 @@ export default class Governor {
     if (room.memory.queue === undefined) {
       room.memory.queue = {
         repair: [],
+        repairUpdate: null,
         haul: [],
+        haulUpdate: null,
         build: [],
+        buildUpdate: null,
       };
     }
 
@@ -163,8 +166,11 @@ export default class Governor {
         invaderCore: false,
         queue: {
           repair: [],
+          repairUpdate: null,
           haul: [],
+          haulUpdate: null,
           build: [],
+          buildUpdate: null,
         },
         population: {}
     };

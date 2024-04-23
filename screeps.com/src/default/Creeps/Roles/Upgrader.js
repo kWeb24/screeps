@@ -34,7 +34,7 @@ export default class Upgrader extends Role {
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
     ) {
-      this.harvest(creep);
+      this.harvestEnergy(creep);
     }
 
     if (
@@ -48,6 +48,18 @@ export default class Upgrader extends Role {
     // this.dropRoad(creep);
   }
 
+  harvestEnergy(creep) {
+    if (creep.room.storage && creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > creep.store.getFreeCapacity()) {
+      if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.storage, { reusePath: 20 });
+        creep.status("moving");
+      }
+      creep.target(creep.room.storage.id);
+    } else {
+      this.harvest(creep);
+    }
+  }
+
   /**
    * @memberof Upgrader
    * @desc Upgrade {@link https://docs.screeps.com/api/#Structure|Screeps Structure}
@@ -57,6 +69,14 @@ export default class Upgrader extends Role {
   upgrade(creep) {
     creep.status("upgrading");
     creep.target(creep.room.controller.name);
+
+    if (creep.room.controller.sign == undefined) {
+      if (creep.signController(creep.room.controller, '☢️ Code wasteland - Robots detected ☢️') == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.controller, { range: 1 });
+        creep.status("moving");
+        return false;
+      }
+    }
 
     if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
       creep.moveTo(creep.room.controller, { range: 3 });
@@ -86,14 +106,18 @@ export default class Upgrader extends Role {
     const storage = room.storage;
     let storageEnergy = 0;
     let limit = 1;
-    // if (storage !== undefined) {
-    //   storageEnergy = storage.store.getUsedCapacity(RESOURCE_ENERGY);
-    //   if (storageEnergy > 15000) {
-    //     limit = 3;
-    //   } else if (storageEnergy > 5000) {
-    //     limit = 2;
-    //   }
-    // }
+    if (storage !== undefined) {
+      storageEnergy = storage.store.getUsedCapacity(RESOURCE_ENERGY);
+      if (storageEnergy > 15000) {
+        limit = 2;
+      } else if (storageEnergy > 5000) {
+        limit = 2;
+      }
+
+      if (room.name == 'W29N14' && storageEnergy > 10000) {
+        limit = 4;
+      }
+    }
 
     const toBuild = room.controller.level < 8 ? limit : 1;
 

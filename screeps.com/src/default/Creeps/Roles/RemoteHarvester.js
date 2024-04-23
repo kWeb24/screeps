@@ -13,7 +13,7 @@ export default class RemoteHarvester extends Role {
     super();
 
     this.ROLE = "remoteHarvester";
-    this.POPULATION = 2;
+    this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = [];
@@ -155,7 +155,7 @@ export default class RemoteHarvester extends Role {
   }
 
   shouldSpawn(room) {
-    return false;
+    // return false;
     let targetRoom = this.getRoomToHarvest(room);
 
     if (targetRoom) {
