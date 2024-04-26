@@ -33,6 +33,14 @@ export default class Emperor {
     //   }
     // }
 
+    // const t = Game.cpu.getUsed()
+    // const s = [];
+    // for (const struct in Game.structures) {
+    //   s.push(struct);
+    // }
+    // console.log(Game.cpu.getUsed() - t);
+    // console.log(s.length);
+
     const orders = [];
     // const orders = Game.market.getAllOrders({type: ORDER_BUY}); //pricy
     // const orders = Game.market.getAllOrders({type: ORDER_SELL, resourceType: RESOURCE_ENERGY});

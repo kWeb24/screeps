@@ -68,7 +68,7 @@ export default class Hauler extends Role {
       Game.creeps,
       creep => creep.memory.role == 'hauler' && creep.memory.room == room.name
     ).length;
-
+    
     return haulersCount < this.POPULATION && room.controller.level > 2;
   }
 
@@ -90,39 +90,51 @@ export default class Hauler extends Role {
       });
     }
 
-    for (const flag in Game.flags) {
-      if (flag.charAt(0) === '$') {
-        const parts = flag.split(';');
-        const roomName = parts[1];
-        const action = parts[2];
-        const resource = parts[3];
-
-        if (roomName === creep.room.name) {
-          if (action === 'D') {
-            const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
-              return structure.structureType === STRUCTURE_LAB
-            });
-            if (atPos.length && atPos[0].store.getFreeCapacity(resource) >= creep.store.getUsedCapacity(resource)) {
-              if (creep.store.getUsedCapacity(resource) > 0) {
-                if (creep.transfer(atPos[0], resource) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(atPos[0], { reusePath: 10 });
-                  creep.status("moving");
-                  return false;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
     const spawnRelated = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
       filter: obj => {
         return (obj.structureType == STRUCTURE_EXTENSION || obj.structureType == STRUCTURE_SPAWN) &&
                 obj.store.getFreeCapacity(RESOURCE_ENERGY) > 0
       }
     });
-    
+
+    if (!spawnRelated) {
+      for (const flag in Game.flags) {
+        if (flag.charAt(0) === '$') {
+          const parts = flag.split(';');
+          const roomName = parts[1];
+          const action = parts[2];
+          const resource = parts[3];
+
+          if (roomName === creep.room.name) {
+            if (action === 'D') {
+              const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
+                return structure.structureType === STRUCTURE_LAB
+              });
+              if (atPos.length && atPos[0].store.getFreeCapacity(resource) >= creep.store.getUsedCapacity(resource)) {
+                if (creep.store.getUsedCapacity(resource) > 0) {
+                  if (creep.transfer(atPos[0], resource) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(atPos[0], { reusePath: 10 });
+                    creep.status("moving");
+                    return false;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      if (creep.room.name === 'W28N13' && creep.store.getUsedCapacity(RESOURCE_BATTERY) > 0) {
+        const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
+        if (factory) {
+          if (creep.transfer(factory, RESOURCE_BATTERY) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(factory, { reusePath: 10 });
+            creep.status("moving");
+          }
+          return false;
+        }
+      }
+    }
     const storageRelated = _.filter(sinks, sink => {
       return (
         (sink.structureType == STRUCTURE_STORAGE) &&
@@ -139,10 +151,10 @@ export default class Hauler extends Role {
       
       let targets = [];
       
-    if (spawnRelated && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
-      targets.push(spawnRelated);
-    } else if (towers.length && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
+    if (towers.length && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
       targets = towers;
+    } else if (spawnRelated && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
+      targets.push(spawnRelated);
     } else if (
       terminal !== undefined && 
       (
@@ -178,7 +190,7 @@ export default class Hauler extends Role {
     // }
     // return false;
 
-    // if (creep.room.name === 'W28N14') {
+    // if (creep.room.name === 'W29N14') {
     //   const res = creep.room.find(FIND_DROPPED_RESOURCES);
     //   if (res.length) {
     //     res.forEach((r) => {
@@ -224,6 +236,13 @@ export default class Hauler extends Role {
       }
     }
 
+    if (!selectedSource && creep.room.name === 'W28N13') {
+      const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
+      if (factory && factory.store.getUsedCapacity(RESOURCE_ENERGY) > 1000) {
+        selectedSource = factory;
+      }
+    }
+
     let masterLink = null;
 
     if (creep.room.storage) {
@@ -249,50 +268,67 @@ export default class Hauler extends Role {
       }
     }
 
-    for (const flag in Game.flags) {
-      if (flag.charAt(0) === '$') {
-        const parts = flag.split(';');
-        const roomName = parts[1];
-        const action = parts[2];
-        const resource = parts[3];
+    const spawnRelated = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+      filter: obj => {
+        return (obj.structureType == STRUCTURE_EXTENSION || obj.structureType == STRUCTURE_SPAWN) &&
+                obj.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+      }
+    });
 
-        if (roomName === creep.room.name) {
-          if (action === 'D') {
-            const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
-              return structure.structureType === STRUCTURE_LAB
-            });
-            if (atPos.length && atPos[0].store.getUsedCapacity(resource) < 2000) {
-              if (creep.room.storage.store.getUsedCapacity(resource) > 0) {
-                if (creep.withdraw(creep.room.storage, resource) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(creep.room.storage, { reusePath: 10 });
-                  creep.status("moving");
-                  return false;
-                }
-              } else if (creep.room.terminal.store.getUsedCapacity(resource) > 0) {
-                if (creep.withdraw(creep.room.terminal, resource) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(creep.room.terminal, { reusePath: 10 });
-                  creep.status("moving");
-                  return false;
+    if (!spawnRelated) {
+      for (const flag in Game.flags) {
+        if (flag.charAt(0) === '$') {
+          const parts = flag.split(';');
+          const roomName = parts[1];
+          const action = parts[2];
+          const resource = parts[3];
+
+          if (roomName === creep.room.name) {
+            if (action === 'D') {
+              const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
+                return structure.structureType === STRUCTURE_LAB
+              });
+              if (atPos.length && atPos[0].store.getUsedCapacity(resource) < 2000) {
+                if (creep.room.storage.store.getUsedCapacity(resource) > 0) {
+                  if (creep.withdraw(creep.room.storage, resource) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.storage, { reusePath: 10 });
+                    creep.status("moving");
+                    return false;
+                  }
+                } else if (creep.room.terminal.store.getUsedCapacity(resource) > 0) {
+                  if (creep.withdraw(creep.room.terminal, resource) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.terminal, { reusePath: 10 });
+                    creep.status("moving");
+                    return false;
+                  }
                 }
               }
-            }
-          } else if (action === 'R') {
-            const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
-              return structure.structureType === STRUCTURE_LAB
-            });
-            if (atPos.length && atPos[0].store.getUsedCapacity(resource) > 500) {
-              if (creep.withdraw(atPos[0], resource) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(atPos[0], { reusePath: 10 });
-                creep.status("moving");
-                return false;
+            } else if (action === 'R') {
+              const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
+                return structure.structureType === STRUCTURE_LAB
+              });
+              if (atPos.length && atPos[0].store.getUsedCapacity(resource) > 500) {
+                if (creep.withdraw(atPos[0], resource) == ERR_NOT_IN_RANGE) {
+                  creep.moveTo(atPos[0], { reusePath: 10 });
+                  creep.status("moving");
+                  return false;
+                }
               }
             }
           }
         }
       }
+
+      if (creep.room.name === 'W28N13' && creep.room.terminal.store.getUsedCapacity(RESOURCE_BATTERY) > 0) {
+        if (creep.withdraw(creep.room.terminal, RESOURCE_BATTERY) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(creep.room.terminal, { reusePath: 10 });
+          creep.status("moving");
+        }
+        return false;
+      }
     }
 
-    if (creep.room.storage && creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+    if (!selectedSource && creep.room.storage && creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
       if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > creep.store.getFreeCapacity()) {
         selectedSource = creep.room.storage;
       }

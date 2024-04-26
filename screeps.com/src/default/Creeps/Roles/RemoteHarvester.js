@@ -182,7 +182,8 @@ export default class RemoteHarvester extends Role {
           Memory.rooms[exit].controller !== false &&
           Memory.rooms[exit].sources.length &&
           !Memory.rooms[exit].controller.my &&
-          !Memory.rooms[exit].controller.otherPlayer
+          !Memory.rooms[exit].controller.otherPlayer &&
+          exit !== 'W29N12' && exit !== 'W28N11'
         ) {
           targetRoom = { name: exit, value: Memory.rooms[exit] }
         }

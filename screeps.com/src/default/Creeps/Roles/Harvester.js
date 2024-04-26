@@ -13,6 +13,8 @@ export default class Harvester extends Role {
 
     this.ROLE = "harvester";
     this.POPULATION = 4;
+    // this.GENOME = [WORK, CARRY, MOVE, WORK, WORK, WORK, WORK, WORK];
+    // this.MAX_GENOME_LENGTH = 9;
     this.GENOME = [WORK, CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = ["upgrader", "builder"];
@@ -110,6 +112,7 @@ export default class Harvester extends Role {
           containers.push(structure);
         }
       });
+
       if (containers.length) {
         creep.moveTo(containers[0].structure.pos);
       }

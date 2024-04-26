@@ -34,13 +34,22 @@ export default class Scout extends Role {
     if (creep.memory.room !== creep.room.name) {
       creep.moveTo(CACHE.ROOMS[creep.memory.room].ROOM.controller.pos);
     } else {
+      let hasExit = false;
       for (const [dir, exit] of Object.entries(creep.room.memory.exits)) {
         if (Memory.rooms[exit] === undefined || Memory.rooms[exit].scouted !== true) {
           const exitPos = creep.pos.findClosestByRange(creep.room.findExitTo(exit));
+          hasExit = true;
           creep.moveTo(exitPos)
           break;
         }
       };
+
+      if (!hasExit) {
+        const spawn = creep.room.find(FIND_MY_SPAWNS);
+        if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+            creep.moveTo(spawn[0], { reusePath: 10 });
+        }
+      }
     }
   }
 

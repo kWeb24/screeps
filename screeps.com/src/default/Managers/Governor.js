@@ -245,6 +245,18 @@ export default class Governor {
     let masterLink = null;
     const slaveLinks = [];
 
+    if (room === 'W28N13') {
+      const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
+      if (
+        factory &&
+        factory.cooldown == 0 && 
+        factory.store.getUsedCapacity(RESOURCE_BATTERY) >= 50 &&
+        factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
+      ) {
+        factory.produce(RESOURCE_ENERGY);
+      }
+    }
+
     if (Game.rooms[room].storage) {
       const links = Game.rooms[room].find(FIND_STRUCTURES, {
         filter: structure => (
@@ -268,9 +280,9 @@ export default class Governor {
       if (masterLink && slaveLinks.length) {
         slaveLinks.forEach((link) => {
           if (
-            masterLink.store.getUsedCapacity(RESOURCE_ENERGY) < 200 && 
+            masterLink.store.getUsedCapacity(RESOURCE_ENERGY) < 300 && 
             link.cooldown === 0 && 
-            link.store.getUsedCapacity(RESOURCE_ENERGY) > 700
+            link.store.getUsedCapacity(RESOURCE_ENERGY) >= 500
           ) {
             link.transferEnergy(masterLink);
           }

@@ -15,7 +15,7 @@ export default class Builder extends Role {
     this.ROLE = "builder";
     this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 6;
+    this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = ["upgrader"];
     this.ON_DEMAND = true;
     this.USE_ENERGY_DEPOSITS = true;
@@ -30,6 +30,8 @@ export default class Builder extends Role {
    * @see Role
    **/
   run(creep) {
+    // creep.moveTo(new RoomPosition(22, 18, 'W28N12'));
+    // return false;
     if (
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)

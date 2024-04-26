@@ -19,6 +19,10 @@ export default class Transporter extends Role {
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
+
+    this.FROM = 'W28N14';
+    this.DEST = 'W29N14';
+    this.RESOURCE = RESOURCE_ENERGY;
   }
 
   /**
@@ -43,13 +47,13 @@ export default class Transporter extends Role {
         if (creep.room.name != creep.memory.room) {
           creep.moveTo(Game.rooms[creep.memory.room].storage, { reusePath: 100 });
         } else {
-          if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          if (creep.withdraw(creep.room.storage, this.RESOURCE) == ERR_NOT_IN_RANGE) {
             creep.moveTo(creep.room.storage, { reusePath: 10 });
           }
         }
       } else {
-        if (creep.room.name != 'W27N13') {
-          creep.moveTo(new RoomPosition(35, 10, 'W27N13', { reusePath: 100 }));
+        if (creep.room.name != this.DEST) {
+          creep.moveTo(new RoomPosition(35, 10, this.DEST, { reusePath: 100 }));
         } else {
           let target = false;
           if (creep.room.storage) {
@@ -97,6 +101,6 @@ export default class Transporter extends Role {
       creep => creep.memory.role == 'transporter' && creep.memory.room == room.name
     ).length;
 
-    return haulersCount < this.POPULATION && room.name === 'W28N14';
+    return haulersCount < this.POPULATION && room.name === this.FROM;
   }
 }

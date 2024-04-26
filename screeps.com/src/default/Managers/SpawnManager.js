@@ -49,7 +49,7 @@ export default class SpawnManager {
         const GENOME = this.createAffordableGenome(roles[0], ROOM);
 
         if (GENOME) {
-          let result = SPAWN.spawnCreep(GENOME, NAME, {
+          let result = SPAWN.spawnCreep(GENOME.slice(0, 50), NAME, {
             memory: {
               role: roles[0].ROLE,
               primarySource: roles[0].getPrimarySource(ROOM),
@@ -86,6 +86,8 @@ export default class SpawnManager {
     let search = true;
     while (currentPrice < maxPrice && search) {
       role.GENOME.forEach(part => {
+        // should break when search false too otherwise it's still adding parts
+        // this logic should be rewritten in governors anyway
         let priceOffset = 0;
 
         if (part == "carry") {

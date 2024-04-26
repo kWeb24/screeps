@@ -46,12 +46,21 @@ export default class Janitor extends Role {
       } else if (creep.room.name != flag.room.name) {
          creep.moveTo(flag);
       } else {
+         // const structure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+         //    filter: structure => (
+         //       (
+         //          structure.structureType !== STRUCTURE_WALL &&
+         //          structure.structureType !== STRUCTURE_ROAD &&
+         //          structure.structureType !== STRUCTURE_CONTROLLER
+         //       )
+         //    )
+         // });
          const structure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: structure => (
                (
-                  structure.structureType !== STRUCTURE_WALL &&
-                  structure.structureType !== STRUCTURE_ROAD &&
-                  structure.structureType !== STRUCTURE_CONTROLLER
+                  structure.structureType === STRUCTURE_WALL &&
+                  structure.pos.x == 45,
+                  structure.pos.y == 26
                )
             )
          });
@@ -79,7 +88,7 @@ export default class Janitor extends Role {
    shouldSpawn(room) {
       return false;
       const flag = Game.flags['Janitor'];
-      if (!flag || room.name !== 'W28N14') return false;
+      if (!flag || room.name !== 'W28N12') return false;
 
       const count = _.filter(
          Game.creeps,

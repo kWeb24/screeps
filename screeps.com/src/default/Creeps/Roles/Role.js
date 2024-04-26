@@ -148,7 +148,7 @@ export default class Role {
     for (const SOURCE in SOURCES) {
       const CREEP_COUNT = _.filter(
         Game.creeps,
-        creep => creep.memory.primarySource == SOURCES[SOURCE].id && creep.memory.role === 'harvester'
+        creep => creep.memory.primarySource == SOURCES[SOURCE].id && creep.memory.role === 'harvester' && creep.ticksToLive > 100
       );
       creepsInSource.push(CREEP_COUNT.length);
     }
