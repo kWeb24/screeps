@@ -16,6 +16,7 @@ export default class RemoteMiner extends Role {
     this.ROLE = "remoteMiner";
     this.POPULATION = 1;
     this.GENOME = [WORK, WORK, CARRY, MOVE, MOVE];
+    // this.GENOME = [CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 50;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
@@ -83,13 +84,13 @@ export default class RemoteMiner extends Role {
 	shouldSpawn(room) {
     return false;
     const flag = Game.flags['RemoteMine1'];
-    if (!flag || room.name !== 'W28N14') return false;
-
+    if (!flag || room.name !== 'W28N13') return false;
+    
     const minersCount = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'remoteMiner' && creep.memory.room == room.name && creep.ticksToLive > 450
-    ).length;
-
+      creep => creep.memory.role == 'remoteMiner' && creep.memory.room == room.name //&& creep.ticksToLive > 450
+      ).length;
+      
     return minersCount < this.POPULATION;
   }
 
@@ -104,9 +105,9 @@ export default class RemoteMiner extends Role {
     } else if (creep.room.name != flag.room.name) {
       creep.moveTo(flag);
       creep.status("moving");
-    } else if (creep.pos.getRangeTo(flag.pos) > 5) {
-      creep.moveTo(flag);
-      creep.status("moving");
+    // } else if (creep.pos.getRangeTo(flag.pos) > 5) {
+    //   creep.moveTo(flag);
+    //   creep.status("moving");
     } else {
       const extractor = flag.room.find(FIND_DEPOSITS);
       if (extractor.length) {
@@ -115,6 +116,8 @@ export default class RemoteMiner extends Role {
           creep.status("moving");
         }
         creep.target(extractor[0].id);
+        // power drops
+        // this.harvestBodies(creep);
       }
     }
   }
@@ -127,6 +130,37 @@ export default class RemoteMiner extends Role {
         creep.moveTo(creep.room.storage);
         creep.status("moving");
       }
+    }
+  }
+
+  harvestBodies(creep) {
+    creep.status("harvesting");
+    const res = creep.room.find(FIND_DROPPED_RESOURCES);
+    if (res.length) {
+      res.forEach((r) => {
+        if (creep.store.getFreeCapacity() > 0) {
+          if (creep.pickup(r) == ERR_NOT_IN_RANGE) {
+            creep.memory.target = undefined;
+            creep.moveTo(r, { reusePath: 10 });
+            creep.status("moving");
+          }
+        }
+      });
+      return false;
+    }
+
+    const tombstones = creep.room.find(FIND_TOMBSTONES);
+    if (tombstones.length) {
+      tombstones.forEach((tomb) => {
+        if (tomb.store.getUsedCapacity() > 0 && creep.store.getFreeCapacity() > 0) {
+          if (creep.withdrawAny(tomb) == ERR_NOT_IN_RANGE) {
+            creep.memory.target = undefined;
+            creep.moveTo(tomb, { reusePath: 10 });
+            creep.status("moving");
+          }
+        }
+      });
+      return false;
     }
   }
 }

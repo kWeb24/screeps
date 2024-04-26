@@ -16,6 +16,7 @@ export default class Harvester extends Role {
     // this.GENOME = [WORK, CARRY, MOVE, WORK, WORK, WORK, WORK, WORK];
     // this.MAX_GENOME_LENGTH = 9;
     this.GENOME = [WORK, CARRY, MOVE];
+    this.OPTIMAL_GENOME = [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE];
     this.MAX_GENOME_LENGTH = 15;
     this.CAPABLE_OF = ["upgrader", "builder"];
     this.ON_DEMAND = false;
@@ -200,9 +201,14 @@ export default class Harvester extends Role {
 
     const harvestersCount = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'harvester' && creep.memory.room == room.name && creep.ticksToLive > 20
+      creep => creep.memory.role == 'harvester' && creep.memory.room == room.name && creep.ticksToLive > 80
     ).length;
 
     return harvestersCount < sourcesCount;
+  }
+
+  getOptimalGenome(room) {
+    if (!room.storage) return false;
+    return this.OPTIMAL_GENOME;
   }
 }

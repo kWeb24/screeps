@@ -182,7 +182,7 @@ export default class Role {
 
     if (
       primarySource.energy < creep.store.getCapacity(RESOURCE_ENERGY) ||
-      primarySource.ticksToRegeneration > 10
+      primarySource.ticksToRegeneration > 80
     ) {
       const bestSource = sources[0];
       sources.forEach((source) => {
@@ -320,5 +320,9 @@ export default class Role {
       }
     });
     return selected;
+  }
+
+  getOptimalGenome(room) {
+    return false;
   }
 }

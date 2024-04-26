@@ -22,7 +22,7 @@ export default class SpawnManager {
     for (const room in Game.rooms) {
       if (CACHE.ROOMS[room] !== undefined && CACHE.ROOMS[room].getMySpawns().length) {
         queue[room] = [];
-        ROLE_MANAGER.ROLES.forEach(role => {
+        ROLE_MANAGER.ROLES.forEach(role => {          
           if (role.shouldSpawn(Game.rooms[room])) {
             queue[room].push(role);
           }
@@ -46,8 +46,19 @@ export default class SpawnManager {
       const SPAWN = CACHE.ROOMS[room].getMySpawns()[0];
       if (SPAWN.spawning === null && roles.length) {
         const NAME = roles[0].ROLE + "_" + UTILS.guidGenerator();
-        const GENOME = this.createAffordableGenome(roles[0], ROOM);
+        let GENOME = roles[0].getOptimalGenome(ROOM);
 
+        if (GENOME !== false) {
+          const dryRun = SPAWN.spawnCreep(GENOME.slice(0, 50), NAME, { dryRun: true });
+          if (dryRun !== OK) {
+            GENOME = false;
+          }
+        }
+        
+        if (GENOME === false) {
+          GENOME = this.createAffordableGenome(roles[0], ROOM);
+        }
+        
         if (GENOME) {
           let result = SPAWN.spawnCreep(GENOME.slice(0, 50), NAME, {
             memory: {
