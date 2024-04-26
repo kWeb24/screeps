@@ -6,15 +6,15 @@ export default class Tower {
   run(tower, repairQueue, index) {
     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 
-    tower.room.visual.circle(
-      tower.pos,
-      {fill: 'transparent', radius: 5, opacity: 0.5, stroke: '#ff0000', lineStyle: 'dashed'}
-    );
+    // tower.room.visual.circle(
+    //   tower.pos,
+    //   {fill: 'transparent', radius: 5, opacity: 0.5, stroke: '#ff0000', lineStyle: 'dashed'}
+    // );
 
-    tower.room.visual.circle(
-      tower.pos,
-      {fill: 'transparent', radius: 20, opacity: 0.5, stroke: '#ff0000', lineStyle: 'dashed'}
-    );
+    // tower.room.visual.circle(
+    //   tower.pos,
+    //   {fill: 'transparent', radius: 20, opacity: 0.5, stroke: '#ff0000', lineStyle: 'dashed'}
+    // );
 
     if (closestHostile) {
       tower.attack(closestHostile);

@@ -289,7 +289,9 @@ export default class RoomCache {
    **/
   getStructures(force = false) {
     if (this.STRUCTURES === undefined || force) {
+      // const t = Game.cpu.getUsed();
       this.STRUCTURES = this.ROOM.find(FIND_STRUCTURES);
+      // console.log(`-- ${Game.cpu.getUsed() - t}`);
     }
 
     return this.STRUCTURES;

@@ -59,6 +59,16 @@ export default class Governor {
     // const t = Game.cpu.getUsed();
     if (room.controller === undefined || !room.controller.my) return false;
 
+    // if (room.memory.queue.repairUpdate === undefined) {
+    //   room.memory.queue.repairUpdate = Game.time;
+    // }
+
+    // if (Game.time - room.memory.queue.repairUpdate < 100) {
+    //   this.repairQueue = room.memory.queue.repair;
+    //   room.memory.queue.repairUpdate = Game.time;
+    //   return false;
+    // }
+
     const structures = room.find(FIND_STRUCTURES, {
       filter: structure => (
         structure.my || 
@@ -69,6 +79,9 @@ export default class Governor {
     });
 
     this.repairQueue = this.getRepairQueue(room, structures);
+    room.memory.queue.repair = this.repairQueue;
+    room.memory.queue.repairUpdate = Game.time;
+    // console.log('updating repair queue');
     // console.log(Game.cpu.getUsed() - t)
   }
 
@@ -258,11 +271,13 @@ export default class Governor {
     }
 
     if (Game.rooms[room].storage) {
+      // const t = Game.cpu.getUsed()
       const links = Game.rooms[room].find(FIND_STRUCTURES, {
         filter: structure => (
           structure.structureType === STRUCTURE_LINK
         )
       });
+      // console.log(Game.cpu.getUsed() - t);
 
       if (links.length) {
         links.forEach((link) => {
@@ -295,7 +310,9 @@ export default class Governor {
     if (CACHE.ROOMS[room] !== undefined) {
       CACHE.ROOMS[room].getStructures(true);
       if (CACHE.ROOMS[room].getMyTowers().length) {
+        // const t = Game.cpu.getUsed();
         const towers = CACHE.ROOMS[room].getMyTowers();
+        // console.log(Game.cpu.getUsed() - t);
         towers.forEach((tower, index) => {
           this.Tower.run(tower, this.repairQueue, index);
         });

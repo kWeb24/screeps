@@ -13,9 +13,9 @@ export default class Hauler extends Role {
   constructor() {
     super();
 		this.ROLE = "hauler";
-    this.POPULATION = 2;
+    this.POPULATION = 1;
     this.GENOME = [CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 20;
+    this.MAX_GENOME_LENGTH = 26;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -80,7 +80,7 @@ export default class Hauler extends Role {
    **/
   transfer(creep) {
     // TODO stop handling spawns if room have manager
-    const sinks = creep.getEnergySinks();
+    
     const terminal = creep.room.terminal;
     const labs = CACHE.ROOMS[creep.room.name].getMyLabs();
     let labsWithoutEnergy = [];
@@ -135,6 +135,9 @@ export default class Hauler extends Role {
         }
       }
     }
+
+    const sinks = creep.getEnergySinks();
+    
     const storageRelated = _.filter(sinks, sink => {
       return (
         (sink.structureType == STRUCTURE_STORAGE) &&

@@ -45,6 +45,16 @@ export default class Reserver extends Role {
       }
     }
 
+    if (!targetFlag) {
+      const spawn = creep.room.find(FIND_MY_SPAWNS);
+      if (spawn) {
+        if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+            creep.moveTo(spawn[0], { reusePath: 10 });
+        }
+      }
+      return false;
+    }
+
     if (Game.flags[targetFlag].room !== undefined && Game.flags[targetFlag].room.name === creep.room.name) {
       if (creep.room.controller.sign == undefined) {
         if (creep.signController(creep.room.controller, '☢️ Code wasteland - Robots detected ☢️') == ERR_NOT_IN_RANGE) {

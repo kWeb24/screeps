@@ -93,6 +93,22 @@ export default class Harvester extends Role {
    **/
   transfer(creep, links, containerAtMyPos) {
     if (links.length) {
+      const t = Game.cpu.getUsed();
+
+      if (!containerAtMyPos.length) {
+        const primarySource = Game.getObjectById(creep.memory.primarySource);
+        const area = creep.room.lookForAtArea(LOOK_STRUCTURES, primarySource.pos.y - 1, primarySource.pos.x - 1, primarySource.pos.y + 1, primarySource.pos.x + 1, true);
+        const containers = [];
+        area.forEach((structure) => {
+          if (structure.structure.structureType == STRUCTURE_CONTAINER) {
+            containers.push(structure);
+          }
+        });
+        if (containers.length) {
+          creep.moveTo(containers[0].structure.pos);
+        }
+      }
+
       if (links[0].structure.store.getFreeCapacity(RESOURCE_ENERGY) >= 0) {
         creep.transfer(links[0].structure, RESOURCE_ENERGY);
         return false;
@@ -103,19 +119,6 @@ export default class Harvester extends Role {
       if (containerAtMyPos[0].store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
         creep.drop(RESOURCE_ENERGY);
         return false;
-      }
-    } else {
-      const primarySource = Game.getObjectById(creep.memory.primarySource);
-      const area = creep.room.lookForAtArea(LOOK_STRUCTURES, primarySource.pos.y - 1, primarySource.pos.x - 1, primarySource.pos.y + 1, primarySource.pos.x + 1, true);
-      const containers = [];
-      area.forEach((structure) => {
-        if (structure.structure.structureType == STRUCTURE_CONTAINER) {
-          containers.push(structure);
-        }
-      });
-
-      if (containers.length) {
-        creep.moveTo(containers[0].structure.pos);
       }
     }
 

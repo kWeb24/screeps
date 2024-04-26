@@ -28,6 +28,23 @@ export default class Core {
       Game.cpu.generatePixel();
     }
     this.clearDeadCreeps();
+
+    // const structures = {};
+    // const t = Game.cpu.getUsed();
+    // for (const structureId in Game.structures) {
+    //   const structure = Game.structures[structureId];
+    //   if (structures[structure.room.name] == undefined) {
+    //     // structures[structure.room.name] = {};
+    //   }
+    //   if (structure.structureType == STRUCTURE_LINK) {
+    //   //   if (structures[structure.room.name].links === undefined) {
+    //   //     structures[structure.room.name].links = [];
+    //   //   }
+    //   //   structures[structure.room.name].links.push(structure);
+    //   }
+    // }
+    // console.log(Game.cpu.getUsed() - t);
+    // console.log(structures);
     
     this.runCreeps();
     this.spawnCreeps();

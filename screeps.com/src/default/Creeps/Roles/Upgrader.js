@@ -49,7 +49,7 @@ export default class Upgrader extends Role {
   }
 
   harvestEnergy(creep) {
-    if (creep.room.storage && creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > creep.store.getFreeCapacity()) {
+    if (creep.room.storage) {
       if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.storage, { reusePath: 20 });
         creep.status("moving");

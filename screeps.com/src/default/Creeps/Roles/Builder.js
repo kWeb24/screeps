@@ -36,7 +36,7 @@ export default class Builder extends Role {
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
     ) {
-      this.harvest(creep);
+      this.harvestEnergy(creep);
     }
 
     if (
@@ -95,9 +95,11 @@ export default class Builder extends Role {
     //   });
     // }
 
+    // const t = Game.cpu.getUsed();
     if (!targets) {
       targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
     }
+    // console.log(Game.cpu.getUsed() - t);
 
     // if (!targets) {
     //   for (const room in Game.rooms) {
@@ -150,6 +152,18 @@ export default class Builder extends Role {
         // creep.status("bored");
         // creep.target("BuildersGatherPoint");
       }
+    }
+  }
+
+  harvestEnergy(creep) {
+    if (creep.room.storage) {
+      if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.storage, { reusePath: 20 });
+        creep.status("moving");
+      }
+      creep.target(creep.room.storage.id);
+    } else {
+      this.harvest(creep);
     }
   }
 
