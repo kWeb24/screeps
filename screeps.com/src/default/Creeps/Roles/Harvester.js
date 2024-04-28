@@ -92,26 +92,29 @@ export default class Harvester extends Role {
    * @param {Creep} creep {@link https://docs.screeps.com/api/#Creep|Screeps Creep} object
    **/
   transfer(creep, links, containerAtMyPos) {
+    if (!containerAtMyPos.length) {
+      const primarySource = Game.getObjectById(creep.memory.primarySource);
+      const area = creep.room.lookForAtArea(LOOK_STRUCTURES, primarySource.pos.y - 2, primarySource.pos.x - 2, primarySource.pos.y + 2, primarySource.pos.x + 2, true);
+      const containers = [];
+      area.forEach((structure) => {
+        if (structure.structure.structureType == STRUCTURE_CONTAINER) {
+          containers.push(structure);
+        }
+      });
+      if (containers.length) {
+        creep.moveTo(containers[0].structure.pos);
+        return false;
+      }
+    }
+
     if (links.length) {
       const t = Game.cpu.getUsed();
-
-      if (!containerAtMyPos.length) {
-        const primarySource = Game.getObjectById(creep.memory.primarySource);
-        const area = creep.room.lookForAtArea(LOOK_STRUCTURES, primarySource.pos.y - 1, primarySource.pos.x - 1, primarySource.pos.y + 1, primarySource.pos.x + 1, true);
-        const containers = [];
-        area.forEach((structure) => {
-          if (structure.structure.structureType == STRUCTURE_CONTAINER) {
-            containers.push(structure);
-          }
-        });
-        if (containers.length) {
-          creep.moveTo(containers[0].structure.pos);
-        }
-      }
-
+      
       if (links[0].structure.store.getFreeCapacity(RESOURCE_ENERGY) >= 0) {
-        creep.transfer(links[0].structure, RESOURCE_ENERGY);
-        return false;
+        const r = creep.transfer(links[0].structure, RESOURCE_ENERGY);
+        if (r !== ERR_FULL) {
+          return false;
+        }
       }
     }
 

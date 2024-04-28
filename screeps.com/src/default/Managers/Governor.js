@@ -268,6 +268,25 @@ export default class Governor {
       ) {
         factory.produce(RESOURCE_ENERGY);
       }
+
+      // if (
+      //   factory &&
+      //   factory.cooldown == 0 && 
+      //   factory.store.getUsedCapacity(RESOURCE_UTRIUM) >= 500 &&
+      //   factory.store.getFreeCapacity(RESOURCE_ENERGY) > 200
+      // ) {
+      //   factory.produce(RESOURCE_UTRIUM_BAR);
+      // }
+
+      if (
+        factory &&
+        factory.cooldown == 0 && 
+        factory.store.getUsedCapacity(RESOURCE_UTRIUM_BAR) >= 20 &&
+        factory.store.getUsedCapacity(RESOURCE_SILICON) >= 100 &&
+        factory.store.getFreeCapacity(RESOURCE_ENERGY) >= 40
+      ) {
+        factory.produce(RESOURCE_WIRE);
+      }
     }
 
     if (Game.rooms[room].storage) {

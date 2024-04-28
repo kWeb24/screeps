@@ -93,6 +93,20 @@ Object.assign(Creep.prototype, {
 });
 
 Object.assign(Creep.prototype, {
+  withdrawAnyExcept(target, except = []) {
+    const keys = Object.keys(target.store);
+    let toWidthdraw = undefined;
+    for (const key in keys) {
+      if (!except.includes(keys[key])) {
+        toWidthdraw = keys[key];
+        break;
+      }
+    }
+    return this.withdraw(target, toWidthdraw);
+  }
+});
+
+Object.assign(Creep.prototype, {
   transferAny(target) {
     return this.transfer(target, _.findKey(this.store));
   }

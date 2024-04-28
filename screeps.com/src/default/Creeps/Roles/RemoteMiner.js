@@ -82,9 +82,9 @@ export default class RemoteMiner extends Role {
 	}
 
 	shouldSpawn(room) {
-    return false;
+    // return false;
     const flag = Game.flags['RemoteMine1'];
-    if (!flag || room.name !== 'W28N13') return false;
+    if (!flag || room.name !== 'W29N14') return false;
     
     const minersCount = _.filter(
       Game.creeps,
@@ -126,8 +126,9 @@ export default class RemoteMiner extends Role {
     if ((!creep.room.controller || !creep.room.controller.my) || !creep.room.storage) {
       creep.moveTo(Game.rooms[creep.memory.room].storage);
     } else {
-      if (creep.transferAny(creep.room.storage) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(creep.room.storage);
+      const target = creep.room.terminal ? creep.room.terminal : creep.room.storage;
+      if (creep.transferAny(target) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(target);
         creep.status("moving");
       }
     }

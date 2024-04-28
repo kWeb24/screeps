@@ -108,10 +108,9 @@ export default class RoleManager {
     * @member {Array<Role>} RoleManager#Roles
     **/
     this.ROLES = [
-      this.Settler,
+      this.Hauler,
       this.Harvester,
       this.Upgrader,
-      this.Hauler,
       this.RemoteHarvester,
       this.Miner,
       this.Builder,
@@ -128,7 +127,8 @@ export default class RoleManager {
       this.Transporter,
       this.Reserver,
       this.Bootstrapper,
-      this.Dismantler
+      this.Dismantler,
+      this.Settler,
     ];
   }
 

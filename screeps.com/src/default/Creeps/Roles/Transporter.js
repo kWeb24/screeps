@@ -13,16 +13,16 @@ export default class Transporter extends Role {
   constructor() {
     super();
 		this.ROLE = "transporter";
-    this.POPULATION = 2;
+    this.POPULATION = 1;
     this.GENOME = [CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 40;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
 
-    this.FROM = 'W28N14';
-    this.DEST = 'W29N14';
-    this.RESOURCE = RESOURCE_ENERGY;
+    this.FROM = 'W27N13';
+    this.DEST = 'W28N14';
+    this.RESOURCE = RESOURCE_POWER;
   }
 
   /**
