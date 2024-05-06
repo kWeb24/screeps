@@ -15,7 +15,7 @@ export default class Hauler extends Role {
 		this.ROLE = "hauler";
     this.POPULATION = 1;
     this.GENOME = [CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 26;
+    this.MAX_GENOME_LENGTH = 40;
     this.CAPABLE_OF = [];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -66,13 +66,13 @@ export default class Hauler extends Role {
     const t = Game.cpu.getUsed();
     const haulersCount = _.filter(
       Game.creeps,
-      creep => creep.memory.role == 'hauler' && creep.memory.room == room.name && creep.ticksToLive > 100
+      creep => creep.memory.role == 'hauler' && creep.memory.room == room.name && creep.ticksToLive > 120
     ).length;
     // console.log(Game.cpu.getUsed() - t);
     let limit = this.POPULATION;
-    if (room.name == 'W27N13') {
-      limit = 2;
-    }
+    // if (room.name == 'W27N13') {
+    //   limit = 2;
+    // }
     return haulersCount < limit && room.controller.level > 2;
   }
 
@@ -138,20 +138,21 @@ export default class Hauler extends Role {
           return false;
         }
   
-        // if (creep.room.name === 'W28N13' && creep.store.getUsedCapacity(RESOURCE_SILICON) > 0 && creep.room.terminal.store.getUsedCapacity(RESOURCE_SILICON) > 0) {
-        //   if (creep.transfer(factory, RESOURCE_SILICON) == ERR_NOT_IN_RANGE) {
-        //     creep.moveTo(factory, { reusePath: 10 });
-        //     creep.status("moving");
-        //   }
-        //   return false;
-        // }
+        if (creep.room.name === 'W28N13' && creep.store.getUsedCapacity(RESOURCE_SILICON) > 0 && creep.room.terminal.store.getUsedCapacity(RESOURCE_SILICON) > 0) {
+          if (creep.transfer(factory, RESOURCE_SILICON) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(factory, { reusePath: 10 });
+            creep.status("moving");
+          }
+          return false;
+        }
   
         // if (
         //   creep.room.name === 'W28N13' && 
         //   creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && 
-        //   factory.store.getUsedCapacity(RESOURCE_ENERGY) < 5000 &&
+        //   factory.store.getUsedCapacity(RESOURCE_ENERGY) < 4000 &&
         //   factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
         //   ) {
+        //   creep.target('none');
         //   if (creep.transfer(factory, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         //     creep.moveTo(factory, { reusePath: 10 });
         //     creep.status("moving");
@@ -162,13 +163,6 @@ export default class Hauler extends Role {
     }
 
     const sinks = creep.getEnergySinks();
-    
-    const storageRelated = _.filter(sinks, sink => {
-      return (
-        (sink.structureType == STRUCTURE_STORAGE) &&
-        sink.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-        );
-      });
     
     const towers = _.filter(sinks, sink => {
       return (
@@ -187,14 +181,16 @@ export default class Hauler extends Role {
       terminal !== undefined && 
       (
         (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 3000) ||
+        (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 20000 && creep.room.name === 'W29N14') ||
+        (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 20000 && creep.room.name === 'W27N13') ||
         (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0 && creep.store.getUsedCapacity() > 0 && terminal.store.getFreeCapacity() > creep.store.getUsedCapacity())
       )
     ) {
       targets = [terminal];
     } else if (labsWithoutEnergy.length && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
       targets = labsWithoutEnergy;
-    } else if (storageRelated.length) {
-      targets = storageRelated;
+    } else if (creep.room.storage) {
+      targets.push(creep.room.storage);
     }
     creep.status("transfering");
     if (targets.length > 0) {
@@ -218,7 +214,7 @@ export default class Hauler extends Role {
     // }
     // return false;
 
-    // if (creep.room.name === 'W29N14') {
+    // if (creep.room.name === 'W28N12') {
     //   const res = creep.room.find(FIND_DROPPED_RESOURCES);
     //   if (res.length) {
     //     res.forEach((r) => {
@@ -266,7 +262,7 @@ export default class Hauler extends Role {
 
     if (!selectedSource && creep.room.name === 'W28N13') {
       const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
-      if (factory && factory.store.getUsedCapacity(RESOURCE_ENERGY) > 1000) {
+      if (factory && factory.store.getUsedCapacity(RESOURCE_ENERGY) > 5000) {
         selectedSource = factory;
       }
     }
@@ -347,7 +343,7 @@ export default class Hauler extends Role {
         }
       }
 
-      // if (creep.room.name === 'W28N14') {
+      // if (creep.room.name === 'W29N14') {
       //   if (creep.withdrawAnyExcept(creep.room.storage, [RESOURCE_ENERGY]) == ERR_NOT_IN_RANGE) {
       //     creep.moveTo(creep.room.storage, { reusePath: 10 });
       //     creep.status("moving");
@@ -376,10 +372,11 @@ export default class Hauler extends Role {
 
       // const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
       // if (factory && creep.room.name == 'W28N13') {
-      //   if (creep.withdraw(factory, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
+      //   if (creep.withdraw(factory, RESOURCE_WIRE) == ERR_NOT_IN_RANGE) {
       //     creep.moveTo(factory, { reusePath: 10 });
       //     creep.status("moving");
       //   }
+      //   return false;
       // }
     }
 
@@ -419,7 +416,13 @@ export default class Hauler extends Role {
 
       if (container) {
         selectedSource = container;
-      } else if (terminal && terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 3000) {
+      } else if (terminal && 
+        (
+          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 3000 && creep.room.name !== 'W29N14') || 
+          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W29N14') ||
+          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W27N13')
+        )
+      ) {
         selectedSource = terminal;
       } else if (storage) {
         selectedSource = storage;

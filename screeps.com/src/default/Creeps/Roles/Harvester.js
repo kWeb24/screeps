@@ -49,8 +49,8 @@ export default class Harvester extends Role {
 
     if (links.length && containerAtMyPos.length) {
       if (
-        links[0].structure.store.getFreeCapacity(RESOURCE_ENERGY) >= 0 &&
-        containerAtMyPos[0].store.getUsedCapacity(RESOURCE_ENERGY) >= 0
+        links[0].structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
+        containerAtMyPos[0].store.getUsedCapacity(RESOURCE_ENERGY) > 0
       ) {
         creep.withdraw(containerAtMyPos[0], RESOURCE_ENERGY);
       }

@@ -15,7 +15,7 @@ export default class Upgrader extends Role {
     this.ROLE = "upgrader";
     this.POPULATION = 1;
     this.GENOME = [WORK, CARRY, MOVE];
-    this.MAX_GENOME_LENGTH = 33;
+    this.MAX_GENOME_LENGTH = 50;
     this.CAPABLE_OF = ["harvester", "builder"];
     this.ON_DEMAND = false;
     this.USE_ENERGY_DEPOSITS = true;
@@ -119,15 +119,17 @@ export default class Upgrader extends Role {
     //   }
     // }
 
-    if (room.name === 'W27N13') {
-      limit = 2;
-    } else if (room.name === 'W28N12') {
-      limit = 2;
-    } else if (room.name === 'W29N13') {
-      limit = 2;
-    }
+    // if (room.name === 'W27N13') {
+    //   limit = 1;
+    // } else if (room.name === 'W28N12') {
+    //   limit = 1;
+    // } else if (room.name === 'W29N13') {
+    //   limit = 1;
+    // } else if (room.name === 'W28N14') {
+    //   limit = 1;
+    // }
 
-    const toBuild = room.controller.level < 7 ? limit : 1;
+    const toBuild = room.controller.level < 8 ? limit : 1;
 
     return upgradersCount < toBuild;
   }

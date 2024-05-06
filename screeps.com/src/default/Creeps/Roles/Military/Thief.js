@@ -12,7 +12,7 @@ export default class Thief extends Role {
   constructor() {
       super();
       this.ROLE = "thief";
-      this.POPULATION = 4;
+      this.POPULATION = 3;
       this.GENOME = [MOVE, CARRY];
       this.MAX_GENOME_LENGTH = 50;
       this.CAPABLE_OF = [];
@@ -30,8 +30,12 @@ export default class Thief extends Role {
    **/
 	run(creep) {
     if (creep.store.getFreeCapacity() > 0 && creep.ticksToLive > 300) {
-      if (creep.room.name != 'W29N15') {
-        creep.moveTo(new RoomPosition(4, 34, 'W29N15'));
+      if (creep.room.name === 'W29N14' && creep.store.getUsedCapacity() > 0) {
+        if (creep.transferAny(creep.room.storage) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(creep.room.storage, { reusePath: 10 });
+        }
+      } else if (creep.room.name != 'W31N16') {
+        creep.moveTo(new RoomPosition(32, 43, 'W31N16'), { reusePath: 100 });
       } else {
         let toWithdraw = RESOURCE_ENERGY;
         // if (creep.room.storage.store.getUsedCapacity('GO') > 0) {
@@ -43,9 +47,13 @@ export default class Thief extends Role {
         // } else if (creep.room.storage.store.getUsedCapacity('UH') > 0) {
         //   toWithdraw = 'UH';
         // }
-        if (creep.room.storage && creep.room.storage.store.getUsedCapacity() > 0) {
-          if (creep.withdraw(creep.room.storage, toWithdraw) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(creep.room.storage, { reusePath: 10 });
+        if (creep.room.terminal && creep.room.terminal.store.getUsedCapacity() > 0) {
+          if (creep.withdrawAny(creep.room.terminal) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(creep.room.terminal, { reusePath: 100 });
+          }
+        } else if (creep.room.storage && creep.room.storage.store.getUsedCapacity() > 0) {
+          if (creep.withdrawAny(creep.room.storage) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(creep.room.storage, { reusePath: 100 });
           }
         } else {
           const structures = creep.room.find(FIND_STRUCTURES, {
@@ -88,7 +96,7 @@ export default class Thief extends Role {
       }
     } else if (creep.store.getUsedCapacity() > 0) {
       if (creep.room.name != 'W29N14') {
-        creep.moveTo(new RoomPosition(2, 18, 'W29N14', { reusePath: 30 }));
+        creep.moveTo(new RoomPosition(2, 18, 'W29N14', { reusePath: 100 }));
       } else {
         if (creep.store.getUsedCapacity() > 0) {
           if (creep.transferAny(creep.room.storage) == ERR_NOT_IN_RANGE) {
@@ -97,9 +105,15 @@ export default class Thief extends Role {
         }
       }
     } else if (creep.ticksToLive < 300) {
-      const spawn = creep.room.find(FIND_MY_SPAWNS);
-      if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(spawn[0], { reusePath: 10 });
+      if (creep.memory.room !== creep.room.name) {
+        creep.moveTo(Game.rooms[creep.memory.room].storage);
+      } else {
+        const spawn = creep.room.find(FIND_MY_SPAWNS);
+        if (spawn.length) {
+          if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+              creep.moveTo(spawn[0], { reusePath: 10 });
+          }
+        }
       }
     }
 

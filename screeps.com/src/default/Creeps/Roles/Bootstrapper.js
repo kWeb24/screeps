@@ -87,6 +87,12 @@ export default class Bootstrapper extends Role {
   }
 
   harvestEnergy(creep) {
+    if (creep.room.storage) {
+      if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.storage, { reusePath: 10 });
+      }
+      return false;
+    }
     let selectedSource = false;
     const tombstones = creep.room.find(FIND_TOMBSTONES);
     const resources = creep.room.find(FIND_DROPPED_RESOURCES);

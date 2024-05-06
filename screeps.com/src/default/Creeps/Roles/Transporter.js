@@ -13,7 +13,7 @@ export default class Transporter extends Role {
   constructor() {
     super();
 		this.ROLE = "transporter";
-    this.POPULATION = 1;
+    this.POPULATION = 4;
     this.GENOME = [CARRY, MOVE];
     this.MAX_GENOME_LENGTH = 40;
     this.CAPABLE_OF = [];
@@ -21,8 +21,8 @@ export default class Transporter extends Role {
     this.USE_ENERGY_DEPOSITS = true;
 
     this.FROM = 'W27N13';
-    this.DEST = 'W28N14';
-    this.RESOURCE = RESOURCE_POWER;
+    this.DEST = 'W28N12';
+    this.RESOURCE = RESOURCE_ENERGY;
   }
 
   /**
@@ -59,20 +59,34 @@ export default class Transporter extends Role {
           if (creep.room.storage) {
             target = creep.room.storage;
           }
-          // const containers = creep.room.find(FIND_STRUCTURES, {
-          //   filter: structure => structure.structureType === STRUCTURE_CONTAINER && structure.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity()
-          // });
-          // if (containers.length && !target) {
-          //   target = containers[0];
-          // }
+          const containers = creep.room.find(FIND_STRUCTURES, {
+            filter: structure => structure.structureType === STRUCTURE_CONTAINER && structure.store.getFreeCapacity(RESOURCE_ENERGY) >= creep.store.getUsedCapacity()
+          });
+          if (containers.length && !target) {
+            target = containers[0];
+          }
           if (target) {
             if (creep.transferAny(target) == ERR_NOT_IN_RANGE) {
               creep.moveTo(target, { reusePath: 50 });
             }
           } else {
-            const spawns = creep.room.find(FIND_MY_SPAWNS);
-            if (spawns) {
-              creep.moveTo(spawns[0], { reusePath: 50 })
+            // const spawns = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+            //   filter: obj => {
+            //     return (obj.structureType == STRUCTURE_EXTENSION || obj.structureType == STRUCTURE_SPAWN) &&
+            //             obj.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+            //   }
+            // });
+
+            // if (spawns) {
+            //   if (creep.transfer(spawns, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            //     creep.moveTo(spawns, { range: 1, reusePath: 10 });
+            //     creep.status("moving");
+            //   }
+            // } else {
+            // }
+            const spawns2 = creep.room.find(FIND_MY_SPAWNS);
+            if (spawns2) {
+              creep.moveTo(spawns2[0], { reusePath: 50 })
             }
           }
         }

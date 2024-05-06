@@ -39,8 +39,9 @@ export default class RemoteMiner extends Role {
         creep.moveTo(Game.rooms[creep.memory.room].storage);
       } else {
         if (creep.store.getUsedCapacity() > 0) {
-          if (creep.transferAny(creep.room.storage) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(creep.room.storage);
+          const target = creep.room.terminal ? creep.room.terminal : creep.room.storage;
+          if (creep.transferAny(target) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(target);
             creep.status("moving");
           }
         } else {
