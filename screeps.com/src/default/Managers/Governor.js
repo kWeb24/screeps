@@ -379,14 +379,14 @@ export default class Governor {
         }
       }
 
-      if (room !== 'W28N12' && Game.rooms['W28N12'].terminal.store.getFreeCapacity(RESOURCE_GHODIUM) > 1000) {
+      if (room !== 'W28N12' && Game.rooms['W28N12'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
           terminal.send(RESOURCE_GHODIUM, 1000, 'W28N12');
         }
       }
 
-      if (room !== 'W28N12' && Game.rooms['W28N13'].terminal.store.getFreeCapacity(RESOURCE_SILICON) > 1000) {
+      if (room !== 'W28N13' && Game.rooms['W28N13'].terminal.store.getFreeCapacity(RESOURCE_SILICON) > 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_SILICON) >= 1000) {
           terminal.send(RESOURCE_SILICON, 1000, 'W28N13');
