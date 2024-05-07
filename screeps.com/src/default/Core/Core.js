@@ -24,6 +24,10 @@ export default class Core {
    * @public
    **/
   loop() {
+    // Game.map.visual.rect(new RoomPosition(0, 0, 'W28N13'), 
+    //   25, 25,
+    //   {fill: 'transparent', stroke: '#ff0000'}
+    // );
     if (Game.cpu.bucket === 10000) {
       Game.cpu.generatePixel();
     }

@@ -129,6 +129,10 @@ export default class Upgrader extends Role {
     //   limit = 1;
     // }
 
+    if (room.name === 'W28N13') {
+      limit = 2;
+    }
+
     const toBuild = room.controller.level < 8 ? limit : 1;
 
     return upgradersCount < toBuild;

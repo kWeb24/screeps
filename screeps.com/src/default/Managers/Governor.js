@@ -16,7 +16,7 @@ export default class Governor {
     this.repairSortOrder = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_WALL];
   }
 
-  run(roomName, orders) {
+  run(roomName, orders) {    
     this.repairQueue = [];
     const room = Game.rooms[roomName];
     this.initRoom(room);
@@ -24,6 +24,7 @@ export default class Governor {
     this.runOwnedRoom(room);
     this.runStructures(roomName, orders);
     // console.log(room.memory);
+
     const status = {};
     // if (room.controller.my && room.controller.level > 0) {
         // if (!room.memory.staticContainers) {
@@ -68,6 +69,8 @@ export default class Governor {
     //   room.memory.queue.repairUpdate = Game.time;
     //   return false;
     // }
+
+    this.drawVisuals(room);
 
     const structures = room.find(FIND_STRUCTURES, {
       filter: structure => (
@@ -260,13 +263,23 @@ export default class Governor {
 
     if (room === 'W28N13') {
       const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
+      const factory2 = Game.getObjectById('6634d9ce4280f2959984be62');
+      // if (
+      //   factory &&
+      //   factory.cooldown == 0 && 
+      //   factory.store.getUsedCapacity(RESOURCE_BATTERY) >= 50 &&
+      //   factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
+      // ) {
+      //   factory.produce(RESOURCE_ENERGY);
+      // }
+
       if (
-        factory &&
-        factory.cooldown == 0 && 
-        factory.store.getUsedCapacity(RESOURCE_BATTERY) >= 50 &&
-        factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
+        factory2 &&
+        factory2.cooldown == 0 && 
+        factory2.store.getUsedCapacity(RESOURCE_GHODIUM) >= 500 &&
+        factory2.store.getFreeCapacity(RESOURCE_ENERGY) > 200
       ) {
-        factory.produce(RESOURCE_ENERGY);
+        factory2.produce(RESOURCE_GHODIUM_MELT);
       }
 
       if (
@@ -337,52 +350,73 @@ export default class Governor {
         });
       }
 
-      if (Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_UTRIUM) < 1000) {
+      if (room !== 'W28N14' && Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_UTRIUM) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_UTRIUM) > 1000) {
           terminal.send(RESOURCE_UTRIUM, 1000, 'W28N14');
         }
       }
 
-      if (Game.rooms['W28N13'].terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM) < 1000) {
+      if (room !== 'W28N13' && Game.rooms['W28N13'].terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_LEMERGIUM) > 1000) {
           terminal.send(RESOURCE_LEMERGIUM, 1000, 'W28N13');
         }
       }
 
-      if (Game.rooms['W29N14'].terminal.store.getUsedCapacity(RESOURCE_KEANIUM) < 1000) {
+      if (room !== 'W29N14' && Game.rooms['W29N14'].terminal.store.getUsedCapacity(RESOURCE_KEANIUM) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_KEANIUM) > 1000) {
           terminal.send(RESOURCE_KEANIUM, 1000, 'W29N14');
         }
       }
 
-      if (Game.rooms['W27N13'].terminal.store.getUsedCapacity(RESOURCE_UTRIUM_LEMERGITE) < 1000) {
+      if (room !== 'W27N13' && Game.rooms['W27N13'].terminal.store.getUsedCapacity(RESOURCE_UTRIUM_LEMERGITE) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_UTRIUM_LEMERGITE) > 1000) {
           terminal.send(RESOURCE_UTRIUM_LEMERGITE, 1000, 'W27N13');
         }
       }
 
-      if (Game.rooms['W27N13'].terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM_KEANITE) < 1000) {
+      if (room !== 'W27N13' && Game.rooms['W27N13'].terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM_KEANITE) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM_KEANITE) > 1000) {
           terminal.send(RESOURCE_ZYNTHIUM_KEANITE, 1000, 'W27N13');
         }
       }
 
-      if (Game.rooms['W29N13'].terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM) < 1000) {
+      if (room !== 'W28N13' && Game.rooms['W28N13'].terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM_KEANITE) < 1000) {
+        const terminal = Game.rooms[room].terminal;
+        if (terminal && terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM_KEANITE) > 1000) {
+          terminal.send(RESOURCE_ZYNTHIUM_KEANITE, 1000, 'W28N13');
+        }
+      }
+
+      if (room !== 'W28N14' && Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM_KEANITE) < 1000) {
+        const terminal = Game.rooms[room].terminal;
+        if (terminal && terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM_KEANITE) > 1000) {
+          terminal.send(RESOURCE_ZYNTHIUM_KEANITE, 1000, 'W28N14');
+        }
+      }
+
+      if (room !== 'W29N13' && Game.rooms['W29N13'].terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_ZYNTHIUM) > 1000) {
           terminal.send(RESOURCE_ZYNTHIUM, 1000, 'W29N13');
         }
       }
 
-      if (room !== 'W28N12' && Game.rooms['W28N12'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
+      // if (room !== 'W28N12' && Game.rooms['W28N12'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
+      //   const terminal = Game.rooms[room].terminal;
+      //   if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
+      //     terminal.send(RESOURCE_GHODIUM, 1000, 'W28N12');
+      //   }
+      // }
+
+      if (room !== 'W28N14' && Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
         const terminal = Game.rooms[room].terminal;
         if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
-          terminal.send(RESOURCE_GHODIUM, 1000, 'W28N12');
+          terminal.send(RESOURCE_GHODIUM, 1000, 'W28N14');
         }
       }
 
@@ -392,22 +426,14 @@ export default class Governor {
           terminal.send(RESOURCE_SILICON, 1000, 'W28N13');
         }
       }
-
-      if (room == 'W29N14') {
-        if (
-          Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 600000 &&
-          Game.rooms[room].terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000
-        ) {
-          Game.rooms[room].terminal.send(RESOURCE_ENERGY, 18000, 'W28N12');
-        }
-      }
       
-      if (room == 'W27N13') {
+      if (room != 'W28N13') {
         if (
+          Game.rooms[room].terminal &&
           Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 600000 &&
           Game.rooms[room].terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000
         ) {
-          Game.rooms[room].terminal.send(RESOURCE_ENERGY, 18000, 'W28N12');
+          Game.rooms[room].terminal.send(RESOURCE_ENERGY, 18000, 'W28N13');
         }
       }
 
@@ -460,6 +486,10 @@ export default class Governor {
                 lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x, Game.flags[flag].pos.y - 1).filter((structure) => {
                   return structure.structureType === STRUCTURE_LAB
                 });
+              } else if (dir1 == TOP_RIGHT) {
+                lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x + 1, Game.flags[flag].pos.y - 1).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
               }
 
               let lab2;
@@ -483,6 +513,10 @@ export default class Governor {
                 lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x, Game.flags[flag].pos.y - 1).filter((structure) => {
                   return structure.structureType === STRUCTURE_LAB
                 });
+              } else if (dir2 == TOP_RIGHT) {
+                lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x + 1, Game.flags[flag].pos.y - 1).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
               }
               // console.log(atPos, lab1, lab2);
               // console.log(atPos[0].store.getFreeCapacity(resource));
@@ -500,5 +534,53 @@ export default class Governor {
         }
       }
     }
+  }
+
+  drawVisuals(room) {
+    const data = [
+      [
+        {background: '#FBE679', color: '#000', value: '100.00m'}, // energy
+        {background: '#F7D492', color: '#000', value: '100.00m'}, // batteries
+        {background: '#EC3B3D', color: '#fff', value: '100.00m'}, // power
+        {background: '#CC3D3D', color: '#fff', value: '100.00m'}, // ops
+      ],
+      [
+        {background: '#FBE679', color: '#000', value: '100.00m'},
+        {background: '#F7D492', color: '#000', value: '100.00m'},
+        {background: '#EC3B3D', color: '#fff', value: '100.00m'},
+      ]
+    ];
+    // room.visual.rect(2, 2, 45, 10, {
+    //   fill: 'rgba(0,0,0,0.2)',
+    //   opacity: 1,
+    // });
+
+    /*
+
+    tiered column with empire status in format like market
+    name [t1val, t2val ...]
+
+    */
+    const startX = 2.8;
+    const startY = 2.3;
+    const startXText = 3;
+    const startYText = 3;
+    const xOffset = 3.2;
+    const xOffsetText = 3.2;
+    const length = 3.2;
+    const height = 0.9;
+    data.forEach((row, rowKey) => {
+      row.forEach((col, colKey) => {
+        room.visual.rect(startX + (length * colKey), startY + (height * rowKey), length , height, {
+          fill: col.background,
+          opacity: 1,
+        });
+    
+        room.visual.text(col.value, startXText + (length * colKey), startYText + (height * rowKey), {
+          align: 'left',
+          color: col.color
+        });
+      });
+    });
   }
 }

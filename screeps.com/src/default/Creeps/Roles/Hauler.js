@@ -129,6 +129,32 @@ export default class Hauler extends Role {
       }
       
       const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
+      const factory2 = Game.getObjectById('6634d9ce4280f2959984be62');
+
+      if (factory2 && creep.room.name === 'W28N14') {
+        if (creep.store.getUsedCapacity(RESOURCE_GHODIUM) > 0 && factory2.store.getUsedCapacity(RESOURCE_GHODIUM) < 2000) {
+          if (creep.transfer(factory2, RESOURCE_GHODIUM) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(factory2, { reusePath: 10 });
+            creep.status("moving");
+          }
+          return false;
+        }
+
+        if (
+          creep.room.name === 'W28N14' && 
+          creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && 
+          factory2.store.getUsedCapacity(RESOURCE_ENERGY) < 4000 &&
+          factory2.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
+          ) {
+          creep.target('none');
+          if (creep.transfer(factory2, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(factory2, { reusePath: 10 });
+            creep.status("moving");
+          }
+          return false;
+        }
+      }
+
       if (factory && creep.room.name === 'W28N13') {
         if (creep.room.name === 'W28N13' && creep.store.getUsedCapacity(RESOURCE_BATTERY) > 0) {
           if (creep.transfer(factory, RESOURCE_BATTERY) == ERR_NOT_IN_RANGE) {
@@ -138,27 +164,35 @@ export default class Hauler extends Role {
           return false;
         }
   
-        if (creep.room.name === 'W28N13' && creep.store.getUsedCapacity(RESOURCE_SILICON) > 0 && creep.room.terminal.store.getUsedCapacity(RESOURCE_SILICON) > 0) {
+        if (creep.room.name === 'W28N13' && creep.store.getUsedCapacity(RESOURCE_SILICON) > 0) {
           if (creep.transfer(factory, RESOURCE_SILICON) == ERR_NOT_IN_RANGE) {
             creep.moveTo(factory, { reusePath: 10 });
             creep.status("moving");
           }
           return false;
         }
-  
-        // if (
-        //   creep.room.name === 'W28N13' && 
-        //   creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && 
-        //   factory.store.getUsedCapacity(RESOURCE_ENERGY) < 4000 &&
-        //   factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
-        //   ) {
-        //   creep.target('none');
-        //   if (creep.transfer(factory, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+
+        // if (creep.room.name === 'W28N13' && creep.store.getUsedCapacity(RESOURCE_UTRIUM) > 0) {
+        //   if (creep.transfer(factory, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
         //     creep.moveTo(factory, { reusePath: 10 });
         //     creep.status("moving");
         //   }
         //   return false;
         // }
+  
+        if (
+          creep.room.name === 'W28N13' && 
+          creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && 
+          factory.store.getUsedCapacity(RESOURCE_ENERGY) < 4000 &&
+          factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
+          ) {
+          creep.target('none');
+          if (creep.transfer(factory, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(factory, { reusePath: 10 });
+            creep.status("moving");
+          }
+          return false;
+        }
       }
     }
 
@@ -230,6 +264,13 @@ export default class Hauler extends Role {
     //   }
     // }
 
+    const spawnRelated = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+      filter: obj => {
+        return (obj.structureType == STRUCTURE_EXTENSION || obj.structureType == STRUCTURE_SPAWN) &&
+                obj.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+      }
+    });
+
     let selectedSource = false;
     if (creep.memory.target !== undefined && creep.memory.target !== 'none') {
       const targetObj = Game.getObjectById(creep.memory.target);
@@ -238,7 +279,7 @@ export default class Hauler extends Role {
       }
     }
 
-    if (!selectedSource) {
+    if (!selectedSource && !spawnRelated) {
       const tombstones = creep.room.find(FIND_TOMBSTONES);
       if (tombstones.length) {
         tombstones.forEach((tomb) => {
@@ -260,46 +301,45 @@ export default class Hauler extends Role {
       }
     }
 
-    if (!selectedSource && creep.room.name === 'W28N13') {
-      const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
-      if (factory && factory.store.getUsedCapacity(RESOURCE_ENERGY) > 5000) {
-        selectedSource = factory;
-      }
-    }
+    // if (!selectedSource && creep.room.name === 'W28N13') {
+    //   const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
+    //   if (factory && factory.store.getUsedCapacity(RESOURCE_ENERGY) > 5000) {
+    //     selectedSource = factory;
+    //   }
+    // }
 
     let masterLink = null;
 
-    if (creep.room.storage) {
-      const links = creep.room.find(FIND_STRUCTURES, {
-        filter: structure => (
-          structure.structureType === STRUCTURE_LINK
-        )
-      });
-
-      if (links.length) {
-        links.forEach((link) => {
-          const storagePos = creep.room.storage.pos;
-          const distX = Math.abs(storagePos.x - link.pos.x);
-          const distY = Math.abs(storagePos.y - link.pos.y);
-          if (distX <= 2 && distY <= 2) {
-            masterLink = link;
-          }
+    if (!selectedSource) {
+      if (creep.room.storage) {
+        const links = creep.room.find(FIND_STRUCTURES, {
+          filter: structure => (
+            structure.structureType === STRUCTURE_LINK
+          )
         });
-      }
-
-      if (masterLink && masterLink.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
-        selectedSource = masterLink;
+  
+        if (links.length) {
+          links.forEach((link) => {
+            const storagePos = creep.room.storage.pos;
+            const distX = Math.abs(storagePos.x - link.pos.x);
+            const distY = Math.abs(storagePos.y - link.pos.y);
+            if (distX <= 2 && distY <= 2) {
+              masterLink = link;
+            }
+          });
+        }
+  
+        if (masterLink && masterLink.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
+          selectedSource = masterLink;
+        }
       }
     }
 
-    const spawnRelated = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
-      filter: obj => {
-        return (obj.structureType == STRUCTURE_EXTENSION || obj.structureType == STRUCTURE_SPAWN) &&
-                obj.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-      }
-    });
+    const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
+    const factory2 = Game.getObjectById('6634d9ce4280f2959984be62');
 
     if (!spawnRelated) {
+      let labActionMade = false;
       for (const flag in Game.flags) {
         if (flag.charAt(0) === '$') {
           const parts = flag.split(';');
@@ -317,14 +357,14 @@ export default class Hauler extends Role {
                   if (creep.withdraw(creep.room.storage, resource) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.storage, { reusePath: 10 });
                     creep.status("moving");
-                    return false;
                   }
+                  labActionMade = true;
                 } else if (creep.room.terminal.store.getUsedCapacity(resource) > 0) {
                   if (creep.withdraw(creep.room.terminal, resource) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.terminal, { reusePath: 10 });
                     creep.status("moving");
-                    return false;
                   }
+                  labActionMade = true;
                 }
               }
             } else if (action === 'R') {
@@ -337,6 +377,7 @@ export default class Hauler extends Role {
                   creep.status("moving");
                   return false;
                 }
+                labActionMade = true;
               }
             }
           }
@@ -359,10 +400,10 @@ export default class Hauler extends Role {
       //   return false;
       // }
 
-      // if (creep.room.name === 'W28N13' && creep.room.terminal.store.getUsedCapacity(RESOURCE_SILICON) > 0) {
+      // if (creep.room.name === 'W28N13' && creep.room.terminal.store.getUsedCapacity(RESOURCE_UTRIUM) > 0) {
       //   const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
       //   if (factory) {
-      //     if (creep.withdraw(creep.room.terminal, RESOURCE_SILICON) == ERR_NOT_IN_RANGE) {
+      //     if (creep.withdraw(creep.room.terminal, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
       //       creep.moveTo(creep.room.terminal, { reusePath: 10 });
       //       creep.status("moving");
       //     }
@@ -370,15 +411,58 @@ export default class Hauler extends Role {
       //   return false;
       // }
 
-      // const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
-      // if (factory && creep.room.name == 'W28N13') {
-      //   if (creep.withdraw(factory, RESOURCE_WIRE) == ERR_NOT_IN_RANGE) {
-      //     creep.moveTo(factory, { reusePath: 10 });
-      //     creep.status("moving");
-      //   }
-      //   return false;
-      // }
+      if (creep.room.name === 'W28N13' && creep.room.terminal.store.getUsedCapacity(RESOURCE_SILICON) > 0) {
+        if (factory) {
+          if (creep.withdraw(creep.room.terminal, RESOURCE_SILICON) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(creep.room.terminal, { reusePath: 10 });
+            creep.status("moving");
+          }
+        }
+        return false;
+      }
+      
+      if (factory && creep.room.name == 'W28N13' && factory.store.getUsedCapacity(RESOURCE_WIRE) >= 500) {
+        if (creep.withdraw(factory, RESOURCE_WIRE) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(factory, { reusePath: 10 });
+          creep.status("moving");
+        }
+        return false;
+      }
+
+      if (factory2 && creep.room.name == 'W28N14' && factory2.store.getUsedCapacity(RESOURCE_GHODIUM_MELT) >= 500) {
+        if (creep.withdraw(factory2, RESOURCE_GHODIUM_MELT) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(factory2, { reusePath: 10 });
+          creep.status("moving");
+        }
+        return false;
+      }
+
+      if (
+        factory2 && creep.room.name === 'W28N14' && 
+        creep.room.terminal.store.getUsedCapacity(RESOURCE_GHODIUM) > 0 &&
+        factory2.store.getUsedCapacity(RESOURCE_GHODIUM) < 2000
+      ) {
+        if (creep.withdraw(creep.room.terminal, RESOURCE_GHODIUM) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(creep.room.terminal, { reusePath: 10 });
+          creep.status("moving");
+        }
+        return false;
+      }
+
+      if (labActionMade) {
+        return false;
+      }
     }
+
+    // if (creep.room.name === 'W28N12') {
+    //   const lab = Game.getObjectById('6638ff405ccb92ce0ae3f0ef');
+    //   if (lab.store.getUsedCapacity(RESOURCE_GHODIUM) > 0) {
+    //     if (creep.withdraw(lab, RESOURCE_GHODIUM) == ERR_NOT_IN_RANGE) {
+    //       creep.moveTo(lab);
+    //     }
+    //     return false;
+    //   }
+    // }
 
     if (!selectedSource && creep.room.storage && creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
       if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > creep.store.getFreeCapacity()) {
