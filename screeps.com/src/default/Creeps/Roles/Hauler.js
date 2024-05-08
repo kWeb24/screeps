@@ -502,7 +502,7 @@ export default class Hauler extends Role {
         selectedSource = container;
       } else if (terminal && 
         (
-          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 3000 && creep.room.name !== 'W29N14') || 
+          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 3000 && creep.room.name !== 'W29N14' && creep.room.name !== 'W27N13') || 
           (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W29N14') ||
           (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W27N13')
         )

@@ -57,20 +57,21 @@ export default class Governor {
   }
 
   runOwnedRoom(room) {
-    // const t = Game.cpu.getUsed();
     if (room.controller === undefined || !room.controller.my) return false;
-
+    
     // if (room.memory.queue.repairUpdate === undefined) {
-    //   room.memory.queue.repairUpdate = Game.time;
-    // }
-
-    // if (Game.time - room.memory.queue.repairUpdate < 100) {
-    //   this.repairQueue = room.memory.queue.repair;
-    //   room.memory.queue.repairUpdate = Game.time;
-    //   return false;
-    // }
-
-    this.drawVisuals(room);
+      //   room.memory.queue.repairUpdate = Game.time;
+      // }
+      
+      // if (Game.time - room.memory.queue.repairUpdate < 100) {
+        //   this.repairQueue = room.memory.queue.repair;
+        //   room.memory.queue.repairUpdate = Game.time;
+        //   return false;
+        // }
+        
+    // const t = Game.cpu.getUsed();
+    // this.drawVisuals(room);
+    // console.log(Game.cpu.getUsed() - t)
 
     const structures = room.find(FIND_STRUCTURES, {
       filter: structure => (
@@ -85,7 +86,6 @@ export default class Governor {
     room.memory.queue.repair = this.repairQueue;
     room.memory.queue.repairUpdate = Game.time;
     // console.log('updating repair queue');
-    // console.log(Game.cpu.getUsed() - t)
   }
 
   getRepairQueue(room, structures) {
@@ -430,8 +430,9 @@ export default class Governor {
       if (room != 'W28N13') {
         if (
           Game.rooms[room].terminal &&
-          Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 600000 &&
-          Game.rooms[room].terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000
+          Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 400000 &&
+          Game.rooms[room].terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 &&
+          Game.rooms['W28N13'].terminal.store.getFreeCapacity(RESOURCE_ENERGY) > 20000
         ) {
           Game.rooms[room].terminal.send(RESOURCE_ENERGY, 18000, 'W28N13');
         }
@@ -539,16 +540,165 @@ export default class Governor {
   drawVisuals(room) {
     const data = [
       [
-        {background: '#FBE679', color: '#000', value: '100.00m'}, // energy
-        {background: '#F7D492', color: '#000', value: '100.00m'}, // batteries
-        {background: '#EC3B3D', color: '#fff', value: '100.00m'}, // power
-        {background: '#CC3D3D', color: '#fff', value: '100.00m'}, // ops
+        {background: '#FBE679', color: '#000', value: '4.81m'}, // energy
+        {background: '#F7D492', color: '#000', value: 0}, // batteries
+        {background: '#EC3B3D', color: '#fff', value: 4877}, // power
+        {background: '#CC3D3D', color: '#fff', value: 0}, // ops
       ],
       [
-        {background: '#FBE679', color: '#000', value: '100.00m'},
-        {background: '#F7D492', color: '#000', value: '100.00m'},
-        {background: '#EC3B3D', color: '#fff', value: '100.00m'},
-      ]
+        {background: '#48484A', color: '#fff', value: 3447}, // oxygen
+        {background: '#A6A6A8', color: '#000', value: 0}, // oxidant
+        {background: '#48484A', color: '#fff', value: 0}, // hydrogen
+        {background: '#A6A6A8', color: '#000', value: 0}, // reductant
+      ],
+      [
+        {background: '#5D4E38', color: '#fff', value: 12788}, // zynthium
+        {background: '#F7D492', color: '#000', value: 0}, // zynthium bar
+        {background: '#335E48', color: '#fff', value: 24788}, // lemergium
+        {background: '#00F99A', color: '#000', value: 0}, // lemergium bar
+      ],
+      [
+        {background: '#285F7B', color: '#fff', value: 98144}, // utrium
+        {background: '#3FCAEF', color: '#000', value: 0}, // utrium bar
+        {background: '#461B86', color: '#fff', value: 3691}, // keanium
+        {background: '#A667FF', color: '#000', value: 0}, // keanium bar
+      ],
+      [
+        {background: '#542A2B', color: '#fff', value: 0}, // catalyst
+        {background: '#E06868', color: '#000', value: 0}, // purifier
+      ],
+      [
+        {background: '#6894B4', color: '#000', value: 'OH'}, // oh
+        {background: '#6894B4', color: '#000', value: 'ZK'}, // zh
+        {background: '#6894B4', color: '#000', value: 'UL'}, // ul
+        {background: '#6894B4', color: '#000', value: 'G'}, // g
+      ],
+      [
+        {background: '#6894B4', color: '#000', value: 0}, // oh
+        {background: '#6894B4', color: '#000', value: '164.78k'}, // zh
+        {background: '#6894B4', color: '#000', value: '236.11k'}, // ul
+        {background: '#6894B4', color: '#000', value: 9487}, // g
+      ],
+      [
+        {background: '#FFFFFF', color: '#000', value: 'GMelt'}, // ghodium melt
+        {background: '#FFFFFF', color: '#000', value: 'Comp'}, // composite
+        {background: '#FFFFFF', color: '#000', value: 'Crys'}, // crystal
+        {background: '#FFFFFF', color: '#000', value: 'Liq'}, // liquid
+      ],
+      [
+        {background: '#FFFFFF', color: '#000', value: 26788}, // ghodium melt
+        {background: '#FFFFFF', color: '#000', value: 0}, // composite
+        {background: '#FFFFFF', color: '#000', value: 0}, // crystal
+        {background: '#FFFFFF', color: '#000', value: 0}, // liquid
+      ],
+      [
+        {background: '#461B86', color: '#fff', value: 'KH'}, // KH
+        {background: '#461B86', color: '#fff', value: 87}, // KH
+        {background: '#461B86', color: '#fff', value: 0}, // KH2O
+        {background: '#461B86', color: '#fff', value: 0}, // XKH2O
+      ],
+      [
+        {background: '#A667FF', color: '#000', value: 'KO'}, // KO
+        {background: '#A667FF', color: '#000', value: 467}, // KO
+        {background: '#A667FF', color: '#000', value: 0}, // KH02
+        {background: '#A667FF', color: '#000', value: 0}, // XKH02
+      ],
+      [
+        {background: '#285F7B', color: '#fff', value: 'UH'}, // UH
+        {background: '#285F7B', color: '#fff', value: 7578}, // UH
+        {background: '#285F7B', color: '#fff', value: 0}, // UH2O
+        {background: '#285F7B', color: '#fff', value: 0}, // XUH2O
+      ],
+      [
+        {background: '#3FCAEF', color: '#000', value: 'UO'}, // UO
+        {background: '#3FCAEF', color: '#000', value: 452}, // UO
+        {background: '#3FCAEF', color: '#000', value: 0}, // UH02
+        {background: '#3FCAEF', color: '#000', value: 0}, // XUH02
+      ],
+      [
+        {background: '#335E48', color: '#fff', value: 'LH'}, // LH
+        {background: '#335E48', color: '#fff', value: 1277}, // LH
+        {background: '#335E48', color: '#fff', value: 0}, // LH2O
+        {background: '#335E48', color: '#fff', value: 0}, // XLH2O
+      ],
+      [
+        {background: '#00F99A', color: '#000', value: 'LO'}, // LO
+        {background: '#00F99A', color: '#000', value: 3484}, // LO
+        {background: '#00F99A', color: '#000', value: 0}, // LH02
+        {background: '#00F99A', color: '#000', value: 0}, // XLH02
+      ],
+      [
+        {background: '#5D4E38', color: '#fff', value: 'ZH'}, // ZH
+        {background: '#5D4E38', color: '#fff', value: 3145}, // ZH
+        {background: '#5D4E38', color: '#fff', value: 0}, // ZH2O
+        {background: '#5D4E38', color: '#fff', value: 0}, // XZH2O
+      ],
+      [
+        {background: '#F7D492', color: '#000', value: 'ZO'}, // ZO
+        {background: '#F7D492', color: '#000', value: 6785}, // ZO
+        {background: '#F7D492', color: '#000', value: 0}, // ZH02
+        {background: '#F7D492', color: '#000', value: 0}, // XZH02
+      ],
+      [
+        {background: '#6894B4', color: '#000', value: 'GH'}, // GH
+        {background: '#6894B4', color: '#000', value: 9782}, // GH
+        {background: '#6894B4', color: '#000', value: 0}, // GH2O
+        {background: '#6894B4', color: '#000', value: 0}, // XGH2O
+      ],
+      [
+        {background: '#FFFFFF', color: '#000', value: 'GO'}, // GO
+        {background: '#FFFFFF', color: '#000', value: 14867}, // GO
+        {background: '#FFFFFF', color: '#000', value: 0}, // ZG02
+        {background: '#FFFFFF', color: '#000', value: 0}, // XGH02
+      ],
+      [
+        {background: '#956F5C', color: '#FFF', value: 'Mech'}, // Mechanical chain
+        {background: '#956F5C', color: '#FFF', value: 0}, // Metal
+        {background: '#956F5C', color: '#FFF', value: 0}, // Alloy
+        {background: '#956F5C', color: '#FFF', value: 0}, // Tube
+      ],
+      [
+        {background: '#956F5C', color: '#FFF', value: 0}, // Fixtures
+        {background: '#956F5C', color: '#FFF', value: 0}, // Frame
+        {background: '#956F5C', color: '#FFF', value: 0}, // Hydraulics
+        {background: '#956F5C', color: '#FFF', value: 0}, // Machine
+      ],
+      [
+        {background: '#84B012', color: '#FFF', value: 'Bio'}, // Bio chain
+        {background: '#84B012', color: '#FFF', value: 0}, // Biomass
+        {background: '#84B012', color: '#FFF', value: 0}, // Cell
+        {background: '#84B012', color: '#FFF', value: 0}, // Phlegm
+      ],
+      [
+        {background: '#84B012', color: '#FFF', value: 0}, // Tissue
+        {background: '#84B012', color: '#FFF', value: 0}, // Muscle
+        {background: '#84B012', color: '#FFF', value: 0}, // Organoid
+        {background: '#84B012', color: '#FFF', value: 0}, // Organism
+      ],
+      [
+        {background: '#4AA0DA', color: '#FFF', value: 'Elec'}, // Electronical chain
+        {background: '#4AA0DA', color: '#FFF', value: 1086}, // Silicon
+        {background: '#4AA0DA', color: '#FFF', value: 950}, // Wire
+        {background: '#4AA0DA', color: '#FFF', value: 0}, // Switch
+      ],
+      [
+        {background: '#4AA0DA', color: '#FFF', value: 0}, // Transistor
+        {background: '#4AA0DA', color: '#FFF', value: 0}, // Microchip
+        {background: '#4AA0DA', color: '#FFF', value: 0}, // Circuit
+        {background: '#4AA0DA', color: '#FFF', value: 0}, // Device
+      ],
+      [
+        {background: '#DA6BF5', color: '#FFF', value: 'Myst'}, // Mystical chain
+        {background: '#DA6BF5', color: '#FFF', value: 0}, // Mist
+        {background: '#DA6BF5', color: '#FFF', value: 0}, // Condensate
+        {background: '#DA6BF5', color: '#FFF', value: 0}, // Concentrate
+      ],
+      [
+        {background: '#DA6BF5', color: '#FFF', value: 0}, // Extract
+        {background: '#DA6BF5', color: '#FFF', value: 0}, // Spirit
+        {background: '#DA6BF5', color: '#FFF', value: 0}, // Emanation
+        {background: '#DA6BF5', color: '#FFF', value: 0}, // Essence
+      ],
     ];
     // room.visual.rect(2, 2, 45, 10, {
     //   fill: 'rgba(0,0,0,0.2)',
@@ -561,10 +711,10 @@ export default class Governor {
     name [t1val, t2val ...]
 
     */
-    const startX = 2.8;
-    const startY = 2.3;
-    const startXText = 3;
-    const startYText = 3;
+    const startX = 34.8;
+    const startY = 1.3;
+    const startXText = 35;
+    const startYText = 2;
     const xOffset = 3.2;
     const xOffsetText = 3.2;
     const length = 3.2;
@@ -573,7 +723,7 @@ export default class Governor {
       row.forEach((col, colKey) => {
         room.visual.rect(startX + (length * colKey), startY + (height * rowKey), length , height, {
           fill: col.background,
-          opacity: 1,
+          opacity: 0.7,
         });
     
         room.visual.text(col.value, startXText + (length * colKey), startYText + (height * rowKey), {
