@@ -70,7 +70,7 @@ export default class Hauler extends Role {
     ).length;
     // console.log(Game.cpu.getUsed() - t);
     let limit = this.POPULATION;
-    // if (room.name == 'W27N13') {
+    // if (room.name == 'W28N12') {
     //   limit = 2;
     // }
     return haulersCount < limit && room.controller.level > 2;
@@ -114,6 +114,7 @@ export default class Hauler extends Role {
               const atPos = creep.room.lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos).filter((structure) => {
                 return structure.structureType === STRUCTURE_LAB
               });
+              
               if (atPos.length && atPos[0].store.getFreeCapacity(resource) >= creep.store.getUsedCapacity(resource)) {
                 if (creep.store.getUsedCapacity(resource) > 0) {
                   if (creep.transfer(atPos[0], resource) == ERR_NOT_IN_RANGE) {
@@ -217,6 +218,8 @@ export default class Hauler extends Role {
         (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 3000) ||
         (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 20000 && creep.room.name === 'W29N14') ||
         (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 20000 && creep.room.name === 'W27N13') ||
+        // (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 20000 && creep.room.name === 'W28N12') ||
+        (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 20000 && creep.room.name === 'W28N14') ||
         (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0 && creep.store.getUsedCapacity() > 0 && terminal.store.getFreeCapacity() > creep.store.getUsedCapacity())
       )
     ) {
@@ -239,16 +242,26 @@ export default class Hauler extends Role {
   harvest(creep) {
     creep.status("harvesting");
 
-    // if (creep.room.terminal !== undefined) {
-    //   if (creep.withdraw(creep.room.storage, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
-    //     creep.moveTo(creep.room.storage);
+    // if (creep.room.name === 'W28N13') {
+    //   const lab = Game.getObjectById('662c152b1e90f857394cdae0');
+    //   if (lab.store.getUsedCapacity(RESOURCE_GHODIUM_OXIDE) > 0) {
+    //     if (creep.withdraw(lab, RESOURCE_GHODIUM_OXIDE) == ERR_NOT_IN_RANGE) {
+    //       creep.moveTo(lab);
+    //     }
+    //     return false;
+    //   }
+    // }
+
+    // if (creep.room.name === 'W28N13') {
+    //   if (creep.withdraw(creep.room.terminal, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
+    //     creep.moveTo(creep.room.terminal);
     //     creep.status("moving");
     //   }
     //   creep.target(selectedSource.id);
     // }
     // return false;
 
-    // if (creep.room.name === 'W28N12') {
+    // if (creep.room.name === 'W28N13') {
     //   const res = creep.room.find(FIND_DROPPED_RESOURCES);
     //   if (res.length) {
     //     res.forEach((r) => {
@@ -263,6 +276,7 @@ export default class Hauler extends Role {
     //     return false;
     //   }
     // }
+
 
     const spawnRelated = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
       filter: obj => {
@@ -392,13 +406,23 @@ export default class Hauler extends Role {
       //   return false;
       // }
 
-      // if (creep.room.name === 'W28N13' && creep.room.terminal.store.getUsedCapacity(RESOURCE_BATTERY) > 0) {
-      //   if (creep.withdraw(creep.room.terminal, RESOURCE_BATTERY) == ERR_NOT_IN_RANGE) {
-      //     creep.moveTo(creep.room.terminal, { reusePath: 10 });
-      //     creep.status("moving");
-      //   }
-      //   return false;
-      // }
+      if (creep.room.name === 'W28N13' && creep.room.terminal.store.getUsedCapacity(RESOURCE_BATTERY) > 0) {
+        if (creep.withdraw(creep.room.terminal, RESOURCE_BATTERY) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(creep.room.terminal, { reusePath: 10 });
+          creep.status("moving");
+        }
+        return false;
+      }
+
+      if (factory) {
+        if (creep.room.name === 'W28N13' && factory.store.getUsedCapacity(RESOURCE_ENERGY) > 5000) {
+          if (creep.withdraw(factory, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(factory, { reusePath: 10 });
+            creep.status("moving");
+          }
+          return false;
+        }
+      }
 
       // if (creep.room.name === 'W28N13' && creep.room.terminal.store.getUsedCapacity(RESOURCE_UTRIUM) > 0) {
       //   const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
@@ -452,17 +476,7 @@ export default class Hauler extends Role {
       if (labActionMade) {
         return false;
       }
-    }
-
-    // if (creep.room.name === 'W28N12') {
-    //   const lab = Game.getObjectById('6638ff405ccb92ce0ae3f0ef');
-    //   if (lab.store.getUsedCapacity(RESOURCE_GHODIUM) > 0) {
-    //     if (creep.withdraw(lab, RESOURCE_GHODIUM) == ERR_NOT_IN_RANGE) {
-    //       creep.moveTo(lab);
-    //     }
-    //     return false;
-    //   }
-    // }
+    }    
 
     if (!selectedSource && creep.room.storage && creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
       if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > creep.store.getFreeCapacity()) {
@@ -502,9 +516,11 @@ export default class Hauler extends Role {
         selectedSource = container;
       } else if (terminal && 
         (
-          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 3000 && creep.room.name !== 'W29N14' && creep.room.name !== 'W27N13') || 
+          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 3000 && creep.room.name !== 'W29N14' && creep.room.name !== 'W27N13' && creep.room.name !== 'W28N14') || 
           (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W29N14') ||
-          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W27N13')
+          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W27N13') ||
+          // (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W28N12') ||
+          (terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 && creep.room.name === 'W28N14')
         )
       ) {
         selectedSource = terminal;

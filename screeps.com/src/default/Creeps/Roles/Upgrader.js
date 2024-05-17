@@ -30,6 +30,47 @@ export default class Upgrader extends Role {
    * @see Role
    **/
   run(creep) {
+    const lab = Game.getObjectById('662c152b1e90f857394cdae0');
+    // it's upgrading all body parts at the same time
+    // docs say 1 at time 
+    let needBoost = false;
+    let hasAny = false;
+    creep.body.forEach((part) => {
+      if (part.type === 'work' && part.boost === undefined) {
+        needBoost = true;
+      }
+      if (part.type === 'work' && part.boost !== undefined) {
+        hasAny = true;
+      }
+    });
+    if (
+      creep.room.name === 'W28N13' &&
+      creep.ticksToLive > 1400 &&
+      lab.store.getUsedCapacity(RESOURCE_GHODIUM_HYDRIDE) > 800
+    ) {
+      if (needBoost) {
+        if (lab.boostCreep(creep) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(lab);
+          creep.status("moving");
+        }
+        return false;
+      }
+    }
+
+    if (creep.room.name === 'W28N13' && creep.ticksToLive < 40) {
+      if (hasAny) {
+        if (lab.unboostCreep(creep) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(lab);
+          creep.status("moving");
+        }
+        return false;
+      }
+      const spawn = creep.room.find(FIND_MY_SPAWNS);
+      if (spawn[0].recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+          creep.moveTo(spawn[0], { reusePath: 10 });
+      }
+      return false;
+    }
     if (
       (creep.status() != "harvesting" && creep.store.getUsedCapacity() === 0) ||
       (creep.status() == "harvesting" && creep.store.getFreeCapacity() > 0)
@@ -131,6 +172,8 @@ export default class Upgrader extends Role {
 
     if (room.name === 'W28N13') {
       limit = 2;
+    } else if (room.name === 'W27N12') {
+      limit = 3;
     }
 
     const toBuild = room.controller.level < 8 ? limit : 1;

@@ -264,23 +264,23 @@ export default class Governor {
     if (room === 'W28N13') {
       const factory = Game.getObjectById('662ba59f3139bc7b6167174b');
       const factory2 = Game.getObjectById('6634d9ce4280f2959984be62');
-      // if (
-      //   factory &&
-      //   factory.cooldown == 0 && 
-      //   factory.store.getUsedCapacity(RESOURCE_BATTERY) >= 50 &&
-      //   factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
-      // ) {
-      //   factory.produce(RESOURCE_ENERGY);
-      // }
-
       if (
-        factory2 &&
-        factory2.cooldown == 0 && 
-        factory2.store.getUsedCapacity(RESOURCE_GHODIUM) >= 500 &&
-        factory2.store.getFreeCapacity(RESOURCE_ENERGY) > 200
+        factory &&
+        factory.cooldown == 0 && 
+        factory.store.getUsedCapacity(RESOURCE_BATTERY) >= 50 &&
+        factory.store.getFreeCapacity(RESOURCE_ENERGY) > 1000
       ) {
-        factory2.produce(RESOURCE_GHODIUM_MELT);
+        factory.produce(RESOURCE_ENERGY);
       }
+
+      // if (
+      //   factory2 &&
+      //   factory2.cooldown == 0 && 
+      //   factory2.store.getUsedCapacity(RESOURCE_GHODIUM) >= 500 &&
+      //   factory2.store.getFreeCapacity(RESOURCE_ENERGY) > 200
+      // ) {
+      //   factory2.produce(RESOURCE_GHODIUM_MELT);
+      // }
 
       if (
         factory &&
@@ -406,19 +406,26 @@ export default class Governor {
         }
       }
 
-      // if (room !== 'W28N12' && Game.rooms['W28N12'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
-      //   const terminal = Game.rooms[room].terminal;
-      //   if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
-      //     terminal.send(RESOURCE_GHODIUM, 1000, 'W28N12');
-      //   }
-      // }
-
-      if (room !== 'W28N14' && Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
+      if (room !== 'W28N13' && Game.rooms['W28N13'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM_HYDRIDE) < 1000) {
         const terminal = Game.rooms[room].terminal;
-        if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
-          terminal.send(RESOURCE_GHODIUM, 1000, 'W28N14');
+        if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM_HYDRIDE) > 1000) {
+          terminal.send(RESOURCE_GHODIUM_HYDRIDE, 1000, 'W28N13');
         }
       }
+
+      if (room !== 'W28N12' && Game.rooms['W28N12'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
+        const terminal = Game.rooms[room].terminal;
+        if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
+          terminal.send(RESOURCE_GHODIUM, 1000, 'W28N12');
+        }
+      }
+
+      // if (room !== 'W28N14' && Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
+      //   const terminal = Game.rooms[room].terminal;
+      //   if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
+      //     terminal.send(RESOURCE_GHODIUM, 1000, 'W28N14');
+      //   }
+      // }
 
       if (room !== 'W28N13' && Game.rooms['W28N13'].terminal.store.getFreeCapacity(RESOURCE_SILICON) > 1000) {
         const terminal = Game.rooms[room].terminal;
@@ -430,7 +437,7 @@ export default class Governor {
       if (room != 'W28N13') {
         if (
           Game.rooms[room].terminal &&
-          Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 400000 &&
+          Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 300000 &&
           Game.rooms[room].terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 &&
           Game.rooms['W28N13'].terminal.store.getFreeCapacity(RESOURCE_ENERGY) > 20000
         ) {
@@ -491,6 +498,10 @@ export default class Governor {
                 lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x + 1, Game.flags[flag].pos.y - 1).filter((structure) => {
                   return structure.structureType === STRUCTURE_LAB
                 });
+              } else if (dir1 == BOTTOM_LEFT) {
+                lab1 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x - 1, Game.flags[flag].pos.y + 1).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
               }
 
               let lab2;
@@ -518,9 +529,16 @@ export default class Governor {
                 lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x + 1, Game.flags[flag].pos.y - 1).filter((structure) => {
                   return structure.structureType === STRUCTURE_LAB
                 });
+              } else if (dir2 == BOTTOM_LEFT) {
+                lab2 = Game.rooms[room].lookForAt(LOOK_STRUCTURES, Game.flags[flag].pos.x - 1, Game.flags[flag].pos.y + 1).filter((structure) => {
+                  return structure.structureType === STRUCTURE_LAB
+                });
               }
               // console.log(atPos, lab1, lab2);
               // console.log(atPos[0].store.getFreeCapacity(resource));
+              // if (resource === 'GH') {
+              //   console.log(atPos[0].store.getFreeCapacity('GH'));
+              // }
               if (
                 atPos.length && atPos[0].store.getFreeCapacity(resource) > 0 &&
                 lab1.length && //lab1[0].store.getUsedCapacity(resource) > 0 &&

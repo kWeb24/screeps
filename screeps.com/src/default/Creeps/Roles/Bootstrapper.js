@@ -146,7 +146,7 @@ export default class Bootstrapper extends Role {
         creep.moveTo(spawns, { range: 1, reusePath: 10 });
         creep.status("moving");
       }
-    } else if (creep.room.controller.level == 1 || creep.room.controller.ticksToDowngrade < 6000) {
+    } else if (creep.room.controller.level == 1 || creep.room.controller.ticksToDowngrade < 4000) {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller, { range: 3, reusePath: 10 });
         creep.status("moving");
