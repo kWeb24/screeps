@@ -294,6 +294,15 @@ export default class Governor {
       if (
         factory &&
         factory.cooldown == 0 && 
+        factory.store.getUsedCapacity(RESOURCE_OXYGEN) >= 500 &&
+        factory.store.getFreeCapacity(RESOURCE_ENERGY) > 200
+      ) {
+        factory.produce(RESOURCE_OXIDANT);
+      }
+
+      if (
+        factory &&
+        factory.cooldown == 0 && 
         factory.store.getUsedCapacity(RESOURCE_UTRIUM_BAR) >= 20 &&
         factory.store.getUsedCapacity(RESOURCE_SILICON) >= 100 &&
         factory.store.getFreeCapacity(RESOURCE_ENERGY) >= 40
@@ -420,6 +429,13 @@ export default class Governor {
         }
       }
 
+      if (room !== 'W28N12' && Game.rooms['W28N12'].terminal.store.getUsedCapacity(RESOURCE_HYDROGEN) < 1000) {
+        const terminal = Game.rooms[room].terminal;
+        if (terminal && terminal.store.getUsedCapacity(RESOURCE_HYDROGEN) >= 1000) {
+          terminal.send(RESOURCE_HYDROGEN, 1000, 'W28N12');
+        }
+      }
+
       // if (room !== 'W28N14' && Game.rooms['W28N14'].terminal.store.getUsedCapacity(RESOURCE_GHODIUM) < 1000) {
       //   const terminal = Game.rooms[room].terminal;
       //   if (terminal && terminal.store.getUsedCapacity(RESOURCE_GHODIUM) >= 1000) {
@@ -434,14 +450,25 @@ export default class Governor {
         }
       }
       
-      if (room != 'W28N13') {
+      if (room != 'W28N12') {
         if (
           Game.rooms[room].terminal &&
-          Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 300000 &&
+          Game.rooms[room].storage.store.getUsedCapacity(RESOURCE_ENERGY) > 200000 &&
           Game.rooms[room].terminal.store.getUsedCapacity(RESOURCE_ENERGY) > 20000 &&
-          Game.rooms['W28N13'].terminal.store.getFreeCapacity(RESOURCE_ENERGY) > 20000
+          Game.rooms['W28N12'].terminal.store.getFreeCapacity(RESOURCE_ENERGY) > 20000
         ) {
           Game.rooms[room].terminal.send(RESOURCE_ENERGY, 18000, 'W28N13');
+        }
+      }
+
+      if (room === 'W28N13') {
+        const powerSpawn = Game.getObjectById('664b3cf106b5095bb00329ab');
+        if (
+          powerSpawn && 
+          powerSpawn.store.getUsedCapacity(RESOURCE_POWER) > 0 &&
+          powerSpawn.store.getUsedCapacity(RESOURCE_ENERGY) >= 50
+        ) {
+          powerSpawn.processPower();
         }
       }
 

@@ -116,9 +116,22 @@ export default class Miner extends Role {
         )
       });
 
+      if (!containerAtMyPos.length) {
+        const area = creep.room.lookForAtArea(LOOK_STRUCTURES, creep.pos.y - 2, creep.pos.x - 2, creep.pos.y + 2, creep.pos.x + 2, true);
+        const containers = [];
+        area.forEach((structure) => {
+          if (structure.structure.structureType == STRUCTURE_CONTAINER) {
+            containers.push(structure);
+          }
+        });
+        if (containers.length) {
+          creep.moveTo(containers[0].structure.pos);
+          // return false;
+        }
+      }
+
       if (
-        (containerAtMyPos.length && containerAtMyPos[0].store.getFreeCapacity() > 0) ||
-        !containerAtMyPos.length
+        (containerAtMyPos.length && containerAtMyPos[0].store.getFreeCapacity() > 0) || !containerAtMyPos.length
       ) {
         if (creep.harvest(t[0]) == ERR_NOT_IN_RANGE) {
           creep.moveTo(t[0]);

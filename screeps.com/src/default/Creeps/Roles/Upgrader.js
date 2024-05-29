@@ -33,29 +33,29 @@ export default class Upgrader extends Role {
     const lab = Game.getObjectById('662c152b1e90f857394cdae0');
     // it's upgrading all body parts at the same time
     // docs say 1 at time 
-    let needBoost = false;
+    // let needBoost = false;
     let hasAny = false;
-    creep.body.forEach((part) => {
-      if (part.type === 'work' && part.boost === undefined) {
-        needBoost = true;
-      }
-      if (part.type === 'work' && part.boost !== undefined) {
-        hasAny = true;
-      }
-    });
-    if (
-      creep.room.name === 'W28N13' &&
-      creep.ticksToLive > 1400 &&
-      lab.store.getUsedCapacity(RESOURCE_GHODIUM_HYDRIDE) > 800
-    ) {
-      if (needBoost) {
-        if (lab.boostCreep(creep) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(lab);
-          creep.status("moving");
-        }
-        return false;
-      }
-    }
+    // creep.body.forEach((part) => {
+    //   if (part.type === 'work' && part.boost === undefined) {
+    //     needBoost = true;
+    //   }
+    //   if (part.type === 'work' && part.boost !== undefined) {
+    //     hasAny = true;
+    //   }
+    // });
+    // if (
+    //   creep.room.name === 'W28N13' &&
+    //   creep.ticksToLive > 1400 &&
+    //   lab.store.getUsedCapacity(RESOURCE_GHODIUM_HYDRIDE) > 800
+    // ) {
+    //   if (needBoost) {
+    //     if (lab.boostCreep(creep) == ERR_NOT_IN_RANGE) {
+    //       creep.moveTo(lab);
+    //       creep.status("moving");
+    //     }
+    //     return false;
+    //   }
+    // }
 
     if (creep.room.name === 'W28N13' && creep.ticksToLive < 40) {
       if (hasAny) {
@@ -170,10 +170,8 @@ export default class Upgrader extends Role {
     //   limit = 1;
     // }
 
-    if (room.name === 'W28N13') {
+    if (room.name === 'W27N12') {
       limit = 2;
-    } else if (room.name === 'W27N12') {
-      limit = 3;
     }
 
     const toBuild = room.controller.level < 8 ? limit : 1;
