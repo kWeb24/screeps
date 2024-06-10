@@ -17,6 +17,7 @@ import RemoteHarvester from '../Creeps/Roles/RemoteHarvester.js';
 import Manufacturer from '../Creeps/Roles/Manufacturer.js';
 import RemoteMiner from '../Creeps/Roles/RemoteMiner.js';
 import RemoteMiner2 from '../Creeps/Roles/RemoteMiner2.js';
+import RemoteMiner3 from '../Creeps/Roles/RemoteMiner3.js';
 
 import Destroyer from '../Creeps/Roles/Military/Destroyer.js';
 import Thief from '../Creeps/Roles/Military/Thief.js';
@@ -99,6 +100,7 @@ export default class RoleManager {
     this.Drainer = new Drainer();
     this.RemoteMiner = new RemoteMiner();
     this.RemoteMiner2 = new RemoteMiner2();
+    this.RemoteMiner3 = new RemoteMiner3();
     this.Janitor = new Janitor();
     this.Degrader = new Degrader();
     this.Transporter = new Transporter();
@@ -125,6 +127,7 @@ export default class RoleManager {
       this.Drainer,
       this.RemoteMiner,
       this.RemoteMiner2,
+      this.RemoteMiner3,
       this.Janitor,
       this.Degrader,
       this.Transporter,

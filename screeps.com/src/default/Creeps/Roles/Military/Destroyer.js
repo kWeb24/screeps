@@ -83,6 +83,7 @@ export default class Destroyer extends Role {
 	}
 
    shouldSpawn(room) {
+      return false;
       const count = _.filter(
          Game.creeps,
          creep => creep.memory.role == 'destroyer' && creep.memory.room == room.name

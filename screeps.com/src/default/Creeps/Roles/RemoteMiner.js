@@ -112,11 +112,18 @@ export default class RemoteMiner extends Role {
     } else {
       const extractor = flag.room.find(FIND_DEPOSITS);
       if (extractor.length) {
-        if (creep.harvest(extractor[0]) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(extractor[0]);
-          creep.status("moving");
+        let selectedDeposit = 0;
+        let lastCooldown = extractor[selectedDeposit].lastCooldown;
+        extractor.forEach((depo, index) => {
+          if (depo.lastCooldown <= lastCooldown) {
+            selectedDeposit = index;
+          }
+        });
+        if (creep.harvest(extractor[selectedDeposit]) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(extractor[selectedDeposit]);
+          // creep.status("moving");
         }
-        creep.target(extractor[0].id);
+        creep.target(extractor[selectedDeposit].id);
         // power drops
         // this.harvestBodies(creep);
       }
